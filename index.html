@@ -1,144 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DC 1968 — Kindred Web</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#1a1a1a;color:#e8e4dc}
-#wrap{display:flex;height:100vh;overflow:hidden}
-
-#panel{width:260px;min-width:260px;background:#111;border-right:1px solid #2a2a2a;display:flex;flex-direction:column}
-#panel-header{padding:16px;border-bottom:1px solid #2a2a2a}
-#panel-header h1{font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#888;margin-bottom:2px}
-#panel-header p{font-size:11px;color:#555}
-
-#card{flex:1;overflow-y:auto;padding:18px 16px}
-#card::-webkit-scrollbar{width:4px}
-#card::-webkit-scrollbar-track{background:transparent}
-#card::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
-
-#card-empty{display:flex;align-items:center;justify-content:center;height:100%;text-align:center;padding:24px}
-#card-empty p{font-size:13px;color:#444;line-height:1.7}
-#card-content{display:none}
-
-#card-clan{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#666;margin-bottom:5px}
-#card-name{font-size:18px;font-weight:600;color:#e8e4dc;line-height:1.2;margin-bottom:3px}
-#card-sub{font-size:12px;color:#666;margin-bottom:16px}
-#card-divider{height:1px;background:#222;margin-bottom:16px}
-#card-detail{font-size:13px;color:#aaa;line-height:1.75;margin-bottom:18px}
-#card-conn-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#555;margin-bottom:8px}
-#card-conn-list{display:flex;flex-direction:column;gap:4px}
-.conn-pill{font-size:12px;color:#888;padding:5px 9px;border-radius:5px;border:1px solid #222;background:#161616;cursor:pointer;transition:all 0.12s;text-align:left}
-.conn-pill:hover{border-color:#444;color:#e8e4dc;background:#1e1e1e}
-
-#board{flex:1;position:relative;overflow:hidden;cursor:grab;background:#1a1a1a}
-#board.panning{cursor:grabbing}
-#board-canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-#sv{position:absolute;top:0;left:0;width:4000px;height:4000px;pointer-events:none}
-
-.nd{position:absolute;cursor:pointer}
-.ni{background:#111;border:1px solid #2e2e2e;border-radius:6px;padding:9px 12px;width:130px;text-align:center;transition:border-color 0.15s}
-.ni:hover{border-color:#555}
-.ni.sel{border-color:#7F77DD;border-width:1.5px}
-.pc .ni{border-color:#3a3560}
-.pc .ni.sel{border-color:#7F77DD}
-.nn{font-size:12px;font-weight:600;color:#ddd;line-height:1.3}
-.ns{font-size:11px;color:#555;margin-top:2px;line-height:1.2}
-
-#hint{position:absolute;bottom:16px;right:16px;font-size:11px;color:#333;pointer-events:none}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Corkboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{width:100%;height:100%;overflow:hidden;background:#1e1c15}
+    #wrap{display:flex;width:100vw;height:100vh;overflow:hidden;border:none;border-radius:0}
+    #panel{width:300px;min-width:300px;background:#1c1a14;border-right:1px solid #2e2b1f;display:flex;flex-direction:column}
+    #panel-header{padding:18px;border-bottom:1px solid #2e2b1f}
+    #ph-eyebrow{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6b6347;margin-bottom:5px}
+    #ph-title{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:#c9b97a;line-height:1.3}
+    #ph-sub{font-family:'Space Mono',monospace;font-size:10px;color:#4a4535;margin-top:4px;letter-spacing:0.03em}
+    #card{flex:1;overflow-y:auto;padding:16px}
+    #card::-webkit-scrollbar{width:3px}
+    #card::-webkit-scrollbar-thumb{background:#2e2b1f}
+    #card-empty{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
+    #card-empty p{font-family:'Space Mono',monospace;font-size:11px;color:#3a3528;line-height:1.9}
+    #card-content{display:none}
+    #card-clan{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#7a6e3e;margin-bottom:6px}
+    #card-name{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#d4c47e;line-height:1.3;margin-bottom:2px}
+    #card-sub{font-family:'Space Mono',monospace;font-size:10px;color:#5a5240;margin-bottom:14px;letter-spacing:0.03em}
+    #card-divider{height:1px;background:#2a2720;margin-bottom:14px;position:relative}
+    #card-divider::after{content:'';position:absolute;left:0;top:0;width:40px;height:1px;background:#7a6e3e}
+    #card-detail{font-family:'Space Mono',monospace;font-size:11px;font-style:italic;color:#9a8e6a;line-height:1.9;margin-bottom:18px}
+    #card-conn-label{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#4a4535;margin-bottom:8px}
+    #card-conn-list{display:flex;flex-direction:column;gap:3px}
+    .conn-pill{font-family:'Space Mono',monospace;font-size:10px;color:#7a6e3e;padding:5px 9px;border:1px solid #2a2720;background:#161410;cursor:pointer;text-align:left;letter-spacing:0.03em;transition:all 0.12s;border-radius:2px}
+    .conn-pill:hover{border-color:#7a6e3e;color:#c9b97a;background:#1e1c14}
+    #board{flex:1;position:relative;overflow:hidden;cursor:crosshair;background:#1e1c15}
+    #board-canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+    #sv{position:absolute;top:0;left:0;width:4000px;height:4000px;pointer-events:none}
+    .nd{position:absolute;cursor:pointer}
+    .ni{background:#171510;border:1px solid #2e2b1e;border-radius:2px;padding:9px 11px;width:136px;text-align:left;transition:border-color 0.15s;position:relative}
+    .ni::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#2a2720}
+    .ni:hover{border-color:#5a5240}
+    .ni:hover::before{background:#7a6e3e}
+    .ni.sel{border-color:#c9b97a}
+    .ni.sel::before{background:#c9b97a}
+    .pc .ni{border-color:#3a3420}
+    .pc .ni::before{background:#4a4228}
+    .pc .ni.sel{border-color:#c9b97a}
+    .nn{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#b8a96a;line-height:1.4}
+    .ns{font-family:'Space Mono',monospace;font-size:9px;color:#4a4535;margin-top:3px;letter-spacing:0.04em;text-transform:uppercase}
+    #hint{position:absolute;bottom:14px;right:14px;font-family:'Space Mono',monospace;font-size:9px;color:#2a2720;letter-spacing:0.06em;text-transform:uppercase;pointer-events:none}
+  </style>
 </head>
 <body>
 
 <div id="wrap">
   <div id="panel">
     <div id="panel-header">
-      <h1>Washington DC, 1968</h1>
-      <p>Kindred web of influence</p>
+      <div id="ph-eyebrow">Case File 1968</div>
+      <div id="ph-title">Washington, D.C.</div>
+      <div id="ph-sub">Kindred web of influence</div>
     </div>
     <div id="card">
-      <div id="card-empty"><p>Select any card on the board to open their dossier.</p></div>
+      <div id="card-empty"><p>Select any subject<br>to open their dossier.</p></div>
       <div id="card-content">
         <div id="card-clan"></div>
         <div id="card-name"></div>
         <div id="card-sub"></div>
         <div id="card-divider"></div>
         <div id="card-detail"></div>
-        <div id="card-conn-label">Connected to</div>
+        <div id="card-conn-label">Known associates</div>
         <div id="card-conn-list"></div>
       </div>
     </div>
   </div>
-
   <div id="board">
-    <div id="board-canvas">
-      <svg id="sv"></svg>
-    </div>
-    <div id="hint">Click and drag to pan</div>
+    <div id="board-canvas"><svg id="sv"></svg></div>
+    <div id="hint">Drag to pan</div>
   </div>
 </div>
 
 <script>
+
 const nodes=[
-  {id:'norman',name:'Norman Graves',clan:'Malkavian',sub:'PC',x:320,y:260,pc:true,
-   detail:'One of five vampires assembled by the Gray Man through blackmail. Sired by Sil, a loud and domineering Malkavian wreck of a sire. Participated in the kidnapping of Elizabeth.',
-   conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown']},
-  {id:'jini',name:'Jini',clan:'Hecata',sub:'PC',x:470,y:260,pc:true,
-   detail:'Sired by Dr. Giovanni, a self-interested Hecata financier who treats the relationship as purely transactional. Bound to the coterie through the Gray Man\'s blackmail.',
-   conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy']},
-  {id:'amalek',name:'Amalek',clan:'Tremere',sub:'PC',x:620,y:260,pc:true,
-   detail:'Sired by Rabbi Levi. Murdered Elias Drum through blood ritual, drawing Marcus Webb\'s attention. Did Thomas Crane a favor; Crane claimed Drum\'s book collection afterward. Kidnapped Elizabeth alongside Norman and Tommy. Has promised Webb information on the blackmailer.',
-   conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','norman','jini','jupiter','tommy']},
-  {id:'jupiter',name:'Jupiter',clan:'Settite',sub:'PC',x:770,y:260,pc:true,
-   detail:'Sired by Sam, an antagonistic Settite true believer who shows up unannounced and is openly hostile toward his own progeny. Operates under his shadow.',
-   conn:['sam','grayMan','norman','jini','amalek','tommy']},
-  {id:'tommy',name:'Tommy Fleet',clan:'Toreador',sub:'PC',x:920,y:260,pc:true,
-   detail:'Lost control of the Beast during a feeding and critically injured rising starlet Vera Lynn. Staged it as a botched suicide and gaslit her into accepting the story. She is now hopelessly devoted to him. Badly botched both encounters with Celeste Beaumont.',
-   conn:['veraLynn','celesteBeaumont','grayMan','norman','jini','amalek','jupiter']},
-  {id:'grayMan',name:'The Gray Man',clan:'Unknown',sub:'The blackmailer',x:620,y:90,
-   detail:'Clan and identity unknown. Assembled the coterie through blackmail, allegedly acting on behalf of a powerful Camarilla patron. True loyalties and ultimate agenda remain a total mystery.',
+
+  // ── PLAYER CHARACTERS ─────────────────────────────────────────────────────
+
+  {id:'norman',name:'Norman Graves',clan:'Malkavian',sub:'PC — Pinkerton Enforcer',x:280,y:260,pc:true,
+   detail:'A Pinkerton strikebreaker who crushed workers movements in Detroit before being transferred to DC to oversee urban renewal. His sire saw the fervor with which he worked and Embraced him for it. Norman did not mind — he was already squeezing the life out of people long before he became a vampire. His Malkavian derangement manifests as an internal voice that judges everyone around him as slothful and indolent. His touchstone — a human foreman he respected — died in the apartment fire the coterie set on the handler\'s orders. Norman did not know whose building it was. He still does not know Amalek did. His institutional identity and sense of purpose are simultaneously unraveling. The Pinkertons are threatening to cut him loose. He is sleeping on Amalek\'s couch. He has nowhere to defect to.',
+   conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown','odessaBright']},
+
+  {id:'jini',name:'Jini',clan:'Hecata',sub:'PC — Night Nurse',x:440,y:260,pc:true,
+   detail:'A war bride who married in a rush before her husband Andrew was shipped out to the Pacific in WWII. He never came back — listed MIA, presumed dead after thirty years. She has never accepted this. Everything she does is organized around finding him: recovering his remains, contacting his spirit, getting him back. Her sire Dr. Giovanni noticed her occult aptitude at the hospital and Embraced her to serve as his assistant. She views the Embrace as a gift — more time, new capabilities, new leads in her search. Her Hecata discipline Oblivion lets her see the dead. She has noticed something wrong in Amalek\'s shadow and does not yet know what it means. She gave Drum\'s ghost and his fetter to Giovanni in exchange for information — and discovered that the Hecata files being built to find Andrew were stolen at precisely the moment this operation began. She is pissed. Giovanni has promised to help. The files were stolen by a Nosferatu working for unknown interests.',
+   conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy','antonioGhoul','eliDrum']},
+
+  {id:'amalek',name:'Amalek',clan:'Tremere',sub:'PC — Ex-SS Occultist',x:600,y:260,pc:true,
+   detail:'An Austrian former member of the SS occult research division who became disillusioned as the war effort collapsed. He made a deal with a Jewish vampire during the Nazi purges — help smuggle Jews out of Germany in exchange for power and the Embrace. He was given both. He is a Noddist — obsessed with vampiric scripture and the mythology of Caine — and a practicing diablerizer, consuming other vampires to accumulate power. Both secrets would end him if discovered. He murdered Reverend Elias Drum at the Mercer funeral using Blood Sorcery as a distraction for Thomas Crane, who needed access to an upper floor unobserved. He has struck a deal with Marcus Webb: information on the blackmailer in exchange for closing the investigation. He has also promised Webb information he does not fully possess yet. He made a separate back-channel call to Webb warning him about the apartment fire — six people died anyway. He is hosting Norman Graves, whose home the coterie burned, without telling Norman he knows.',
+   conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','norman','jini','jupiter','tommy','calvDuchamp']},
+
+  {id:'jupiter',name:'Jupiter / Ira',clan:'Setite',sub:'PC — Cult Leader',x:760,y:260,pc:true,
+   detail:'A cold, calculating predator wearing the costume of a New Age spiritual leader. Her cult, Healing Beyond the Nine, teaches that Earth is a failing colony slowly poisoning its inhabitants. She purifies members by drinking their blood — framed as removing poison — creating early-stage Blood Bonds in her devotees without their knowledge. She is a Setite operating without Camarilla sanction in DC, sent here by her sire Sam with a specific purpose she does not fully understand. Sam has pointed her at something. She does not know what. She conducted the infiltration of the apartment building in cobra form while Amalek kept the car running. She is the most situationally aware member of the coterie and the one most likely to realize the handler\'s real agenda before the others do.',
+   conn:['sam','grayMan','norman','jini','amalek','tommy','calvDuchamp']},
+
+  {id:'tommy',name:'Tommy Fleet',clan:'Toreador',sub:'PC — Country Musician',x:930,y:260,pc:true,
+   detail:'A handsome, charismatic country musician with almost no genuine creative talent. He makes his living appropriating music from underprivileged Black musicians and presenting it to white audiences. A cultural vampire in a world of actual vampires. His sire, a Toreador woman obsessed with his beauty, Embraced him to preserve it forever. He found being a muse constricting and moved on. He lost control of the Beast during a feeding, critically injuring a young starlet named Vera Lynn, then staged the injuries as a botched suicide and gaslit her into accepting the story. She is now hopelessly devoted to him — a Blood Bond developing that neither understands. He has badly botched two encounters with Celestine Beaumont. His charm is cracking under pressure. The performance is slipping. Celestine has noticed.',
+   conn:['veraLynn','celesteBeaumont','grayMan','norman','jini','amalek','jupiter','calvDuchamp']},
+
+  // ── THE HANDLER NETWORK ───────────────────────────────────────────────────
+
+  {id:'grayMan',name:'The Gray Man',clan:'Unknown',sub:'The Handler',x:600,y:80,
+   detail:'Identity and clan unknown. Operates exclusively through dead drops, coded messages, and intermediaries. Assembled the coterie through blackmail — one to three words of threat at the bottom of each envelope, specific enough to demonstrate he knows everything. His assignments have escalated from surveillance to arson to assassination. He claims to serve Camarilla interests but his real agenda is something older and more absolute. He commissioned the death of Aldous Mercer using a method drawn from a stolen Hecata text — meaning the investigation the coterie is managing is into a murder he committed. He knows about the furniture delivery to the safehouse. He knows about Amalek\'s back-channel call to Webb. He is always watching. He has never been wrong about anything yet. The Harrington interest is his oldest mortal proxy.',
    conn:['norman','jini','amalek','jupiter','tommy','mattMercer']},
-  {id:'sil',name:'Sil',clan:'Malkavian',sub:'Norman\'s sire',x:180,y:90,
-   detail:'Norman\'s sire. Domineering, abusive, loud, and vulgar. Clinically insane and obsessively work-focused. Quick to anger. A deeply unpleasant presence in Norman\'s existence.',
+
+  // ── SIRES ─────────────────────────────────────────────────────────────────
+
+  {id:'sil',name:'Silas Mercer',clan:'Malkavian',sub:'Norman\'s sire (no relation to Matt Mercer)',x:120,y:80,
+   detail:'Norman\'s sire. No relation to Matt Mercer despite the surname. A loud, domineering, abusive Malkavian wreck. Clinically insane with a work obsession that manifests as contempt for everyone who operates below his standards, which is everyone. He informed the Pinkerton leadership about Norman\'s blackmail situation — ostensibly to protect the institution, possibly to protect himself. Norman does not know this yet. Sil is the origin of the internal voice that judges everyone as slothful. Someone installed that voice in Norman. Understanding who Sil is and what he wanted to create is the key to understanding what Norman is.',
    conn:['norman']},
-  {id:'rabbiLevi',name:'Rabbi Levi',clan:'Tremere',sub:'Amalek\'s sire',x:920,y:90,
-   detail:'Amalek\'s sire. Blunt, domineering, and old-world in disposition. Has grown noticeably warmer toward Amalek as he edges closer to genuine Kindred power. Whether that warmth is affection or investment remains to be seen.',
+
+  {id:'rabbiLevi',name:'Rabbi Ezra Morgenstern',clan:'Tremere',sub:'Amalek\'s sire',x:900,y:80,
+   detail:'Amalek\'s sire. A Jewish vampire who survived the 20th century with a particular relationship to what human life costs and what it is worth. Not cruel — actuarial. He has done the math on how many humans can be spent before the ecosystem collapses and he stays inside those numbers with the discipline of someone who learned what happens when you do not. Genuinely fatherly toward Amalek in a way that makes the control more insidious than open hostility would be. Took him to task for driving his own car to the arson — not for the six deaths, for the operational sloppiness. Has grown noticeably warmer toward Amalek as he edges closer to genuine power. Does not know about the Noddism. Does not know about the diablerie. The name Ezra Morgenstern — morning star — belongs to a vampire who has not seen dawn in centuries.',
    conn:['amalek']},
-  {id:'drGiovanni',name:'Dr. Giovanni',clan:'Hecata',sub:'Jini\'s sire',x:1080,y:260,
-   detail:'Jini\'s sire. Not a real doctor and never was. Sleazy, wealth-obsessed, entirely self-interested. Treats the sire relationship as a transaction and will sell anyone out for the right price.',
-   conn:['jini']},
-  {id:'sam',name:'Sam',clan:'Settite',sub:'Jupiter\'s sire',x:1080,y:90,
-   detail:'Jupiter\'s sire. Mysterious and antagonistic toward his own progeny. Shows up without warning. A fervent believer that the time of Set is fast approaching, and not particularly concerned with Jupiter\'s wellbeing.',
+
+  {id:'drGiovanni',name:'Dr. Giovanni',clan:'Hecata',sub:'Jini\'s sire',x:1100,y:260,
+   detail:'Jini\'s sire and self-described Head of Pathology, though he was never a real doctor. Sleazy, wealth-obsessed, entirely self-interested. Treats the sire relationship as a transaction — Jini is a useful tool and he will maintain her as such as long as she produces value. He signed Reverend Drum\'s death certificate. He was present when Drum died. He took custody of Drum\'s fetter and ghost from Jini in exchange for information about Andrew. He knows about her outside assignment and has been watching her extracurricular activities since before she had any. He has promised to help find the stolen Andrew files. His price has not been named yet. He will collect at maximum leverage.',
+   conn:['jini','eliDrum']},
+
+  {id:'sam',name:'Sam',clan:'Setite',sub:'Jupiter\'s sire',x:1100,y:80,
+   detail:'Jupiter\'s sire. An Egyptian antiquities dealer in his mid-thirties in appearance, operating out of a Georgetown townhouse. In DC since the late 1950s — longer than Jupiter knows. His mask is legitimate: he trades antiquities, moves through embassy circles, knows the right people. His real work is Setite influence operations. DC in 1968 is fracturing along every fault line simultaneously and he is here to eat slowly and carefully. He sent Jupiter to DC pointed at something specific she does not know she is pointed at yet. He has an instrument on the Camarilla establishment side that Jupiter does not know about. He contacts her infrequently, usually with requests she fulfills to stay in his good graces. He knows where she is. She does not know where he is. His line: "I have found that most people know exactly what they want. The difficulty is never the wanting. It is the permission."',
    conn:['jupiter']},
-  {id:'thomasCrane',name:'Thomas Crane',clan:'Tremere',sub:'Chantry representative',x:180,y:430,
-   detail:'Tremere Chantry representative. Projects warmth and professorial kindness. Actually deeply curious about diablerie in a way that should alarm anyone paying attention. Amalek did him a favor. He quietly claimed books from Elias Drum\'s collection after the murder.',
-   conn:['amalek','eliDrum']},
-  {id:'marcusWebb',name:'Marcus Webb',clan:'Ventrue',sub:'Sheriff of DC',x:350,y:550,
-   detail:'The Prince\'s sheriff. Large, measured, and lethal once roused. Chosen for his light touch; he does not start fires, he ends them. Currently tracking Amalek over Elias Drum\'s death. Amalek has offered him information on the blackmailer as a goodwill gesture.',
+
+  // ── CAMARILLA ESTABLISHMENT ───────────────────────────────────────────────
+
+  {id:'thomasCrane',name:'Thomas Crane',clan:'Tremere',sub:'Chantry representative',x:160,y:430,
+   detail:'Projects warmth and professorial kindness. Actually deeply curious about diablerie in a way that should alarm anyone paying attention. Attended Calvin DuChamp\'s speech in disguise — not for politics, for DuChamp\'s blood. Recognized the diablerie signature in DuChamp\'s aura and wants what the consumption of such a Kindred would provide. Made a deal with Amalek at the Mercer funeral: a distraction in exchange for an intelligence report on Jupiter. He got upstairs. He sent the report. The favor economy between them is unresolved. He also quietly claimed Drum\'s book collection after the murder. The Libellus Sanguinis — a Noddist text of significant interest — is either in that collection or DuChamp knew where it was.',
+   conn:['amalek','eliDrum','calvDuchamp']},
+
+  {id:'marcusWebb',name:'Marcus Webb',clan:'Brujah',sub:'Sheriff of DC',x:330,y:530,
+   detail:'The Prince\'s Sheriff. Measured, unhurried, and lethal once roused. Every question he asks is already answered — he asks to see how you respond. Was present at DuChamp\'s speech in an official capacity. Has an active investigation into Elias Drum\'s death that he closed in exchange for Amalek\'s promise of information on the blackmailer. Has the Harrington interest name from Odessa Bright\'s letter, which she finally delivered. His investigation is now moving toward something dangerous. He is the character most likely to become an ambiguous ally in the campaign\'s back half — his official function increasingly conflicts with what the Prince wants him to ignore.',
    conn:['amalek','odessaBright','eliDrum']},
-  {id:'odessaBright',name:'Odessa Bright',clan:'Brujah',sub:'DC Brujah leader',x:500,y:550,
-   detail:'De-facto leader of the DC Brujah, a job she never wanted. Young and idealistic by Kindred standards. Running the clan out of obligation, increasingly out of her depth. Met the coterie at Marcus Webb\'s office.',
-   conn:['marcusWebb','amalek','norman','jini','jupiter','tommy']},
-  {id:'celesteBeaumont',name:'Celeste Beaumont',clan:'Toreador',sub:'Toreador Primogen',x:880,y:430,
-   detail:'Toreador Primogen. Has shown an interest in Tommy, but it reads as contempt rather than flattery. Tommy botched their first meeting spectacularly, then compounded it with a fumbled phone call asking about Calvin Duchamp.',
-   conn:['tommy','calvDuchamp']},
-  {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Anarch',sub:'West Coast Anarch',x:710,y:550,
-   detail:'A West Coast Anarch spreading political gospel in DC. Presents as a true believer in freedom and personal governance. Target of a coterie firebombing mission. Caught by Graves with Noddist-aligned paraphernalia. Something feels off about him.',
-   conn:['celesteBeaumont','amalek','norman','jini','jupiter','tommy']},
-  {id:'mattMercer',name:'Matt Mercer',clan:'Ventrue',sub:'Camarilla financier, deceased',x:620,y:430,
-   detail:'His funeral was the inciting incident that brought the coterie together. Known for a pastoral, patronizing sympathy toward younger vampires. Deceased. Had some connection to the Gray Man\'s operations.',
-   conn:['grayMan','eliDrum']},
-  {id:'eliDrum',name:'Elias Drum',clan:'Ghoul',sub:'Mercer\'s manservant',x:490,y:430,
-   detail:'Matt Mercer\'s ghoul manservant. Genuinely loved Mercer, which Kindred society considers bizarre and abhorrent. Murdered by Amalek through blood ritual. His death put Webb on Amalek\'s trail and allowed Crane to claim his book collection without obstruction.',
-   conn:['mattMercer','amalek','thomasCrane','marcusWebb']},
-  {id:'elizUnknown',name:'Elizabeth ????',clan:'Thin-Blooded',sub:'Identity unclear',x:180,y:550,
-   detail:'A thin-blooded vampire woman kidnapped by Amalek, Norman, and Tommy. No one asked why Amalek needed her. He promised a serious boon in exchange for the favor. Her full name and current fate remain unknown.',
+
+  {id:'celesteBeaumont',name:'Celestine Beaumont',clan:'Toreador',sub:'Toreador Primogen',x:880,y:430,
+   detail:'Toreador Primogen. In DC since before the Civil War, earned her council seat through a century of patience and leverage. Runs a Georgetown gallery that is also Elysium. Tommy spilled the entire blackmail situation to her at the Mercer funeral within twenty minutes of meeting her — she now has a more complete picture of the coterie\'s operation than the coterie does. She introduced Tommy to Vera, a Toreador plant tasked with getting close to him and reporting on the group. She is setting Tommy up through the Leon Dupree gallery connection — placing him in a room with genuine talent to observe what his face does, then making an ask she knows he cannot easily fulfill. She wants to know who the handler is. Tommy does not know. That gap is going to produce the next scene.',
+   conn:['tommy','veraLynn','calvDuchamp']},
+
+  // ── THE DEAD ──────────────────────────────────────────────────────────────
+
+  {id:'mattMercer',name:'Aldous Mercer',clan:'Ventrue',sub:'Camarilla Primogen, deceased',x:530,y:430,
+   detail:'His funeral was the inciting incident that brought the coterie together — each of them given an envelope and a surveillance target that turned out to be each other. He held DC\'s urban renewal contracts through a network of mortal proxies and ghoul city officials including Harold Pruitt. He was building a quiet back-channel deal with Odessa Bright\'s reform faction to shore up his council position against the Harrington interest — the Gray Man\'s proxy. He was killed before the deal concluded using a method drawn from Agnetta Voss\'s stolen Hecata text. The Gray Man commissioned his death. The coterie was assembled to manage the fallout of a murder their employer committed.',
+   conn:['grayMan','eliDrum','odessaBright']},
+
+  {id:'eliDrum',name:'Reverend Elias Drum',clan:'Ghoul',sub:'Mercer\'s manservant, deceased',x:470,y:530,
+   detail:'Mercer\'s ghoul manservant for thirty years. A Baptist preacher who served as community liaison without ever being told what Mercer was. He genuinely loved Mercer, which Kindred society considers beneath contempt. Murdered by Amalek at the Mercer funeral using Blood Sorcery as a distraction for Crane. His death was the only genuine grief in a room full of performance. His ghost is now in Dr. Giovanni\'s custody, bound to a fetter Jini recovered. The ghost knows things — it was present for conversations Mercer had, it heard the name Harrington, it witnessed Giovanni at the scene of its own death. What Giovanni does with that knowledge has not yet been revealed.',
+   conn:['mattMercer','amalek','thomasCrane','marcusWebb','drGiovanni','jini']},
+
+  // ── THE REFORM FACTION ────────────────────────────────────────────────────
+
+  {id:'odessaBright',name:'Odessa Bright',clan:'Brujah',sub:'Reform faction, DC',x:440,y:620,
+   detail:'A young Brujah who never wanted to be the de-facto leader of DC\'s reform faction and increasingly is one anyway. She attended the Mercer funeral despite having no right to be there — Mercer had contacted her through back channels about a deal before he died, and she came to deliver his letter to Webb. She lost her nerve at the funeral. She almost delivered it at Webb\'s office. She has finally delivered it. Webb now has Mercer\'s handwriting naming the Harrington interest. She is now a woman who has done the right thing and has no idea what it will cost her. The letter is no longer in her coat pocket. She does not know if that is better or worse.',
+   conn:['marcusWebb','mattMercer','calvDuchamp']},
+
+  {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Brujah',sub:'West Coast Anarch',x:660,y:620,
+   detail:'Spreading Anarch gospel in DC, building a coalition of reform-minded Kindred that is part genuine ideology and part hunting ground. Exiled from the West Coast after committing diablerie — the black threads are still visible in his aura to anyone who knows what to look for. He came east to rebuild and to feed his new hunger. Knows the Harrington interest name — it has surfaced in his organizing work. Knows someone is asking about him before the speech — Celestine\'s network passed it along. Wants to talk before anything else happens. Whether that conversation occurs determines what kind of story this becomes.',
+   conn:['celesteBeaumont','amalek','odessaBright','thomasCrane']},
+
+  // ── LOOSE THREADS ─────────────────────────────────────────────────────────
+
+  {id:'veraLynn',name:'Vera Lynn',clan:'Mortal',sub:'Starlet / Celestine\'s plant',x:1040,y:530,
+   detail:'A rising DC session musician who was critically injured when Tommy lost control of the Beast during a feeding. Tommy staged the injuries as a botched suicide and gaslit her into accepting the story. She is now hopelessly devoted to him — a Blood Bond developing that neither understands. She thinks it is love. She thinks the feeling of needing to be near him is something she chose. She is also Celestine Beaumont\'s plant, tasked with getting close to Tommy and reporting on the group\'s movements. The operational directive and the genuine Bond are pulling toward different outcomes and she does not know it. She is going to see something she is not supposed to see. The question is what she does with it.',
+   conn:['tommy','celesteBeaumont']},
+
+  {id:'elizUnknown',name:'Elizabeth ????',clan:'Thin-Blooded',sub:'Fate unknown',x:160,y:620,
+   detail:'A thin-blooded vampire woman kidnapped by Amalek, Norman, and Tommy. Nobody asked why Amalek needed her. He offered a serious boon to Norman and Tommy in exchange for their help and they did not ask questions. Tommy did not feel good about it but did not stop it. Norman did not care. What happened to her afterward has not been discussed. Thin-blooded Kindred exist at the absolute margins of Kindred society — the final generation, an omen of Gehenna. She had people who knew her. Whether any of them are looking is unknown.',
    conn:['amalek','norman','tommy']},
-  {id:'veraLynn',name:'Vera Lynn',clan:'Mortal',sub:'Starlet',x:1060,y:430,
-   detail:'A rising starlet critically injured when Tommy lost control of the Beast during a feeding. The incident was staged as a botched suicide attempt. Tommy gaslit her into accepting the story. She is now hopelessly devoted to him.',
-   conn:['tommy']},
+
+  {id:'antonioGhoul',name:'Antonio',clan:'Ghoul',sub:'Untethered, DC',x:320,y:620,
+   detail:'A teenage Italian ghoul whose master cut him loose after the warehouse incident — three gangsters dead, a compromised operation, promises made without authorization. He is seventeen, untethered, and slightly Blood Bonded to Jini after she gave him her vitae to save his life. He thinks the feeling of needing to see her is admiration. He has been making earnest and slightly wrong overtures. His former master is a Nosferatu who conducted a targeted bank heist, stealing only Hecata documents — the files being built to find Andrew. He knows where his master operates. He knows what his master was interested in. He does not know that this information is significant. He is going to do something with his newfound freedom. Jini gets to influence whether that something helps or complicates.',
+   conn:['jini']},
+
 ];
 
 const idMap={};
@@ -154,26 +189,23 @@ const board=document.getElementById('board'),sv=document.getElementById('sv');
 
 function ctr(n){
   const el=document.getElementById('n'+n.id);
-  const w=el?el.offsetWidth:130,h=el?el.offsetHeight:52;
+  const w=el?el.offsetWidth:136,h=el?el.offsetHeight:52;
   return{x:n.x+px+w/2,y:n.y+py+h/2};
 }
-
 function drawEdges(){
   sv.innerHTML='';
   edges.forEach(([aid,bid])=>{
-    const a=idMap[aid],b=idMap[bid];
-    if(!a||!b)return;
+    const a=idMap[aid],b=idMap[bid];if(!a||!b)return;
     const ac=ctr(a),bc=ctr(b),hi=sel&&(aid===sel||bid===sel);
     const l=document.createElementNS('http://www.w3.org/2000/svg','line');
     l.setAttribute('x1',ac.x);l.setAttribute('y1',ac.y);
     l.setAttribute('x2',bc.x);l.setAttribute('y2',bc.y);
-    l.setAttribute('stroke',hi?'#7F77DD':'#2e2e2e');
+    l.setAttribute('stroke',hi?'#c9b97a':'#2e2b1e');
     l.setAttribute('stroke-width',hi?'1.5':'1');
-    l.setAttribute('stroke-dasharray',hi?'none':'4,4');
+    l.setAttribute('stroke-dasharray',hi?'none':'3,5');
     sv.appendChild(l);
   });
 }
-
 function drawNodes(){
   nodes.forEach(n=>{
     let el=document.getElementById('n'+n.id);
@@ -190,7 +222,6 @@ function drawNodes(){
     el.querySelector('.ni').classList.toggle('sel',n.id===sel);
   });
 }
-
 function pick(id){
   sel=id;
   const n=idMap[id];
@@ -205,28 +236,24 @@ function pick(id){
   (n.conn||[]).forEach(cid=>{
     const cn=idMap[cid];if(!cn)return;
     const pill=document.createElement('button');
-    pill.className='conn-pill';
-    pill.textContent=cn.name;
+    pill.className='conn-pill';pill.textContent=cn.name;
     pill.onclick=()=>pick(cid);
     cl.appendChild(pill);
   });
   drawNodes();drawEdges();
 }
-
 board.addEventListener('mousedown',e=>{
   if(e.target.closest('.nd'))return;
-  panning=true;ps={x:e.clientX-px,y:e.clientY-py};board.classList.add('panning');
+  panning=true;ps={x:e.clientX-px,y:e.clientY-py};board.style.cursor='grabbing';
 });
 window.addEventListener('mousemove',e=>{
   if(!panning)return;
-  px=e.clientX-ps.x;py=e.clientY-ps.y;
-  drawNodes();drawEdges();
+  px=e.clientX-ps.x;py=e.clientY-ps.y;drawNodes();drawEdges();
 });
-window.addEventListener('mouseup',()=>{panning=false;board.classList.remove('panning');});
-window.addEventListener('resize',()=>{drawNodes();drawEdges();});
+window.addEventListener('mouseup',()=>{panning=false;board.style.cursor='crosshair';});
+drawNodes();setTimeout(drawEdges,60);
 
-drawNodes();
-setTimeout(drawEdges,60);
 </script>
+
 </body>
 </html>
