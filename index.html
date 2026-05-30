@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DC 1968 — Kindred Web</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#1a1a1a;color:#e8e4dc}
+#wrap{display:flex;height:100vh;overflow:hidden}
+
+#panel{width:260px;min-width:260px;background:#111;border-right:1px solid #2a2a2a;display:flex;flex-direction:column}
+#panel-header{padding:16px;border-bottom:1px solid #2a2a2a}
+#panel-header h1{font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#888;margin-bottom:2px}
+#panel-header p{font-size:11px;color:#555}
+
+#card{flex:1;overflow-y:auto;padding:18px 16px}
+#card::-webkit-scrollbar{width:4px}
+#card::-webkit-scrollbar-track{background:transparent}
+#card::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+
+#card-empty{display:flex;align-items:center;justify-content:center;height:100%;text-align:center;padding:24px}
+#card-empty p{font-size:13px;color:#444;line-height:1.7}
+#card-content{display:none}
+
+#card-clan{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#666;margin-bottom:5px}
+#card-name{font-size:18px;font-weight:600;color:#e8e4dc;line-height:1.2;margin-bottom:3px}
+#card-sub{font-size:12px;color:#666;margin-bottom:16px}
+#card-divider{height:1px;background:#222;margin-bottom:16px}
+#card-detail{font-size:13px;color:#aaa;line-height:1.75;margin-bottom:18px}
+#card-conn-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#555;margin-bottom:8px}
+#card-conn-list{display:flex;flex-direction:column;gap:4px}
+.conn-pill{font-size:12px;color:#888;padding:5px 9px;border-radius:5px;border:1px solid #222;background:#161616;cursor:pointer;transition:all 0.12s;text-align:left}
+.conn-pill:hover{border-color:#444;color:#e8e4dc;background:#1e1e1e}
+
+#board{flex:1;position:relative;overflow:hidden;cursor:grab;background:#1a1a1a}
+#board.panning{cursor:grabbing}
+#board-canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+#sv{position:absolute;top:0;left:0;width:4000px;height:4000px;pointer-events:none}
+
+.nd{position:absolute;cursor:pointer}
+.ni{background:#111;border:1px solid #2e2e2e;border-radius:6px;padding:9px 12px;width:130px;text-align:center;transition:border-color 0.15s}
+.ni:hover{border-color:#555}
+.ni.sel{border-color:#7F77DD;border-width:1.5px}
+.pc .ni{border-color:#3a3560}
+.pc .ni.sel{border-color:#7F77DD}
+.nn{font-size:12px;font-weight:600;color:#ddd;line-height:1.3}
+.ns{font-size:11px;color:#555;margin-top:2px;line-height:1.2}
+
+#hint{position:absolute;bottom:16px;right:16px;font-size:11px;color:#333;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div id="wrap">
+  <div id="panel">
+    <div id="panel-header">
+      <h1>Washington DC, 1968</h1>
+      <p>Kindred web of influence</p>
+    </div>
+    <div id="card">
+      <div id="card-empty"><p>Select any card on the board to open their dossier.</p></div>
+      <div id="card-content">
+        <div id="card-clan"></div>
+        <div id="card-name"></div>
+        <div id="card-sub"></div>
+        <div id="card-divider"></div>
+        <div id="card-detail"></div>
+        <div id="card-conn-label">Connected to</div>
+        <div id="card-conn-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="board">
+    <div id="board-canvas">
+      <svg id="sv"></svg>
+    </div>
+    <div id="hint">Click and drag to pan</div>
+  </div>
+</div>
+
+<script>
+const nodes=[
+  {id:'norman',name:'Norman Graves',clan:'Malkavian',sub:'PC',x:320,y:260,pc:true,
+   detail:'One of five vampires assembled by the Gray Man through blackmail. Sired by Sil, a loud and domineering Malkavian wreck of a sire. Participated in the kidnapping of Elizabeth.',
+   conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown']},
+  {id:'jini',name:'Jini',clan:'Hecata',sub:'PC',x:470,y:260,pc:true,
+   detail:'Sired by Dr. Giovanni, a self-interested Hecata financier who treats the relationship as purely transactional. Bound to the coterie through the Gray Man\'s blackmail.',
+   conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy']},
+  {id:'amalek',name:'Amalek',clan:'Tremere',sub:'PC',x:620,y:260,pc:true,
+   detail:'Sired by Rabbi Levi. Murdered Elias Drum through blood ritual, drawing Marcus Webb\'s attention. Did Thomas Crane a favor; Crane claimed Drum\'s book collection afterward. Kidnapped Elizabeth alongside Norman and Tommy. Has promised Webb information on the blackmailer.',
+   conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','norman','jini','jupiter','tommy']},
+  {id:'jupiter',name:'Jupiter',clan:'Settite',sub:'PC',x:770,y:260,pc:true,
+   detail:'Sired by Sam, an antagonistic Settite true believer who shows up unannounced and is openly hostile toward his own progeny. Operates under his shadow.',
+   conn:['sam','grayMan','norman','jini','amalek','tommy']},
+  {id:'tommy',name:'Tommy Fleet',clan:'Toreador',sub:'PC',x:920,y:260,pc:true,
+   detail:'Lost control of the Beast during a feeding and critically injured rising starlet Vera Lynn. Staged it as a botched suicide and gaslit her into accepting the story. She is now hopelessly devoted to him. Badly botched both encounters with Celeste Beaumont.',
+   conn:['veraLynn','celesteBeaumont','grayMan','norman','jini','amalek','jupiter']},
+  {id:'grayMan',name:'The Gray Man',clan:'Unknown',sub:'The blackmailer',x:620,y:90,
+   detail:'Clan and identity unknown. Assembled the coterie through blackmail, allegedly acting on behalf of a powerful Camarilla patron. True loyalties and ultimate agenda remain a total mystery.',
+   conn:['norman','jini','amalek','jupiter','tommy','mattMercer']},
+  {id:'sil',name:'Sil',clan:'Malkavian',sub:'Norman\'s sire',x:180,y:90,
+   detail:'Norman\'s sire. Domineering, abusive, loud, and vulgar. Clinically insane and obsessively work-focused. Quick to anger. A deeply unpleasant presence in Norman\'s existence.',
+   conn:['norman']},
+  {id:'rabbiLevi',name:'Rabbi Levi',clan:'Tremere',sub:'Amalek\'s sire',x:920,y:90,
+   detail:'Amalek\'s sire. Blunt, domineering, and old-world in disposition. Has grown noticeably warmer toward Amalek as he edges closer to genuine Kindred power. Whether that warmth is affection or investment remains to be seen.',
+   conn:['amalek']},
+  {id:'drGiovanni',name:'Dr. Giovanni',clan:'Hecata',sub:'Jini\'s sire',x:1080,y:260,
+   detail:'Jini\'s sire. Not a real doctor and never was. Sleazy, wealth-obsessed, entirely self-interested. Treats the sire relationship as a transaction and will sell anyone out for the right price.',
+   conn:['jini']},
+  {id:'sam',name:'Sam',clan:'Settite',sub:'Jupiter\'s sire',x:1080,y:90,
+   detail:'Jupiter\'s sire. Mysterious and antagonistic toward his own progeny. Shows up without warning. A fervent believer that the time of Set is fast approaching, and not particularly concerned with Jupiter\'s wellbeing.',
+   conn:['jupiter']},
+  {id:'thomasCrane',name:'Thomas Crane',clan:'Tremere',sub:'Chantry representative',x:180,y:430,
+   detail:'Tremere Chantry representative. Projects warmth and professorial kindness. Actually deeply curious about diablerie in a way that should alarm anyone paying attention. Amalek did him a favor. He quietly claimed books from Elias Drum\'s collection after the murder.',
+   conn:['amalek','eliDrum']},
+  {id:'marcusWebb',name:'Marcus Webb',clan:'Ventrue',sub:'Sheriff of DC',x:350,y:550,
+   detail:'The Prince\'s sheriff. Large, measured, and lethal once roused. Chosen for his light touch; he does not start fires, he ends them. Currently tracking Amalek over Elias Drum\'s death. Amalek has offered him information on the blackmailer as a goodwill gesture.',
+   conn:['amalek','odessaBright','eliDrum']},
+  {id:'odessaBright',name:'Odessa Bright',clan:'Brujah',sub:'DC Brujah leader',x:500,y:550,
+   detail:'De-facto leader of the DC Brujah, a job she never wanted. Young and idealistic by Kindred standards. Running the clan out of obligation, increasingly out of her depth. Met the coterie at Marcus Webb\'s office.',
+   conn:['marcusWebb','amalek','norman','jini','jupiter','tommy']},
+  {id:'celesteBeaumont',name:'Celeste Beaumont',clan:'Toreador',sub:'Toreador Primogen',x:880,y:430,
+   detail:'Toreador Primogen. Has shown an interest in Tommy, but it reads as contempt rather than flattery. Tommy botched their first meeting spectacularly, then compounded it with a fumbled phone call asking about Calvin Duchamp.',
+   conn:['tommy','calvDuchamp']},
+  {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Anarch',sub:'West Coast Anarch',x:710,y:550,
+   detail:'A West Coast Anarch spreading political gospel in DC. Presents as a true believer in freedom and personal governance. Target of a coterie firebombing mission. Caught by Graves with Noddist-aligned paraphernalia. Something feels off about him.',
+   conn:['celesteBeaumont','amalek','norman','jini','jupiter','tommy']},
+  {id:'mattMercer',name:'Matt Mercer',clan:'Ventrue',sub:'Camarilla financier, deceased',x:620,y:430,
+   detail:'His funeral was the inciting incident that brought the coterie together. Known for a pastoral, patronizing sympathy toward younger vampires. Deceased. Had some connection to the Gray Man\'s operations.',
+   conn:['grayMan','eliDrum']},
+  {id:'eliDrum',name:'Elias Drum',clan:'Ghoul',sub:'Mercer\'s manservant',x:490,y:430,
+   detail:'Matt Mercer\'s ghoul manservant. Genuinely loved Mercer, which Kindred society considers bizarre and abhorrent. Murdered by Amalek through blood ritual. His death put Webb on Amalek\'s trail and allowed Crane to claim his book collection without obstruction.',
+   conn:['mattMercer','amalek','thomasCrane','marcusWebb']},
+  {id:'elizUnknown',name:'Elizabeth ????',clan:'Thin-Blooded',sub:'Identity unclear',x:180,y:550,
+   detail:'A thin-blooded vampire woman kidnapped by Amalek, Norman, and Tommy. No one asked why Amalek needed her. He promised a serious boon in exchange for the favor. Her full name and current fate remain unknown.',
+   conn:['amalek','norman','tommy']},
+  {id:'veraLynn',name:'Vera Lynn',clan:'Mortal',sub:'Starlet',x:1060,y:430,
+   detail:'A rising starlet critically injured when Tommy lost control of the Beast during a feeding. The incident was staged as a botched suicide attempt. Tommy gaslit her into accepting the story. She is now hopelessly devoted to him.',
+   conn:['tommy']},
+];
+
+const idMap={};
+nodes.forEach(n=>idMap[n.id]=n);
+const edgeSet=new Set(),edges=[];
+nodes.forEach(n=>(n.conn||[]).forEach(t=>{
+  const k=[n.id,t].sort().join('|');
+  if(!edgeSet.has(k)){edgeSet.add(k);edges.push([n.id,t]);}
+}));
+
+let sel=null,px=0,py=0,panning=false,ps=null;
+const board=document.getElementById('board'),sv=document.getElementById('sv');
+
+function ctr(n){
+  const el=document.getElementById('n'+n.id);
+  const w=el?el.offsetWidth:130,h=el?el.offsetHeight:52;
+  return{x:n.x+px+w/2,y:n.y+py+h/2};
+}
+
+function drawEdges(){
+  sv.innerHTML='';
+  edges.forEach(([aid,bid])=>{
+    const a=idMap[aid],b=idMap[bid];
+    if(!a||!b)return;
+    const ac=ctr(a),bc=ctr(b),hi=sel&&(aid===sel||bid===sel);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',ac.x);l.setAttribute('y1',ac.y);
+    l.setAttribute('x2',bc.x);l.setAttribute('y2',bc.y);
+    l.setAttribute('stroke',hi?'#7F77DD':'#2e2e2e');
+    l.setAttribute('stroke-width',hi?'1.5':'1');
+    l.setAttribute('stroke-dasharray',hi?'none':'4,4');
+    sv.appendChild(l);
+  });
+}
+
+function drawNodes(){
+  nodes.forEach(n=>{
+    let el=document.getElementById('n'+n.id);
+    if(!el){
+      el=document.createElement('div');
+      el.id='n'+n.id;
+      el.className='nd'+(n.pc?' pc':'');
+      el.innerHTML=`<div class="ni"><div class="nn">${n.name}</div><div class="ns">${n.clan}</div></div>`;
+      el.addEventListener('click',()=>pick(n.id));
+      document.getElementById('board-canvas').appendChild(el);
+    }
+    el.style.left=(n.x+px)+'px';
+    el.style.top=(n.y+py)+'px';
+    el.querySelector('.ni').classList.toggle('sel',n.id===sel);
+  });
+}
+
+function pick(id){
+  sel=id;
+  const n=idMap[id];
+  document.getElementById('card-empty').style.display='none';
+  document.getElementById('card-content').style.display='block';
+  document.getElementById('card-clan').textContent=n.clan;
+  document.getElementById('card-name').textContent=n.name;
+  document.getElementById('card-sub').textContent=n.sub;
+  document.getElementById('card-detail').textContent=n.detail;
+  const cl=document.getElementById('card-conn-list');
+  cl.innerHTML='';
+  (n.conn||[]).forEach(cid=>{
+    const cn=idMap[cid];if(!cn)return;
+    const pill=document.createElement('button');
+    pill.className='conn-pill';
+    pill.textContent=cn.name;
+    pill.onclick=()=>pick(cid);
+    cl.appendChild(pill);
+  });
+  drawNodes();drawEdges();
+}
+
+board.addEventListener('mousedown',e=>{
+  if(e.target.closest('.nd'))return;
+  panning=true;ps={x:e.clientX-px,y:e.clientY-py};board.classList.add('panning');
+});
+window.addEventListener('mousemove',e=>{
+  if(!panning)return;
+  px=e.clientX-ps.x;py=e.clientY-ps.y;
+  drawNodes();drawEdges();
+});
+window.addEventListener('mouseup',()=>{panning=false;board.classList.remove('panning');});
+window.addEventListener('resize',()=>{drawNodes();drawEdges();});
+
+drawNodes();
+setTimeout(drawEdges,60);
+</script>
+</body>
+</html>
