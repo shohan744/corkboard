@@ -8,12 +8,22 @@
     @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap');
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{width:100%;height:100%;overflow:hidden;background:#1e1c15}
-    #wrap{display:flex;width:100vw;height:100vh;overflow:hidden;border:none;border-radius:0}
+    #wrap{display:flex;width:100vw;height:100vh;overflow:hidden}
+
+    /* ── PANEL ── */
     #panel{width:300px;min-width:300px;background:#1c1a14;border-right:1px solid #2e2b1f;display:flex;flex-direction:column}
     #panel-header{padding:18px;border-bottom:1px solid #2e2b1f}
     #ph-eyebrow{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6b6347;margin-bottom:5px}
     #ph-title{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:#c9b97a;line-height:1.3}
     #ph-sub{font-family:'Space Mono',monospace;font-size:10px;color:#4a4535;margin-top:4px;letter-spacing:0.03em}
+
+    /* ── TABS ── */
+    #tab-bar{display:flex;border-bottom:1px solid #2e2b1f;flex-shrink:0}
+    .tab{flex:1;padding:10px 0;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#4a4535;text-align:center;cursor:pointer;border:none;background:none;transition:color 0.15s,border-bottom 0.15s;border-bottom:2px solid transparent}
+    .tab:hover{color:#7a6e3e}
+    .tab.active{color:#c9b97a;border-bottom:2px solid #c9b97a}
+
+    /* ── CARD ── */
     #card{flex:1;overflow-y:auto;padding:16px}
     #card::-webkit-scrollbar{width:3px}
     #card::-webkit-scrollbar-thumb{background:#2e2b1f}
@@ -30,7 +40,12 @@
     #card-conn-list{display:flex;flex-direction:column;gap:3px}
     .conn-pill{font-family:'Space Mono',monospace;font-size:10px;color:#7a6e3e;padding:5px 9px;border:1px solid #2a2720;background:#161410;cursor:pointer;text-align:left;letter-spacing:0.03em;transition:all 0.12s;border-radius:2px}
     .conn-pill:hover{border-color:#7a6e3e;color:#c9b97a;background:#1e1c14}
-    #board{flex:1;position:relative;overflow:hidden;cursor:crosshair;background:#1e1c15}
+
+    /* ── MAIN AREA ── */
+    #main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+
+    /* ── WEB VIEW ── */
+    #view-web{flex:1;position:relative;overflow:hidden;cursor:crosshair;background:#1e1c15}
     #board-canvas{position:absolute;top:0;left:0;width:100%;height:100%}
     #sv{position:absolute;top:0;left:0;width:4000px;height:4000px;pointer-events:none}
     .nd{position:absolute;cursor:pointer}
@@ -46,16 +61,63 @@
     .nn{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#b8a96a;line-height:1.4}
     .ns{font-family:'Space Mono',monospace;font-size:9px;color:#4a4535;margin-top:3px;letter-spacing:0.04em;text-transform:uppercase}
     #hint{position:absolute;bottom:14px;right:14px;font-family:'Space Mono',monospace;font-size:9px;color:#2a2720;letter-spacing:0.06em;text-transform:uppercase;pointer-events:none}
+
+    /* ── TIMELINE VIEW ── */
+    #view-timeline{flex:1;display:none;flex-direction:column;overflow:hidden;background:#1e1c15;position:relative}
+    #tl-track-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden;position:relative;padding:0 60px}
+    #tl-scroll{overflow-x:auto;overflow-y:hidden;padding:40px 0 30px;cursor:grab;user-select:none}
+    #tl-scroll::-webkit-scrollbar{height:3px}
+    #tl-scroll::-webkit-scrollbar-thumb{background:#2e2b1f}
+    #tl-scroll.grabbing{cursor:grabbing}
+    #tl-inner{position:relative;height:160px;white-space:nowrap;display:inline-flex;align-items:center;padding:0 80px}
+
+    /* spine */
+    #tl-line{position:absolute;top:50%;left:0;right:0;height:1px;background:#2a2720;transform:translateY(-50%)}
+    #tl-line::before{content:'';position:absolute;left:0;top:-1px;width:60px;height:3px;background:linear-gradient(90deg,#1e1c15,#2a2720)}
+    #tl-line::after{content:'';position:absolute;right:0;top:-1px;width:60px;height:3px;background:linear-gradient(270deg,#1e1c15,#2a2720)}
+
+    /* event markers */
+    .tl-event{position:relative;display:inline-flex;flex-direction:column;align-items:center;margin:0 36px;cursor:pointer;flex-shrink:0}
+    .tl-event.above .tl-label{bottom:calc(50% + 22px);top:auto}
+    .tl-event.below .tl-label{top:calc(50% + 22px);bottom:auto}
+    .tl-dot{width:10px;height:10px;border-radius:50%;background:#2e2b1e;border:1px solid #4a4535;transition:all 0.15s;position:relative;z-index:2;flex-shrink:0}
+    .tl-event:hover .tl-dot{background:#7a6e3e;border-color:#c9b97a}
+    .tl-event.sel .tl-dot{background:#c9b97a;border-color:#c9b97a;box-shadow:0 0 8px rgba(201,185,122,0.4)}
+    .tl-dot.cat-death{border-color:#8b3a3a;background:#3a1a1a}
+    .tl-dot.cat-meeting{border-color:#3a5a8b;background:#1a2a3a}
+    .tl-dot.cat-discovery{border-color:#3a7a4a;background:#1a3a1a}
+    .tl-dot.cat-faction{border-color:#7a5a3a;background:#3a2a1a}
+    .tl-dot.cat-embrace{border-color:#6a3a8b;background:#2a1a3a}
+    .tl-event:hover .tl-dot.cat-death,.tl-event.sel .tl-dot.cat-death{background:#8b3a3a;border-color:#c97a7a}
+    .tl-event:hover .tl-dot.cat-meeting,.tl-event.sel .tl-dot.cat-meeting{background:#3a5a8b;border-color:#7aaac9}
+    .tl-event:hover .tl-dot.cat-discovery,.tl-event.sel .tl-dot.cat-discovery{background:#3a7a4a;border-color:#7ac98a}
+    .tl-event:hover .tl-dot.cat-faction,.tl-event.sel .tl-dot.cat-faction{background:#7a5a3a;border-color:#c9aa7a}
+    .tl-event:hover .tl-dot.cat-embrace,.tl-event.sel .tl-dot.cat-embrace{background:#6a3a8b;border-color:#aa7ac9}
+    .tl-tick{position:absolute;top:50%;width:1px;height:14px;background:#2a2720;transform:translateY(-50%);z-index:1}
+    .tl-label{position:absolute;width:110px;text-align:center;pointer-events:none}
+    .tl-label-date{font-family:'Space Mono',monospace;font-size:8px;color:#4a4535;letter-spacing:0.08em;margin-bottom:3px}
+    .tl-label-name{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:#7a6e3e;line-height:1.3;white-space:normal}
+    .tl-event:hover .tl-label-name,.tl-event.sel .tl-label-name{color:#c9b97a}
+
+    /* category legend */
+    #tl-legend{display:flex;gap:16px;padding:12px 60px;border-top:1px solid #1a1810;flex-shrink:0}
+    .tl-leg{display:flex;align-items:center;gap:5px;font-family:'Space Mono',monospace;font-size:8px;color:#3a3528;letter-spacing:0.06em;text-transform:uppercase}
+    .tl-leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
   </style>
 </head>
 <body>
-
 <div id="wrap">
+
+  <!-- PANEL -->
   <div id="panel">
     <div id="panel-header">
       <div id="ph-eyebrow">Case File 1968</div>
       <div id="ph-title">Washington, D.C.</div>
       <div id="ph-sub">Kindred web of influence</div>
+    </div>
+    <div id="tab-bar">
+      <button class="tab active" id="tab-web" onclick="switchTab('web')">Web</button>
+      <button class="tab" id="tab-timeline" onclick="switchTab('timeline')">Timeline</button>
     </div>
     <div id="card">
       <div id="card-empty"><p>Select any subject<br>to open their dossier.</p></div>
@@ -70,116 +132,271 @@
       </div>
     </div>
   </div>
-  <div id="board">
-    <div id="board-canvas"><svg id="sv"></svg></div>
-    <div id="hint">Drag to pan</div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- WEB -->
+    <div id="view-web">
+      <div id="board-canvas"><svg id="sv"></svg></div>
+      <div id="hint">Drag to pan</div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div id="view-timeline">
+      <div id="tl-track-wrap">
+        <div id="tl-scroll">
+          <div id="tl-inner">
+            <div id="tl-line"></div>
+            <!-- events injected by JS -->
+          </div>
+        </div>
+      </div>
+      <div id="tl-legend">
+        <div class="tl-leg"><div class="tl-leg-dot" style="background:#8b3a3a;border:1px solid #c97a7a"></div>Death</div>
+        <div class="tl-leg"><div class="tl-leg-dot" style="background:#6a3a8b;border:1px solid #aa7ac9"></div>Embrace</div>
+        <div class="tl-leg"><div class="tl-leg-dot" style="background:#3a5a8b;border:1px solid #7aaac9"></div>Meeting</div>
+        <div class="tl-leg"><div class="tl-leg-dot" style="background:#3a7a4a;border:1px solid #7ac98a"></div>Discovery</div>
+        <div class="tl-leg"><div class="tl-leg-dot" style="background:#7a5a3a;border:1px solid #c9aa7a"></div>Faction</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
-
+// ─────────────────────────────────────────────
+// NODES
+// ─────────────────────────────────────────────
 const nodes=[
+  {id:'norman',name:'Norman Graves',clan:'Malkavian',sub:'PC — Pinkerton Enforcer',x:1100,y:910,pc:true,
+   detail:`A Pinkerton strikebreaker who crushed workers movements in Detroit before being transferred to DC to oversee urban renewal. His sire saw the fervor with which he worked and Embraced him for it. His Malkavian derangement manifests as an internal voice that judges everyone around him as slothful and indolent. His touchstone, Hugh Mann, died in the apartment fire the coterie set on the handler's orders — a fire Norman helped cause without knowing it was his own building. He has since lost his job, his home, and very nearly his composure. He now haunts Amalek's house in self-imposed exile, obfuscating himself from mortals. Hugh's teenage daughter, Wu Mann, found him there and asked him to pass along anything he learns about the fire. He has not yet decided what, if anything, to tell her.`,
+   conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown','ganymede','odessaBright','wuMann']},
 
-  // ── PLAYER CHARACTERS ─────────────────────────────────────────────────────
+  {id:'jini',name:'Jini',clan:'Hecata',sub:'PC — Night Nurse',x:1281,y:1041,pc:true,
+   detail:`A war bride who married in a rush before her husband Andrew was shipped out to the Pacific in WWII. He never came back — listed MIA, presumed dead after thirty years. She has never accepted this. Everything she does is organized around finding him: recovering his remains, contacting his spirit, getting him back. Her sire Dr. Giovanni noticed her occult aptitude at the hospital and Embraced her to serve as his assistant. She views the Embrace as a gift — more time, new capabilities, new leads in her search. Her Hecata discipline Oblivion lets her see the dead. She has noticed something wrong in Amalek's shadow and does not yet know what it means. She gave Drum's ghost and his fetter to Giovanni in exchange for information — and discovered that the Hecata files being built to find Andrew were stolen at precisely the moment this operation began. She reported what she'd overheard at the reflecting pool to her Primogen, Agnette Vess, who confirmed the files were likely stolen by a Nosferatu and ordered her to keep watching the Anarchs.`,
+   conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy','antonioGhoul','eliDrum','agnetteVess']},
 
-  {id:'norman',name:'Norman Graves',clan:'Malkavian',sub:'PC — Pinkerton Enforcer',x:280,y:260,pc:true,
-   detail:`A Pinkerton strikebreaker who crushed workers movements in Detroit before being transferred to DC to oversee urban renewal. His sire saw the fervor with which he worked and Embraced him for it. Norman did not mind — he was already squeezing the life out of people long before he became a vampire. His Malkavian derangement manifests as an internal voice that judges everyone around him as slothful and indolent. His touchstone — a human foreman he respected — died in the apartment fire the coterie set on the handler's orders. Norman did not know whose building it was. He still does not know Amalek did. His institutional identity and sense of purpose are simultaneously unraveling. The Pinkertons are threatening to cut him loose. He is sleeping on Amalek's couch. He has nowhere to defect to.`,
-   conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown','odessaBright']},
+  {id:'amalek',name:'Amalek',clan:'Tremere',sub:'PC — Ex-SS Occultist',x:1212,y:1254,pc:true,
+   detail:`An Austrian former member of the SS occult research division who became disillusioned as the war effort collapsed. He made a deal with a Jewish vampire during the Nazi purges — help smuggle Jews out of Germany in exchange for power and the Embrace. He was given both. He is a Noddist — obsessed with vampiric scripture and the mythology of Caine — and a practicing diablerizer, consuming other vampires to accumulate power. He confessed to DuChamp at the reflecting pool that he is Sabbat, though he denied diablerie outright — a lie DuChamp seemed to accept. He has since diablerized Ganymede in full view of witnesses during a botched staged attack, and the secret may not hold much longer. He has fled DC to consult his malkav, Anton LaVey, for a solution. The FBI is asking questions outside his house under his mortal mask, Klaus Grossman — a mask Jupiter has already slipped and broken once.`,
+   conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','ganymede','norman','jini','jupiter','tommy','calvDuchamp','ehHoldings','antonLaVey']},
 
-  {id:'jini',name:'Jini',clan:'Hecata',sub:'PC — Night Nurse',x:440,y:260,pc:true,
-   detail:`A war bride who married in a rush before her husband Andrew was shipped out to the Pacific in WWII. He never came back — listed MIA, presumed dead after thirty years. She has never accepted this. Everything she does is organized around finding him: recovering his remains, contacting his spirit, getting him back. Her sire Dr. Giovanni noticed her occult aptitude at the hospital and Embraced her to serve as his assistant. She views the Embrace as a gift — more time, new capabilities, new leads in her search. Her Hecata discipline Oblivion lets her see the dead. She has noticed something wrong in Amalek's shadow and does not yet know what it means. She gave Drum's ghost and his fetter to Giovanni in exchange for information — and discovered that the Hecata files being built to find Andrew were stolen at precisely the moment this operation began. She is pissed. Giovanni has promised to help. The files were stolen by a Nosferatu working for unknown interests.`,
-   conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy','antonioGhoul','eliDrum']},
+  {id:'jupiter',name:'Jupiter / Ira',clan:'Setite',sub:'PC — Cult Leader',x:988,y:1254,pc:true,
+   detail:`A cold, calculating predator wearing the costume of a New Age spiritual leader. Her cult, Healing Beyond the Nine, teaches that Earth is a failing colony slowly poisoning its inhabitants. She purifies members by drinking their blood — framed as removing poison — creating early-stage Blood Bonds in her devotees without their knowledge. She is a Setite operating without Camarilla sanction in DC, sent here by her sire Sam with a specific purpose she does not fully understand. Sam has pointed her at something. She does not know what. She conducted the infiltration of the apartment building in cobra form while Amalek kept the car running. She discovered one of her own flock had been secretly sired and fed a false gospel of vampirism as an alien species, meant to challenge her authority from within. She dealt with it ruthlessly. That same fledgling was later used as a patsy in a botched staged attack that ended in her death — and Jupiter was left to manage the human fallout alone while Amalek and Norman fled.`,
+   conn:['sam','grayMan','norman','jini','amalek','tommy','calvDuchamp','ganymede']},
 
-  {id:'amalek',name:'Amalek',clan:'Tremere',sub:'PC — Ex-SS Occultist',x:600,y:260,pc:true,
-   detail:`An Austrian former member of the SS occult research division who became disillusioned as the war effort collapsed. He made a deal with a Jewish vampire during the Nazi purges — help smuggle Jews out of Germany in exchange for power and the Embrace. He was given both. He is a Noddist — obsessed with vampiric scripture and the mythology of Caine — and a practicing diablerizer, consuming other vampires to accumulate power. Both secrets would end him if discovered. He murdered Reverend Elias Drum at the Mercer funeral using Blood Sorcery as a distraction for Thomas Crane, who needed access to an upper floor unobserved. He has struck a deal with Marcus Webb: information on the blackmailer in exchange for closing the investigation. He has also promised Webb information he does not fully possess yet. He made a separate back-channel call to Webb warning him about the apartment fire — six people died anyway. He is hosting Norman Graves, whose home the coterie burned, without telling Norman he knows.`,
-   conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','norman','jini','jupiter','tommy','calvDuchamp','ehHoldings']},
-
-  {id:'jupiter',name:'Jupiter / Ira',clan:'Setite',sub:'PC — Cult Leader',x:760,y:260,pc:true,
-   detail:`A cold, calculating predator wearing the costume of a New Age spiritual leader. Her cult, Healing Beyond the Nine, teaches that Earth is a failing colony slowly poisoning its inhabitants. She purifies members by drinking their blood — framed as removing poison — creating early-stage Blood Bonds in her devotees without their knowledge. She is a Setite operating without Camarilla sanction in DC, sent here by her sire Sam with a specific purpose she does not fully understand. Sam has pointed her at something. She does not know what. She conducted the infiltration of the apartment building in cobra form while Amalek kept the car running.`,
-   conn:['sam','grayMan','norman','jini','amalek','tommy','calvDuchamp']},
-
-  {id:'tommy',name:'Tommy Fleet',clan:'Toreador',sub:'PC — Country Musician',x:930,y:260,pc:true,
-   detail:`A handsome, charismatic country musician with almost no genuine creative talent. He makes his living appropriating music from underprivileged Black musicians and presenting it to white audiences. A cultural vampire in a world of actual vampires. His sire, a Toreador woman obsessed with his beauty, Embraced him to preserve it forever. He found being a muse constricting and moved on. He lost control of the Beast during a feeding, critically injuring a young starlet named Vera Lynn, then staged the injuries as a botched suicide and gaslit her into accepting the story. She is now hopelessly devoted to him — a Blood Bond developing that neither understands. He has badly botched two encounters with Celestine Beaumont. His charm is cracking under pressure. The performance is slipping. Celestine has noticed.`,
+  {id:'tommy',name:'Tommy Fleet',clan:'Toreador',sub:'PC — Country Musician',x:919,y:1041,pc:true,
+   detail:`A handsome, charismatic country musician with almost no genuine creative talent. He makes his living appropriating music from underprivileged Black musicians and presenting it to white audiences. A cultural vampire in a world of actual vampires. His sire, a Toreador woman obsessed with his beauty, Embraced him to preserve it forever. He found being a muse constricting and moved on. He lost control of the Beast during a feeding, critically injuring a young starlet named Vera Lynn, then staged the injuries as a botched suicide and gaslit her into accepting the story. She is now hopelessly devoted to him — a Blood Bond developing that neither understands. He has badly botched two encounters with Celeste Beaumont. His charm is cracking under pressure. The performance is slipping. Celeste has noticed.`,
    conn:['veraLynn','celesteBeaumont','grayMan','norman','jini','amalek','jupiter','calvDuchamp']},
 
-  // ── THE HANDLER NETWORK ───────────────────────────────────────────────────
-
-  {id:'grayMan',name:'The Gray Man',clan:'Unknown',sub:'The Handler',x:600,y:80,
+  {id:'grayMan',name:'The Gray Man',clan:'Unknown',sub:'The Handler',x:1100,y:624,
    detail:`Identity and clan unknown. Operates exclusively through dead drops, coded messages, and intermediaries. Assembled the coterie through blackmail — one to three words of threat at the bottom of each envelope, specific enough to demonstrate he knows everything. His assignments have escalated from surveillance to arson to assassination. He claims to serve Camarilla interests. He is always watching.`,
    conn:['norman','jini','amalek','jupiter','tommy','mattMercer','ehHoldings']},
 
-  // ── SIRES ─────────────────────────────────────────────────────────────────
-
-  {id:'sil',name:'Silas Mercer',clan:'Malkavian',sub:"Norman's sire (no relation to Matt Mercer)",x:120,y:80,
+  {id:'sil',name:'Silas Mercer',clan:'Malkavian',sub:"Norman's sire (no relation to Matt Mercer)",x:1244,y:704,
    detail:`Norman's sire. No relation to Matt Mercer despite the surname. A loud, domineering, abusive Malkavian wreck. Clinically insane with a work obsession that manifests as contempt for everyone who operates below his standards, which is everyone. He informed the Pinkerton leadership about Norman's blackmail situation — ostensibly to protect the institution, possibly to protect himself. Norman does not know this yet. Sil is the origin of the internal voice that judges everyone as slothful. Someone installed that voice in Norman. Understanding who Sil is and what he wanted to create is the key to understanding what Norman is.`,
    conn:['norman']},
 
-  {id:'rabbiLevi',name:'Rabbi Levi Morgenstern',clan:'Tremere',sub:"Amalek's sire",x:900,y:80,
+  {id:'rabbiLevi',name:'Rabbi Levi Morgenstern',clan:'Tremere',sub:"Amalek's sire",x:1285,y:1479,
    detail:`Amalek's sire. A Jewish vampire who survived the 20th century with a particular relationship to what human life costs and what it is worth. Not cruel — actuarial. He has done the math on how many humans can be spent before the ecosystem collapses and he stays inside those numbers with the discipline of someone who learned what happens when you do not. Genuinely fatherly toward Amalek in a way that makes the control more insidious than open hostility would be. Took him to task for driving his own car to the arson — not for the six deaths, for the operational sloppiness. Has grown noticeably warmer toward Amalek as he edges closer to genuine power. Does not know about the Noddism. Does not know about the diablerie. The name Levi Morgenstern — morning star — belongs to a vampire who has not seen dawn in centuries.`,
    conn:['amalek']},
 
-  {id:'drGiovanni',name:'Dr. Giovanni',clan:'Hecata',sub:"Jini's sire",x:1100,y:260,
+  {id:'drGiovanni',name:'Dr. Giovanni',clan:'Hecata',sub:"Jini's sire",x:1522,y:1100,
    detail:`Jini's sire and self-described Head of Pathology, though he was never a real doctor. Sleazy, wealth-obsessed, entirely self-interested. Treats the sire relationship as a transaction — Jini is a useful tool and he will maintain her as such as long as she produces value. He signed Reverend Drum's death certificate. He was present when Drum died. He took custody of Drum's fetter and ghost from Jini in exchange for information about Andrew. He knows about her outside assignment and has been watching her extracurricular activities since before she had any. He has promised to help find the stolen Andrew files. His price has not been named yet. He will collect at maximum leverage.`,
    conn:['jini','eliDrum']},
 
-  {id:'sam',name:'Sam',clan:'Setite',sub:"Jupiter's sire",x:1100,y:80,
+  {id:'sam',name:'Sam',clan:'Setite',sub:"Jupiter's sire",x:750,y:1336,
    detail:`Jupiter's sire. An Egyptian antiquities dealer in his mid-thirties in appearance, operating out of a Georgetown townhouse. In DC since the late 1950s — longer than Jupiter knows. His mask is legitimate: he trades antiquities, moves through embassy circles, knows the right people. His real work is Setite influence operations. DC in 1968 is fracturing along every fault line simultaneously and he is here to eat slowly and carefully. He sent Jupiter to DC pointed at something specific she does not know she is pointed at yet. He contacts her infrequently, usually with requests she fulfills to stay in his good graces. He knows where she is. She does not know where he is. His line: "I have found that most people know exactly what they want. The difficulty is never the wanting. It is the permission."`,
    conn:['jupiter']},
 
-  // ── CAMARILLA ESTABLISHMENT ───────────────────────────────────────────────
-
-  {id:'thomasCrane',name:'Thomas Crane',clan:'Tremere',sub:'Chantry representative',x:160,y:430,
+  {id:'thomasCrane',name:'Thomas Crane',clan:'Tremere',sub:'Chantry representative',x:1403,y:1393,
    detail:`Projects warmth and professorial kindness. Actually deeply curious about diablerie in a way that should alarm anyone paying attention. Attended Calvin DuChamp's speech in disguise — not for politics, for DuChamp's blood. Recognized the diablerie signature in DuChamp's aura and wants what the consumption of such a Kindred would provide. Made a deal with Amalek at the Mercer funeral: a distraction in exchange for an intelligence report on Jupiter. He got upstairs. He sent the report. The favor economy between them is unresolved. He also quietly claimed Drum's book collection after the murder. The Libellus Sanguinis — a Noddist text of significant interest — is either in that collection or DuChamp knew where it was.`,
    conn:['amalek','eliDrum','calvDuchamp']},
 
-  {id:'marcusWebb',name:'Marcus Webb',clan:'Brujah',sub:'Sheriff of DC',x:330,y:530,
+  {id:'marcusWebb',name:'Marcus Webb',clan:'Brujah',sub:'Sheriff of DC',x:1510,y:1283,
    detail:`The Prince's Sheriff. Measured, unhurried, and lethal once roused. Every question he asks is already answered — he asks to see how you respond. Was present at DuChamp's speech in an official capacity. Has an active investigation into Elias Drum's death that he closed in exchange for Amalek's promise of information on the blackmailer. His investigation is now moving toward something dangerous. Amalek's secret confidant within the existing Camarilla power structure.`,
    conn:['amalek','odessaBright','eliDrum']},
 
-  {id:'celesteBeaumont',name:'Celestine Beaumont',clan:'Toreador',sub:'Toreador Primogen',x:880,y:430,
-   detail:`Toreador Primogen. In DC since before the Civil War, earned her council seat through a century of patience and leverage. Runs a Georgetown gallery that is also Elysium. Tommy spilled the entire blackmail situation to her at the Mercer funeral within twenty minutes of meeting her — she now has a more complete picture of the coterie's operation than the coterie does. She feels like something is slipping away from her sphere of influence, and is determined to stop it. The coterie prove an excellent tool to that end. She is especially interested in Tommy, though for good or ill is yet to be determined.`,
-   conn:['tommy','veraLynn','calvDuchamp']},
+  {id:'celesteBeaumont',name:'Celeste Beaumont',clan:'Toreador',sub:'Toreador Primogen',x:768,y:840,
+   detail:`Toreador Primogen. In DC since before the Civil War, earned her council seat through a century of patience and leverage. Runs a Georgetown gallery that is also Elysium. Tommy spilled the entire blackmail situation to her at the Mercer funeral within twenty minutes of meeting her — she now has a more complete picture of the coterie's operation than the coterie does. She surfaced an interesting piece of intelligence to the group herself: the Nosferatu Primogen is functionally missing, never seen, communicating only through missives, despite holding the Prince's ear. A potential exploit she seems content to let the coterie pursue on her behalf. She has since called in Tommy's favor twice — once for an "up-and-coming" act that turned out to be a punishing test, and once to congratulate him on passing it. She is now summoning the whole coterie to her gallery.`,
+   conn:['tommy','veraLynn','calvDuchamp','nosferatuPrimogen']},
 
-  // ── THE DEAD ──────────────────────────────────────────────────────────────
-
-  {id:'mattMercer',name:'Aldous Mercer',clan:'Ventrue',sub:'Camarilla Primogen, deceased',x:530,y:430,
+  {id:'mattMercer',name:'Aldous Mercer',clan:'Ventrue',sub:'Camarilla Primogen, deceased',x:1309,y:525,
    detail:`His funeral was the inciting incident that brought the coterie together — each of them given an envelope and a surveillance target that turned out to be each other. He held DC's urban renewal contracts through a network of mortal proxies and ghoul city officials. He was building a quiet back-channel deal with Odessa Bright's reform faction to shore up his council position.`,
    conn:['grayMan','eliDrum','odessaBright']},
 
-  {id:'eliDrum',name:'Reverend Elias Drum',clan:'Ghoul',sub:"Mercer's manservant, deceased",x:470,y:530,
+  {id:'eliDrum',name:'Reverend Elias Drum',clan:'Ghoul',sub:"Mercer's manservant, deceased",x:1478,y:709,
    detail:`Mercer's ghoul manservant for thirty years. A Baptist preacher who served as community liaison without ever being told what Mercer was. He genuinely loved Mercer, which Kindred society considers beneath contempt. Murdered by Amalek at the Mercer funeral using Blood Sorcery as a distraction for Crane. His death was the only genuine grief in a room full of performance. His ghost is now in Dr. Giovanni's custody, bound to a fetter Jini recovered. The ghost knows things.`,
    conn:['mattMercer','amalek','thomasCrane','marcusWebb','drGiovanni','jini']},
 
-  // ── THE REFORM FACTION ────────────────────────────────────────────────────
-
-  {id:'odessaBright',name:'Odessa Bright',clan:'Brujah',sub:'Reform faction, DC',x:440,y:860,
+  {id:'odessaBright',name:'Odessa Bright',clan:'Brujah',sub:'Reform faction, DC',x:1711,y:1143,
    detail:`A young Brujah who never wanted to be the de-facto leader of DC's reform faction and increasingly is one anyway. She attended the Mercer funeral despite having no right to be there — and was spotted by Amalek at Marcus Webb's office. A pragmatist forced into dealing with people who hold her with contempt.`,
    conn:['marcusWebb','mattMercer','calvDuchamp']},
 
-  {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Brujah',sub:'West Coast Anarch',x:660,y:620,
-   detail:`Spreading Anarch gospel in DC, building a coalition of reform-minded Kindred that is part genuine ideology and part hunting ground. Exiled from the West Coast after committing diablerie — the black threads are still visible in his aura to anyone who knows what to look for. He came east to rebuild and to feed his new hunger. Knows someone is asking about him before the speech — Celestine's network passed it along. Wants to talk before anything else happens. Whether that conversation occurs determines what kind of story this becomes. Norman Graves found Noddist materia in his apartment. He is the one who first identified EH Holdings as the entity systematically buying and demolishing buildings that could have housed the Anarch movement — and passed that intelligence to Amalek.`,
+  {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Brujah',sub:'West Coast Anarch',x:1688,y:931,
+   detail:`Spreading Anarch gospel in DC, building a coalition of reform-minded Kindred that is part genuine ideology and part hunting ground. Exiled from the West Coast after committing diablerie — the black threads are still visible in his aura to anyone who knows what to look for. He came east to rebuild and to feed his new hunger. Knows someone is asking about him before the speech — Celeste's network passed it along. Wants to talk before anything else happens. Whether that conversation occurs determines what kind of story this becomes. Norman Graves found Noddist materia in his apartment. He is the one who first identified EH Holdings as the entity systematically buying and demolishing buildings that could have housed the Anarch movement — and passed that intelligence to Amalek.`,
    conn:['celesteBeaumont','amalek','odessaBright','thomasCrane','ehHoldings']},
 
-  {id:'ehHoldings',name:'EH Holdings',clan:'Mortal Proxy',sub:'Real estate front, Gray Man',x:820,y:740,
+  {id:'ehHoldings',name:'EH Holdings',clan:'Mortal Proxy',sub:'Real estate front, Gray Man',x:991,y:1535,
    detail:`A shell company operating in the DC real estate market with no visible principals and no public-facing leadership. Its pattern of acquisition is not random: EH Holdings buys buildings in neighborhoods where Anarch organizing has begun to take root, sits on them briefly, and then demolishes or converts them — destroying community infrastructure before it can be used. Calvin DuChamp identified the pattern through his organizing network and shared the name with Amalek. The Gray Man's oldest mortal proxy. Whether EH stands for anything, and who signs the checks, remains unknown.`,
    conn:['calvDuchamp','amalek','grayMan']},
 
-  // ── LOOSE THREADS ─────────────────────────────────────────────────────────
-
-  {id:'veraLynn',name:'Vera Lynn',clan:'Mortal',sub:"Starlet / Celestine's plant",x:1040,y:530,
-   detail:`A rising DC session musician who was critically injured when Tommy lost control of the Beast during a feeding. Tommy staged the injuries as a botched suicide and gaslit her into accepting the story. She is now hopelessly devoted to him — a Blood Bond developing that neither understands. She thinks it is love. She thinks the feeling of needing to be near him is something she chose.`,
+  {id:'veraLynn',name:'Vera Lynn',clan:'Mortal',sub:"Starlet / Celeste's plant",x:679,y:1115,
+   detail:`A rising DC session musician who was injured when Tommy fed on her — he staged the wounds as a botched suicide attempt and gaslit her into believing it. She accepted the story. Her infatuation with him has only deepened since: she once caught him feeding on a man and mistook it for intimacy, concluding in a homophobic society that his strange behavior must stem from closeted bisexuality rather than anything supernatural. Tommy has done nothing to correct that assumption either. He has since floated the idea of siring her outright, both to contain the Masquerade risk she represents and to lock down his hold over her completely.`,
    conn:['tommy','celesteBeaumont']},
 
-  {id:'elizUnknown',name:'Elizabeth ????',clan:'Thin-Blooded',sub:'Fate unknown',x:160,y:620,
-   detail:`A thin-blooded vampire woman kidnapped by Amalek, Norman, and Tommy. Nobody asked why Amalek needed her. He offered a serious boon to Norman and Tommy in exchange for their help and they did not ask questions. Tommy did not feel good about it but did not stop it. Norman did not care. What happened to her afterward has not been discussed. Thin-blooded Kindred exist at the absolute margins of Kindred society — the final generation, an omen of Gehenna. She had people who knew her. Whether any of them are looking is unknown.`,
+  {id:'elizUnknown',name:'Elizabeth ????',clan:'Thin-Blooded',sub:'Fate unknown',x:812,y:756,
+   detail:`A thin-blooded drifter abducted by Amalek, Norman, and Tommy using Tommy's star power as bait. Nobody asked why Amalek needed her. He took her to his private room and she was never seen again. What he wanted from her, and what became of her, has never been discussed by anyone who was there. Thin-blooded Kindred exist at the absolute margins of Kindred society — the final generation, an omen of Gehenna. She had people who knew her. Whether any of them are looking is unknown.`,
    conn:['amalek','norman','tommy']},
 
-  {id:'antonioGhoul',name:'Antonio',clan:'Ghoul',sub:'Untethered, DC',x:320,y:740,
-   detail:`A teenage Italian ghoul whose master cut him loose after the warehouse incident — three gangsters dead, a compromised operation, promises made without authorization. He is seventeen, untethered, and slightly Blood Bonded to Jini after she gave him her vitae to save his life. He thinks the feeling of needing to see her is admiration. He has been making earnest and slightly wrong overtures. His former master is a Nosferatu who conducted a targeted bank heist, stealing only Hecata documents — the files being built to find Andrew. He knows where his master operates. He knows what his master was interested in. He does not know that this information is significant. He is going to do something with his newfound freedom. Jini gets to influence whether that something helps or complicates.`,
+  {id:'ganymede',name:'Ganymede',clan:'Caitiff (deceased)',sub:"Diablerized by Amalek",x:941,y:1656,
+   detail:`Formerly one of Jupiter's most devoted flock. Secretly sired by an unknown party and fed a deliberate false gospel — that vampires are aliens of a dying superior race sent to save humanity — meant to position him to challenge Jupiter's control of Healing Beyond the Nine from within. Jupiter discovered the deception and locked him away. He was then used as a patsy in a staged attack meant to pin the original apartment fire on him. He tried to flee. Norman ran him down with Amalek's car. Amalek diablerized him while he lay trapped beneath the wreckage, in front of witnesses. He is dead. Who actually sired and coached him remains unknown.`,
+   conn:['jupiter','amalek','norman']},
+
+  {id:'antonioGhoul',name:'Antonio',clan:'Ghoul',sub:'Untethered, DC',x:1669,y:1000,
+   detail:`A teenage Italian ghoul whose master cut him loose after the warehouse incident — three gangsters dead, a compromised operation, promises made without authorization. He is seventeen, untethered, and slightly Blood Bonded to Jini after she gave him her vitae to save his life. He has taken to following her, visiting her at work, and making increasingly bold romantic overtures she has not encouraged. He has mentioned his former master in passing — a Nosferatu who lives in the sewers, and who Jini's own Primogen now suspects of stealing the Hecata files on her missing husband. Antonio does not seem to grasp how significant that connection is.`,
    conn:['jini']},
 
+  {id:'agnetteVess',name:'Agnette Vess',clan:'Hecata',sub:"Jini's Primogen",x:1441,y:852,
+   detail:`Jini's Primogen within the Hecata. Composed, exacting, and clearly in possession of more information than she lets on at any given time. When Jini reported what she'd overheard at the reflecting pool — Amalek's confession, the EH Holdings revelation — Vess ordered her to keep close watch on the Anarch faction going forward. She also confirmed what Jini already suspected: the stolen files on Andrew were almost certainly taken by a Nosferatu. She did not say how she knew that.`,
+   conn:['jini']},
+
+  {id:'antonLaVey',name:'Anton LaVey',clan:'Malkavian',sub:"Amalek's malkav, whereabouts unknown",x:1144,y:1519,
+   detail:`The Malkavian elder Amalek turns to in moments of genuine crisis — less a sire-figure than a confessor with an agenda of his own. Amalek fled to him after the Ganymede diablerie with the FBI closing in. LaVey's price for help was simple: keep pushing DC further into Sabbat-flavored chaos. In exchange, he performed the Rite of Innocence on Amalek's behalf — a Blood Sorcery ritual requiring a child sacrifice, conducted off-page, that masks Amalek's aura from divination and supernatural scrutiny. Amalek now carries a totem born of that killing. Whether it will be enough to survive the FBI's attention is unknown. What LaVey actually wants from a more chaotic DC has not been revealed.`,
+   conn:['amalek']},
+
+  {id:'wuMann',name:'Wu Mann',clan:'Mortal',sub:"Hugh Mann's daughter",x:956,y:704,
+   detail:`Hugh Mann's teenage daughter. Convinced the fire that killed her father was arson, she has been unable to get the police or anyone else to take her seriously. She tracked Norman down during his self-imposed exile at Amalek's house and asked him directly to pass along anything he learns. She has no idea Norman was there the night it happened — or what he actually knows.`,
+   conn:['norman']},
+
+  {id:'nosferatuPrimogen',name:'Nosferatu Primogen',clan:'Nosferatu',sub:'Identity unknown — communicates only by missive',x:776,y:581,
+   detail:`No one in the Camarilla's local hierarchy has ever seen him. He communicates entirely through delivered missives, never in person, and yet somehow holds the Prince's ear regardless. Celeste Beaumont surfaced his existence to the coterie as a potential exploit — whoever controls access to him, or can impersonate his channel, gains leverage no one else in the city currently has. Possibly connected to the Nosferatu who stole the Hecata files on Andrew. Possibly connected to Antonio's former master. Possibly the same person.`,
+   conn:['celesteBeaumont']},
 ];
 
+// ─────────────────────────────────────────────
+// TIMELINE EVENTS
+// ─────────────────────────────────────────────
+const events=[
+  {id:'ev0a', date:'1944', name:"Jini's Husband Lost", cat:'discovery',
+   detail:`Jini's husband Andrew ships out to the Pacific theater during WWII. He never returns — listed MIA, presumed dead. Decades before her Embrace, this loss becomes the organizing principle of her entire existence, mortal and Kindred alike.`},
+
+  {id:'ev0b', date:'1945', name:"Amalek Escapes the Reich", cat:'discovery',
+   detail:`As the Nazi war machine collapses, Amalek — disillusioned with the SS occult research division he served — strikes a deal with a Jewish vampire and helps smuggle Jews out of Germany. He is given power and the Embrace in return. The deal that saved him is also the deal that made him.`},
+
+  {id:'ev0c', date:'1965', name:'Healing Beyond the Nine Founded', cat:'faction',
+   detail:`Jupiter establishes her cult, Healing Beyond the Nine, in a bohemian corner of Georgetown. The gospel of a poisoned, failing Earth begins quietly recruiting believers years before the coterie ever forms.`},
+
+  {id:'ev0d', date:'1965', name:"Tommy's First Album", cat:'faction',
+   detail:`Tommy Fleet releases his debut album and becomes a country star almost overnight, riding music appropriated from underprivileged Black musicians to a white audience that has no idea where it really came from.`},
+
+  {id:'ev0e', date:'1967', name:'Norman Reassigned to DC', cat:'faction',
+   detail:`Norman leaves Detroit, reassigned by the Pinkertons to clear "human refuse" from Washington DC in the name of urban revitalization. He arrives already very good at the part of the job that involves crushing people.`},
+
+
+  {id:'ev1', date:'Apr 04, 1968', name:'MLK Assassinated', cat:'faction',
+   detail:`Dr. Martin Luther King Jr. is shot in Memphis. Washington DC erupts into riots. The city the coterie will soon be operating in is already on fire before any of them have met.`},
+
+  {id:'ev2', date:'Apr 06, 1968', name:'Death of Aldous Mercer', cat:'death',
+   detail:`Camarilla Primogen Aldous Mercer is assassinated amid the chaos of the riots. The Prince's court has not satisfactorily explained the circumstances. His death sets the machinery in motion.`},
+
+  {id:'ev3', date:'Apr 08, 1968', name:'The Envelopes', cat:'faction',
+   detail:`Documents are delivered to five individuals through separate channels. Each contains a surveillance target and a coded threat — specific enough to demonstrate the sender knows everything. The targets turn out to be each other. This is how the coterie is assembled.`},
+
+  {id:'ev4', date:'Apr 11, 1968', name:'Mercer Funeral', cat:'meeting',
+   detail:`The coterie attends Mercer's funeral, ostensibly to spy on one another. Amalek makes a poor first impression trying to ply Jupiter and Jini with absinthe tainted by blood magic — both refuse. Reverend Elias Drum is murdered by Amalek using Blood Sorcery, providing cover for Thomas Crane to slip upstairs unobserved.`},
+
+  {id:'ev5', date:'Apr 13, 1968', name:'Findings Turned In', cat:'faction',
+   detail:`The coterie reports their surveillance findings on each other to the Gray Man, their shadowy handler's representative. Norman alone blows the assignment off as a joke — a decision that will not age well.`},
+
+  {id:'ev6', date:'Apr 15, 1968', name:'The Death Certificate', cat:'discovery',
+   detail:`Jini retrieves Reverend Drum's death certificate for Dr. Giovanni. In doing so she discovers a ghost haunting the document — Drum's own. She steals both the certificate and his fetter, handing them to Giovanni. In the process she learns the Hecata file being compiled on her missing husband has been stolen.`},
+
+  {id:'ev7', date:'Apr 17, 1968', name:'Webb Back-Channel Opened', cat:'meeting',
+   detail:`Amalek quietly opens a private line to Sheriff Marcus Webb, behind the rest of the coterie's back. Neither Webb nor Amalek mention this arrangement to anyone else.`},
+
+  {id:'ev8', date:'Apr 22, 1968', name:'First Job: The Fire', cat:'death',
+   detail:`The coterie's first assignment from the handler: torch an apartment complex. Tommy injures fledgling starlet Vera Lynn while feeding on her and stages it as self-harm. Jupiter and Amalek fake an electrical fault; Amalek calls it in to Webb from a payphone as Jupiter sets the blaze herself in serpent form.`},
+
+  {id:'ev9', date:'Apr 22, 1968', name:'Hugh Mann Dies', cat:'death',
+   detail:`Norman returns to find his own home consumed in the fire. Hugh Mann, his touchstone, dies in the blaze. The coterie tries to maintain the deception but the truth surfaces fast. Norman has a breakdown in a bohemian nightclub. He moves in with Amalek shortly after — homeless, jobless, and increasingly unmoored.`},
+
+  {id:'ev10', date:'Apr 28, 1968', name:'Second Job: The Bomb', cat:'faction',
+   detail:`A new assignment arrives: plant a car bomb and assassinate Calvin DuChamp. Separately, Jini is tasked by Dr. Giovanni with retrieving Drum's death certificate — work that overlaps with the bomb plot in ways no one has noticed yet.`},
+
+  {id:'ev11', date:'May 01, 1968', name:'The Hotel Job Goes Bad', cat:'meeting',
+   detail:`Norman and Jini go to collect the bomb from a ghoul supplier, only to find the deal has soured — gangsters are beating the ghoul to death in a dingy hotel room. They kill the gangsters, save the ghoul (Antonio), and walk away with the bomb and an unplanned dependent.`},
+
+  {id:'ev12', date:'May 03, 1968', name:"Amalek's Warning", cat:'meeting',
+   detail:`Amalek speaks with his sire, Rabbi Levi Morgenstern, who warns him to be careful. The warning will be ignored almost immediately.`},
+
+  {id:'ev13', date:'May 05, 1968', name:'Elizabeth Taken', cat:'discovery',
+   detail:`Amalek recruits Norman and Tommy for a special task, promising a boon in return. Using Tommy's star power as bait, the trio abduct a thin-blooded drifter woman. Amalek takes her to his private room. She is never seen again. Neither helper asks what happened.`},
+
+  {id:'ev14', date:'May 09, 1968', name:'Stakeout at the Church', cat:'discovery',
+   detail:`The coterie stakes out the abandoned church where Calvin DuChamp is set to speak. Norman discovers Noddist paraphernalia among DuChamp's belongings — a detail no one quite knows what to do with yet.`},
+
+  {id:'ev15', date:'May 10, 1968', name:'Tommy Strikes Out with Celeste', cat:'meeting',
+   detail:`Tommy attempts to probe Celeste Beaumont for information ahead of the DuChamp operation. It goes poorly — he offers a small boon and receives nothing in return.`},
+
+  {id:'ev16', date:'May 11, 1968', name:'The Speech and the Bomb', cat:'faction',
+   detail:`The night of DuChamp's speech. Amalek and Tommy attend the meeting itself — young Anarchs are thrilled to see Tommy supporting their cause, and Thomas Crane is in the room. Amalek slips away backstage and delivers a letter to DuChamp directly. Meanwhile Tommy, Jini, and Jupiter attempt to plant the car bomb; a distraction goes wrong when Jini breaks a car window and is detained by a guard. Norman plants the bomb anyway, a fight breaks out, and DuChamp escapes in a different vehicle.`},
+
+  {id:'ev17', date:'Jun 05, 1968', name:'RFK Assassinated', cat:'faction',
+   detail:`Senator Robert F. Kennedy is shot at the Ambassador Hotel in Los Angeles. A congressional committee on assassinations is formed in the aftermath. DC's political temperature climbs further still.`},
+
+  {id:'ev18', date:'Jun 07, 1968', name:'Vera Lynn Misreads Everything', cat:'embrace',
+   detail:`Vera Lynn's infatuation with Tommy deepens. She discovers him feeding on a man and mistakes the act for intimacy — in a homophobic society, she assumes his odd behavior stems from closeted bisexuality rather than anything supernatural. The misunderstanding suits Tommy fine for now.`},
+
+  {id:'ev19', date:'Jun 09, 1968', name:'Cult Infiltration Discovered', cat:'discovery',
+   detail:`Jupiter discovers that one of her flock — Ganymede — has been secretly sired and deliberately misled about the nature of vampirism, positioned to challenge her control of Healing Beyond the Nine. She deals with it ruthlessly and locks the new lick away.`},
+
+  {id:'ev20', date:'Jun 11, 1968', name:'The Missing Primogen', cat:'discovery',
+   detail:`Celeste Beaumont interrupts a coterie meeting at a coffee shop to reveal that the Nosferatu Primogen is functionally missing — no one has ever seen him, and he communicates only through delivered missives, despite holding the Prince's ear. A potentially valuable exploit. Tommy grovels and offers yet another favor.`},
+
+  {id:'ev21', date:'Jun 13, 1968', name:'Antonio Mentions His Master', cat:'discovery',
+   detail:`Antonio begins following Jini, visiting her at work and making increasingly bold romantic overtures. In the course of this he mentions his former master — a Nosferatu who lives in the sewers.`},
+
+  {id:'ev22', date:'Jun 15, 1968', name:'The Reflecting Pool Meeting', cat:'meeting',
+   detail:`Calvin DuChamp arranges a meeting with Amalek at the reflecting pool. Amalek brings Jini and Jupiter as backup and tries to keep them at a distance — Jini stealthily follows anyway. Amalek confesses to being Sabbat but denies diablerie. The two plot to weaken the Camarilla's grip on DC and bolster the Anarch faction, and DuChamp names a real estate firm, EH Holdings, that has been aggressively buying and demolishing buildings Anarchs try to use. Jini overhears the entire exchange.`},
+
+  {id:'ev23', date:'Jun 16, 1968', name:'Jini Reports to Agnette Vess', cat:'faction',
+   detail:`Jini relays what she overheard to her Primogen, Agnette Vess, who orders her to keep watch on the would-be revolutionaries. Vess also confirms that the data on Andrew was likely stolen by a Nosferatu.`},
+
+  {id:'ev24', date:'Jun 17, 1968', name:"Celeste's Favor Called", cat:'meeting',
+   detail:`Celeste Beaumont calls Tommy and cashes in his outstanding favor: a performance to bolster a "burgeoning young talent." Tommy has no idea yet what he is walking into.`},
+
+  {id:'ev25', date:'Jun 18, 1968', name:'The Patsy Plot', cat:'faction',
+   detail:`Norman hatches a scheme to get his old job back — using Ganymede, Jupiter's recently turned and imprisoned lost lamb, as a patsy for the apartment fire. Jupiter, Amalek, and Norman plan a staged attack on the cult to abduct and kill the fresh vampire and pin the original arson on him.`},
+
+  {id:'ev26', date:'Jun 18, 1968', name:'Tommy at the Metal Show', cat:'meeting',
+   detail:`Tommy arrives at Celeste's "performance" to find a heavy metal show at a total dive — deliberately outside his element. The crowd is hostile to the pop country star and the headliner, a dismissive British kid named Osbourne, mocks him outright. Against every odd, Tommy plays a blistering set, wins the crowd, and cements an Anarch-hero reputation he never wanted.`},
+
+  {id:'ev27', date:'Jun 18, 1968', name:'The Fake Attack Goes Wrong', cat:'death',
+   detail:`The staged attack on the cult unravels. Ganymede attempts to flee before Norman runs her down with Amalek's car through a garden wall. Amalek loses control and diablerizes her while she's trapped beneath the vehicle, in front of witnesses. Norman and Amalek flee on foot, leaving Jupiter to calm her terrified flock and handle the responding police — who she tells may have a connection to Tommy Fleet.`},
+
+  {id:'ev28', date:'Jun 20, 1968', name:'Amalek Goes to Ground', cat:'faction',
+   detail:`Suspicion falls heavily on Amalek despite the masks. He leaves town to consult his Malkavian — Anton LaVey — for a solution. Norman, meanwhile, haunts Amalek's empty house, obfuscating himself from mortals and locking himself inside.`},
+
+  {id:'ev28b', date:'Jun 20, 1968', name:'The Rite of Innocence', cat:'death',
+   detail:`In exchange for Amalek's continued work pushing DC toward Sabbat-flavored chaos, Anton LaVey performs the Rite of Innocence on his behalf — a Blood Sorcery ritual requiring the sacrifice of a child, conducted away from the table. The result is a totem that masks Amalek's aura from supernatural scrutiny. The cost was a child's life. Amalek does not appear to have hesitated.`},
+
+  {id:'ev29', date:'Jun 21, 1968', name:'Jini and Jupiter Compare Notes', cat:'meeting',
+   detail:`Jini and Jupiter meet privately to discuss the Amalek situation. Both independently resolve not to trust him going forward.`},
+
+  {id:'ev30', date:'Jun 23, 1968', name:'FBI Closes In', cat:'faction',
+   detail:`FBI agents investigating Amalek encounter Jini and Jupiter outside his house — everyone, it seems, is looking for him. During questioning, Jupiter slips and refers to him by his true name rather than his mortal mask, Klaus Grossman. The agents also visit Tommy Fleet's home; he notices afterward that his place is under surveillance.`},
+
+  {id:'ev31', date:'Jun 24, 1968', name:"Wu Mann's Visit", cat:'discovery',
+   detail:`During his self-imposed exile at Amalek's house, Norman receives a visit from Wu Mann — Hugh Mann's teenage daughter. She is convinced the fire was arson and can't get anyone to take her seriously. She asks Norman to pass along anything he learns.`},
+
+  {id:'ev32', date:'Jun 25, 1968', name:'The Gallery Invitation', cat:'meeting',
+   detail:`Celeste Beaumont calls Tommy to congratulate him on the performance. Tommy raises the idea of siring Vera Lynn to contain the brewing Masquerade risk and lock down his control over her. Beaumont promises to raise it with the council — for another favor — and summons the entire coterie to meet her at a decrepit art gallery.`},
+];
+
+// ─────────────────────────────────────────────
+// WEB LOGIC
+// ─────────────────────────────────────────────
 const idMap={};
 nodes.forEach(n=>idMap[n.id]=n);
 const edgeSet=new Set(),edges=[];
@@ -188,8 +405,8 @@ nodes.forEach(n=>(n.conn||[]).forEach(t=>{
   if(!edgeSet.has(k)){edgeSet.add(k);edges.push([n.id,t]);}
 }));
 
-let sel=null,px=0,py=0,panning=false,ps=null;
-const board=document.getElementById('board'),sv=document.getElementById('sv');
+let sel=null,px=-580,py=-580,panning=false,ps=null;
+const webView=document.getElementById('view-web'),sv=document.getElementById('sv');
 
 function ctr(n){
   const el=document.getElementById('n'+n.id);
@@ -201,12 +418,19 @@ function drawEdges(){
   edges.forEach(([aid,bid])=>{
     const a=idMap[aid],b=idMap[bid];if(!a||!b)return;
     const ac=ctr(a),bc=ctr(b),hi=sel&&(aid===sel||bid===sel);
+    const pcLink = a.pc && b.pc;
     const l=document.createElementNS('http://www.w3.org/2000/svg','line');
     l.setAttribute('x1',ac.x);l.setAttribute('y1',ac.y);
     l.setAttribute('x2',bc.x);l.setAttribute('y2',bc.y);
-    l.setAttribute('stroke',hi?'#c9b97a':'#2e2b1e');
-    l.setAttribute('stroke-width',hi?'1.5':'1');
-    l.setAttribute('stroke-dasharray',hi?'none':'3,5');
+    if(pcLink){
+      l.setAttribute('stroke',hi?'#e3d5a0':'#9a8c54');
+      l.setAttribute('stroke-width',hi?'3':'2.25');
+      l.setAttribute('stroke-dasharray','none');
+    } else {
+      l.setAttribute('stroke',hi?'#c9b97a':'#2e2b1e');
+      l.setAttribute('stroke-width',hi?'1.5':'1');
+      l.setAttribute('stroke-dasharray',hi?'none':'3,5');
+    }
     sv.appendChild(l);
   });
 }
@@ -218,7 +442,7 @@ function drawNodes(){
       el.id='n'+n.id;
       el.className='nd'+(n.pc?' pc':'');
       el.innerHTML=`<div class="ni"><div class="nn">${n.name}</div><div class="ns">${n.clan}</div></div>`;
-      el.addEventListener('click',()=>pick(n.id));
+      el.addEventListener('click',()=>pickNode(n.id));
       document.getElementById('board-canvas').appendChild(el);
     }
     el.style.left=(n.x+px)+'px';
@@ -226,38 +450,133 @@ function drawNodes(){
     el.querySelector('.ni').classList.toggle('sel',n.id===sel);
   });
 }
-function pick(id){
+function pickNode(id){
   sel=id;
   const n=idMap[id];
-  document.getElementById('card-empty').style.display='none';
-  document.getElementById('card-content').style.display='block';
-  document.getElementById('card-clan').textContent=n.clan;
-  document.getElementById('card-name').textContent=n.name;
-  document.getElementById('card-sub').textContent=n.sub;
-  document.getElementById('card-detail').textContent=n.detail;
-  const cl=document.getElementById('card-conn-list');
-  cl.innerHTML='';
-  (n.conn||[]).forEach(cid=>{
-    const cn=idMap[cid];if(!cn)return;
-    const pill=document.createElement('button');
-    pill.className='conn-pill';pill.textContent=cn.name;
-    pill.onclick=()=>pick(cid);
-    cl.appendChild(pill);
+  showCard(n.clan, n.name, n.sub, n.detail, n.conn||[], cid=>{
+    const cn=idMap[cid];if(!cn)return null;
+    return{label:cn.name,action:()=>pickNode(cid)};
   });
   drawNodes();drawEdges();
 }
-board.addEventListener('mousedown',e=>{
+webView.addEventListener('mousedown',e=>{
   if(e.target.closest('.nd'))return;
-  panning=true;ps={x:e.clientX-px,y:e.clientY-py};board.style.cursor='grabbing';
+  panning=true;ps={x:e.clientX-px,y:e.clientY-py};webView.style.cursor='grabbing';
 });
 window.addEventListener('mousemove',e=>{
   if(!panning)return;
   px=e.clientX-ps.x;py=e.clientY-ps.y;drawNodes();drawEdges();
 });
-window.addEventListener('mouseup',()=>{panning=false;board.style.cursor='crosshair';});
-drawNodes();setTimeout(drawEdges,60);
+window.addEventListener('mouseup',()=>{panning=false;webView.style.cursor='crosshair';});
 
+// ─────────────────────────────────────────────
+// TIMELINE LOGIC
+// ─────────────────────────────────────────────
+const evMap={};
+events.forEach(e=>evMap[e.id]=e);
+
+function buildTimeline(){
+  const inner=document.getElementById('tl-inner');
+  // remove old event els
+  inner.querySelectorAll('.tl-event').forEach(el=>el.remove());
+  events.forEach((ev,i)=>{
+    const above=i%2===0;
+    const wrap=document.createElement('div');
+    wrap.className='tl-event '+(above?'above':'below');
+    wrap.id='tev'+ev.id;
+
+    const LABEL_H=54; // px clearance from center spine to label
+    const labelTop = above
+      ? `bottom:${LABEL_H}px`
+      : `top:${LABEL_H}px`;
+
+    wrap.innerHTML=`
+      <div class="tl-tick"></div>
+      <div class="tl-dot cat-${ev.cat}"></div>
+      <div class="tl-label" style="${labelTop}">
+        <div class="tl-label-date">${ev.date}</div>
+        <div class="tl-label-name">${ev.name}</div>
+      </div>`;
+    wrap.addEventListener('click',()=>pickEvent(ev.id));
+    inner.appendChild(wrap);
+  });
+}
+
+function pickEvent(id){
+  // deselect previous
+  document.querySelectorAll('.tl-event.sel').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('tev'+id).classList.add('sel');
+  const ev=evMap[id];
+  showCard(ev.cat.toUpperCase(), ev.name, ev.date, ev.detail, [], ()=>null);
+}
+
+// ─────────────────────────────────────────────
+// SHARED CARD
+// ─────────────────────────────────────────────
+function showCard(clan, name, sub, detail, connIds, connResolver){
+  document.getElementById('card-empty').style.display='none';
+  document.getElementById('card-content').style.display='block';
+  document.getElementById('card-clan').textContent=clan;
+  document.getElementById('card-name').textContent=name;
+  document.getElementById('card-sub').textContent=sub;
+  document.getElementById('card-detail').textContent=detail;
+  const cl=document.getElementById('card-conn-list');
+  cl.innerHTML='';
+  const label=document.getElementById('card-conn-label');
+  if(connIds.length){
+    label.style.display='block';
+    connIds.forEach(cid=>{
+      const resolved=connResolver(cid);
+      if(!resolved)return;
+      const pill=document.createElement('button');
+      pill.className='conn-pill';
+      pill.textContent=resolved.label;
+      pill.onclick=resolved.action;
+      cl.appendChild(pill);
+    });
+  } else {
+    label.style.display='none';
+  }
+}
+
+// ─────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────
+function switchTab(tab){
+  document.getElementById('tab-web').classList.toggle('active', tab==='web');
+  document.getElementById('tab-timeline').classList.toggle('active', tab==='timeline');
+  document.getElementById('view-web').style.display = tab==='web' ? 'block' : 'none';
+  document.getElementById('view-timeline').style.display = tab==='timeline' ? 'flex' : 'none';
+  // reset card
+  document.getElementById('card-empty').style.display='flex';
+  document.getElementById('card-content').style.display='none';
+  sel=null;
+  if(tab==='web'){drawNodes();drawEdges();}
+}
+
+// ─────────────────────────────────────────────
+// TIMELINE DRAG SCROLL
+// ─────────────────────────────────────────────
+const tlScroll=document.getElementById('tl-scroll');
+let tlDragging=false,tlStartX=0,tlScrollLeft=0;
+tlScroll.addEventListener('mousedown',e=>{
+  if(e.target.closest('.tl-event'))return;
+  tlDragging=true;tlStartX=e.pageX-tlScroll.offsetLeft;tlScrollLeft=tlScroll.scrollLeft;
+  tlScroll.classList.add('grabbing');
+});
+window.addEventListener('mousemove',e=>{
+  if(!tlDragging)return;
+  const x=e.pageX-tlScroll.offsetLeft;
+  tlScroll.scrollLeft=tlScrollLeft-(x-tlStartX);
+});
+window.addEventListener('mouseup',()=>{tlDragging=false;tlScroll.classList.remove('grabbing');});
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+buildTimeline();
+drawNodes();
+setTimeout(drawEdges,60);
 </script>
-
 </body>
 </html>
