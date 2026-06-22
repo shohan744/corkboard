@@ -170,107 +170,119 @@
 // ─────────────────────────────────────────────
 const nodes=[
   {id:'norman',name:'Norman Graves',clan:'Malkavian',sub:'PC — Pinkerton Enforcer',x:1100,y:910,pc:true,
-   detail:`A Pinkerton strikebreaker who crushed workers movements in Detroit before being transferred to DC to oversee urban renewal. His sire saw the fervor with which he worked and Embraced him for it. His Malkavian derangement manifests as an internal voice that judges everyone around him as slothful and indolent. His touchstone, Hugh Mann, died in the apartment fire the coterie set on the handler's orders — a fire Norman helped cause without knowing it was his own building. He has since lost his job, his home, and very nearly his composure. He now haunts Amalek's house in self-imposed exile, obfuscating himself from mortals. Hugh's teenage daughter, Wu Mann, found him there and asked him to pass along anything he learns about the fire. He has not yet decided what, if anything, to tell her.`,
+   detail:`A Pinkerton enforcer who crushed labor movements in Detroit before his sire Embraced him for the fervor of it. His touchstone Hugh Mann died in a fire Norman unknowingly helped set on the Patron's orders. Now jobless and unraveling, he's hiding out at Amalek's — and Hugh's daughter Wu wants to know what really happened.`,
    conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown','ganymede','odessaBright','wuMann']},
 
   {id:'jini',name:'Jini',clan:'Hecata',sub:'PC — Night Nurse',x:1281,y:1041,pc:true,
-   detail:`A war bride who married in a rush before her husband Andrew was shipped out to the Pacific in WWII. He never came back — listed MIA, presumed dead after thirty years. She has never accepted this. Everything she does is organized around finding him: recovering his remains, contacting his spirit, getting him back. Her sire Dr. Giovanni noticed her occult aptitude at the hospital and Embraced her to serve as his assistant. She views the Embrace as a gift — more time, new capabilities, new leads in her search. Her Hecata discipline Oblivion lets her see the dead. She has noticed something wrong in Amalek's shadow and does not yet know what it means. She gave Drum's ghost and his fetter to Giovanni in exchange for information — and discovered that the Hecata files being built to find Andrew were stolen at precisely the moment this operation began. She reported what she'd overheard at the reflecting pool to her Primogen, Agnette Vess, who confirmed the files were likely stolen by a Nosferatu and ordered her to keep watching the Anarchs.`,
+   detail:`A WWII war bride whose husband Andrew was lost in the Pacific, presumed dead. Her sire Dr. Giovanni Embraced her for her occult aptitude, and everything since has been in service of finding Andrew. She's just discovered the Hecata files compiled on his disappearance were stolen — almost certainly by a Nosferatu.`,
    conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy','antonioGhoul','eliDrum','agnetteVess']},
 
   {id:'amalek',name:'Amalek',clan:'Tremere',sub:'PC — Ex-SS Occultist',x:1212,y:1254,pc:true,
-   detail:`An Austrian former member of the SS occult research division who became disillusioned as the war effort collapsed. He made a deal with a Jewish vampire during the Nazi purges — help smuggle Jews out of Germany in exchange for power and the Embrace. He was given both. He is a Noddist — obsessed with vampiric scripture and the mythology of Caine — and a practicing diablerizer, consuming other vampires to accumulate power. He confessed to DuChamp at the reflecting pool that he is Sabbat, though he denied diablerie outright — a lie DuChamp seemed to accept. He has since diablerized Ganymede in full view of witnesses during a botched staged attack, and the secret may not hold much longer. He has fled DC to consult his malkav, Anton LaVey, for a solution. The FBI is asking questions outside his house under his mortal mask, Klaus Grossman — a mask Jupiter has already slipped and broken once.`,
-   conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','ganymede','norman','jini','jupiter','tommy','calvDuchamp','ehHoldings','antonLaVey']},
+   detail:`An ex-SS occultist who bought his Embrace by smuggling Jews out of the collapsing Reich. A devout Noddist and a practicing diablerizer, he consumed Ganymede in full view of witnesses during a botched job. He's fled to his malkav Anton LaVey for cover while the FBI circles his mortal mask, Klaus Grossman.`,
+   conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','ganymede','norman','jini','jupiter','tommy','calvDuchamp','ehHoldings','antonLaVey','washington','buscemi']},
 
   {id:'jupiter',name:'Jupiter / Ira',clan:'Setite',sub:'PC — Cult Leader',x:988,y:1254,pc:true,
-   detail:`A cold, calculating predator wearing the costume of a New Age spiritual leader. Her cult, Healing Beyond the Nine, teaches that Earth is a failing colony slowly poisoning its inhabitants. She purifies members by drinking their blood — framed as removing poison — creating early-stage Blood Bonds in her devotees without their knowledge. She is a Setite operating without Camarilla sanction in DC, sent here by her sire Sam with a specific purpose she does not fully understand. Sam has pointed her at something. She does not know what. She conducted the infiltration of the apartment building in cobra form while Amalek kept the car running. She discovered one of her own flock had been secretly sired and fed a false gospel of vampirism as an alien species, meant to challenge her authority from within. She dealt with it ruthlessly. That same fledgling was later used as a patsy in a botched staged attack that ended in her death — and Jupiter was left to manage the human fallout alone while Amalek and Norman fled.`,
+   detail:`A cold Setite predator running a New Age healing cult as a front for slow-burn Blood Bonding. Sent to DC by her sire Sam for a purpose she doesn't fully understand, she discovered and purged a planted infiltrator in her flock — who was later used, and killed, as a patsy for the coterie.`,
    conn:['sam','grayMan','norman','jini','amalek','tommy','calvDuchamp','ganymede']},
 
   {id:'tommy',name:'Tommy Fleet',clan:'Toreador',sub:'PC — Country Musician',x:919,y:1041,pc:true,
-   detail:`A handsome, charismatic country musician with almost no genuine creative talent. He makes his living appropriating music from underprivileged Black musicians and presenting it to white audiences. A cultural vampire in a world of actual vampires. His sire, a Toreador woman obsessed with his beauty, Embraced him to preserve it forever. He found being a muse constricting and moved on. He lost control of the Beast during a feeding, critically injuring a young starlet named Vera Lynn, then staged the injuries as a botched suicide and gaslit her into accepting the story. She is now hopelessly devoted to him — a Blood Bond developing that neither understands. He has badly botched two encounters with Celeste Beaumont. His charm is cracking under pressure. The performance is slipping. Celeste has noticed.`,
+   detail:`A charismatic country star who built a career stealing music from underprivileged Black musicians. He lost control feeding on starlet Vera Lynn, staged it as a suicide attempt, and gaslit her into devotion that's curdling into a real Blood Bond. His charm is cracking under Celeste Beaumont's scrutiny, and he knows it.`,
    conn:['veraLynn','celesteBeaumont','grayMan','norman','jini','amalek','jupiter','calvDuchamp']},
 
-  {id:'grayMan',name:'The Gray Man',clan:'Unknown',sub:'The Handler',x:1100,y:624,
-   detail:`Identity and clan unknown. Operates exclusively through dead drops, coded messages, and intermediaries. Assembled the coterie through blackmail — one to three words of threat at the bottom of each envelope, specific enough to demonstrate he knows everything. His assignments have escalated from surveillance to arson to assassination. He claims to serve Camarilla interests. He is always watching.`,
-   conn:['norman','jini','amalek','jupiter','tommy','mattMercer','ehHoldings']},
+  {id:'patron',name:'The Patron',clan:'Unknown',sub:'True identity unknown — never met',x:1100,y:454,
+   detail:`The unseen blackmailer running the coterie through the Gray Man. No one has ever met this person, confirmed their clan, or even confirmed they're a single individual rather than a committee. Assembled the coterie by threat, escalated the jobs from surveillance to arson to assassination, and is, as far as anyone can tell, always watching.`,
+   conn:['grayMan']},
+
+  {id:'grayMan',name:'The Gray Man',clan:'Unknown',sub:'Intermediary for the Patron',x:1100,y:624,
+   detail:`The Patron's calm, unreadable courier — the only face the coterie actually deals with. He delivers instructions, collects results, and disappears without ever slipping a name, a location, or a motive, his own or his employer's. Whether he's Kindred, ghoul, or something stranger is unconfirmed. He seems to find the work mildly tedious.`,
+   conn:['norman','jini','amalek','jupiter','tommy','mattMercer','ehHoldings','patron']},
 
   {id:'sil',name:'Silas Mercer',clan:'Malkavian',sub:"Norman's sire (no relation to Matt Mercer)",x:1244,y:704,
-   detail:`Norman's sire. No relation to Matt Mercer despite the surname. A loud, domineering, abusive Malkavian wreck. Clinically insane with a work obsession that manifests as contempt for everyone who operates below his standards, which is everyone. He informed the Pinkerton leadership about Norman's blackmail situation — ostensibly to protect the institution, possibly to protect himself. Norman does not know this yet. Sil is the origin of the internal voice that judges everyone as slothful. Someone installed that voice in Norman. Understanding who Sil is and what he wanted to create is the key to understanding what Norman is.`,
+   detail:`Norman's loud, abusive Malkavian sire — clinically insane, with a contempt for everyone operating below his impossible standards. He quietly reported Norman's blackmail situation to Pinkerton leadership, ostensibly to protect the institution. Norman doesn't know this yet. Sil is also the origin of the judgmental inner voice that haunts Norman's mind.`,
    conn:['norman']},
 
   {id:'rabbiLevi',name:'Rabbi Levi Morgenstern',clan:'Tremere',sub:"Amalek's sire",x:1285,y:1479,
-   detail:`Amalek's sire. A Jewish vampire who survived the 20th century with a particular relationship to what human life costs and what it is worth. Not cruel — actuarial. He has done the math on how many humans can be spent before the ecosystem collapses and he stays inside those numbers with the discipline of someone who learned what happens when you do not. Genuinely fatherly toward Amalek in a way that makes the control more insidious than open hostility would be. Took him to task for driving his own car to the arson — not for the six deaths, for the operational sloppiness. Has grown noticeably warmer toward Amalek as he edges closer to genuine power. Does not know about the Noddism. Does not know about the diablerie. The name Levi Morgenstern — morning star — belongs to a vampire who has not seen dawn in centuries.`,
+   detail:`Amalek's sire — a Jewish vampire who survived the century with an actuarial, not cruel, relationship to what human life costs. Genuinely fatherly toward Amalek in a way that makes the control more insidious. He's warmed noticeably as Amalek edges toward real power, and doesn't yet know about the Noddism or the diablerie.`,
    conn:['amalek']},
 
   {id:'drGiovanni',name:'Dr. Giovanni',clan:'Hecata',sub:"Jini's sire",x:1522,y:1100,
-   detail:`Jini's sire and self-described Head of Pathology, though he was never a real doctor. Sleazy, wealth-obsessed, entirely self-interested. Treats the sire relationship as a transaction — Jini is a useful tool and he will maintain her as such as long as she produces value. He signed Reverend Drum's death certificate. He was present when Drum died. He took custody of Drum's fetter and ghost from Jini in exchange for information about Andrew. He knows about her outside assignment and has been watching her extracurricular activities since before she had any. He has promised to help find the stolen Andrew files. His price has not been named yet. He will collect at maximum leverage.`,
+   detail:`Jini's sire, a self-described Head of Pathology who was never a real doctor. Treats the sire bond as pure transaction — Jini is useful, so he keeps her. He's holding Reverend Drum's ghost and fetter, plus a price for the stolen Andrew files he hasn't named yet. He'll collect at maximum leverage.`,
    conn:['jini','eliDrum']},
 
   {id:'sam',name:'Sam',clan:'Setite',sub:"Jupiter's sire",x:750,y:1336,
-   detail:`Jupiter's sire. An Egyptian antiquities dealer in his mid-thirties in appearance, operating out of a Georgetown townhouse. In DC since the late 1950s — longer than Jupiter knows. His mask is legitimate: he trades antiquities, moves through embassy circles, knows the right people. His real work is Setite influence operations. DC in 1968 is fracturing along every fault line simultaneously and he is here to eat slowly and carefully. He sent Jupiter to DC pointed at something specific she does not know she is pointed at yet. He contacts her infrequently, usually with requests she fulfills to stay in his good graces. He knows where she is. She does not know where he is. His line: "I have found that most people know exactly what they want. The difficulty is never the wanting. It is the permission."`,
+   detail:`Jupiter's sire, an Egyptian antiquities dealer who's quietly run Setite influence games in DC since the late 1950s — longer than Jupiter knows. He sent her here pointed at something specific she hasn't figured out yet, and contacts her rarely, always with requests she fulfills to stay in his good graces.`,
    conn:['jupiter']},
 
   {id:'thomasCrane',name:'Thomas Crane',clan:'Tremere',sub:'Chantry representative',x:1403,y:1393,
-   detail:`Projects warmth and professorial kindness. Actually deeply curious about diablerie in a way that should alarm anyone paying attention. Attended Calvin DuChamp's speech in disguise — not for politics, for DuChamp's blood. Recognized the diablerie signature in DuChamp's aura and wants what the consumption of such a Kindred would provide. Made a deal with Amalek at the Mercer funeral: a distraction in exchange for an intelligence report on Jupiter. He got upstairs. He sent the report. The favor economy between them is unresolved. He also quietly claimed Drum's book collection after the murder. The Libellus Sanguinis — a Noddist text of significant interest — is either in that collection or DuChamp knew where it was.`,
+   detail:`A warm, professorial Tremere with a dangerous fascination with diablerie. He recognized the diablerie signature in Calvin DuChamp's aura at the Anarch speech and wants what consuming a Kindred like that would give him. Traded a distraction for intel on Jupiter with Amalek at the Mercer funeral — the favor's still unresolved.`,
    conn:['amalek','eliDrum','calvDuchamp']},
 
   {id:'marcusWebb',name:'Marcus Webb',clan:'Brujah',sub:'Sheriff of DC',x:1510,y:1283,
-   detail:`The Prince's Sheriff. Measured, unhurried, and lethal once roused. Every question he asks is already answered — he asks to see how you respond. Was present at DuChamp's speech in an official capacity. Has an active investigation into Elias Drum's death that he closed in exchange for Amalek's promise of information on the blackmailer. His investigation is now moving toward something dangerous. Amalek's secret confidant within the existing Camarilla power structure.`,
+   detail:`The Prince's unhurried, lethal Sheriff. Closed his investigation into Elias Drum's death in exchange for Amalek's promise of information on the blackmailer behind the coterie. That investigation is now creeping toward something far more dangerous than a single murder — and Amalek is the only one who knows just how close it's getting.`,
    conn:['amalek','odessaBright','eliDrum']},
 
   {id:'celesteBeaumont',name:'Celeste Beaumont',clan:'Toreador',sub:'Toreador Primogen',x:768,y:840,
-   detail:`Toreador Primogen. In DC since before the Civil War, earned her council seat through a century of patience and leverage. Runs a Georgetown gallery that is also Elysium. Tommy spilled the entire blackmail situation to her at the Mercer funeral within twenty minutes of meeting her — she now has a more complete picture of the coterie's operation than the coterie does. She surfaced an interesting piece of intelligence to the group herself: the Nosferatu Primogen is functionally missing, never seen, communicating only through missives, despite holding the Prince's ear. A potential exploit she seems content to let the coterie pursue on her behalf. She has since called in Tommy's favor twice — once for an "up-and-coming" act that turned out to be a punishing test, and once to congratulate him on passing it. She is now summoning the whole coterie to her gallery.`,
+   detail:`Toreador Primogen who's run DC's Elysium-gallery since before the Civil War. Tommy spilled the coterie's entire blackmail situation to her within twenty minutes of meeting. She surfaced the missing Nosferatu Primogen as a potential exploit, called in two favors from Tommy already, and is now summoning the whole coterie to her gallery.`,
    conn:['tommy','veraLynn','calvDuchamp','nosferatuPrimogen']},
 
   {id:'mattMercer',name:'Aldous Mercer',clan:'Ventrue',sub:'Camarilla Primogen, deceased',x:1309,y:525,
-   detail:`His funeral was the inciting incident that brought the coterie together — each of them given an envelope and a surveillance target that turned out to be each other. He held DC's urban renewal contracts through a network of mortal proxies and ghoul city officials. He was building a quiet back-channel deal with Odessa Bright's reform faction to shore up his council position.`,
+   detail:`A Camarilla Primogen whose assassination, amid the chaos of the MLK riots, brought the coterie together in the first place. He held DC's urban renewal contracts through mortal proxies and ghoul officials, and was quietly building a back-channel deal with Odessa Bright's reform faction to shore up his council seat.`,
    conn:['grayMan','eliDrum','odessaBright']},
 
   {id:'eliDrum',name:'Reverend Elias Drum',clan:'Ghoul',sub:"Mercer's manservant, deceased",x:1478,y:709,
-   detail:`Mercer's ghoul manservant for thirty years. A Baptist preacher who served as community liaison without ever being told what Mercer was. He genuinely loved Mercer, which Kindred society considers beneath contempt. Murdered by Amalek at the Mercer funeral using Blood Sorcery as a distraction for Crane. His death was the only genuine grief in a room full of performance. His ghost is now in Dr. Giovanni's custody, bound to a fetter Jini recovered. The ghost knows things.`,
+   detail:`Mercer's ghoul manservant of thirty years, murdered by Amalek at the funeral as cover for Crane's disappearance upstairs. His was the only genuine grief in a room full of performance. His ghost is now bound to a fetter in Dr. Giovanni's custody — and it knows a great deal more than it's said.`,
    conn:['mattMercer','amalek','thomasCrane','marcusWebb','drGiovanni','jini']},
 
   {id:'odessaBright',name:'Odessa Bright',clan:'Brujah',sub:'Reform faction, DC',x:1711,y:1143,
-   detail:`A young Brujah who never wanted to be the de-facto leader of DC's reform faction and increasingly is one anyway. She attended the Mercer funeral despite having no right to be there — and was spotted by Amalek at Marcus Webb's office. A pragmatist forced into dealing with people who hold her with contempt.`,
+   detail:`A young Brujah who never wanted to lead DC's reform faction and increasingly is doing it anyway. She attended Mercer's funeral despite having no right to be there, and was spotted by Amalek doing it. A pragmatist stuck dealing with people who barely tolerate her existence.`,
    conn:['marcusWebb','mattMercer','calvDuchamp']},
 
   {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Brujah',sub:'West Coast Anarch',x:1688,y:931,
-   detail:`Spreading Anarch gospel in DC, building a coalition of reform-minded Kindred that is part genuine ideology and part hunting ground. Exiled from the West Coast after committing diablerie — the black threads are still visible in his aura to anyone who knows what to look for. He came east to rebuild and to feed his new hunger. Knows someone is asking about him before the speech — Celeste's network passed it along. Wants to talk before anything else happens. Whether that conversation occurs determines what kind of story this becomes. Norman Graves found Noddist materia in his apartment. He is the one who first identified EH Holdings as the entity systematically buying and demolishing buildings that could have housed the Anarch movement — and passed that intelligence to Amalek.`,
+   detail:`An exiled West Coast Anarch organizer, building a coalition that's part ideology and part hunting ground. Came east after committing diablerie of his own — the threads still show in his aura. He identified EH Holdings as the real-estate front quietly demolishing buildings the Anarch movement could've used, and passed that intel to Amalek.`,
    conn:['celesteBeaumont','amalek','odessaBright','thomasCrane','ehHoldings']},
 
   {id:'ehHoldings',name:'EH Holdings',clan:'Mortal Proxy',sub:'Real estate front, Gray Man',x:991,y:1535,
-   detail:`A shell company operating in the DC real estate market with no visible principals and no public-facing leadership. Its pattern of acquisition is not random: EH Holdings buys buildings in neighborhoods where Anarch organizing has begun to take root, sits on them briefly, and then demolishes or converts them — destroying community infrastructure before it can be used. Calvin DuChamp identified the pattern through his organizing network and shared the name with Amalek. The Gray Man's oldest mortal proxy. Whether EH stands for anything, and who signs the checks, remains unknown.`,
+   detail:`A shell company with no visible owners, buying up buildings in neighborhoods where Anarch organizing is taking root and quietly demolishing them before they can be used. The Patron's oldest known mortal asset. What EH stands for, and who actually signs the checks, remains a mystery.`,
    conn:['calvDuchamp','amalek','grayMan']},
 
   {id:'veraLynn',name:'Vera Lynn',clan:'Mortal',sub:"Starlet / Celeste's plant",x:679,y:1115,
-   detail:`A rising DC session musician who was injured when Tommy fed on her — he staged the wounds as a botched suicide attempt and gaslit her into believing it. She accepted the story. Her infatuation with him has only deepened since: she once caught him feeding on a man and mistook it for intimacy, concluding in a homophobic society that his strange behavior must stem from closeted bisexuality rather than anything supernatural. Tommy has done nothing to correct that assumption either. He has since floated the idea of siring her outright, both to contain the Masquerade risk she represents and to lock down his hold over her completely.`,
+   detail:`A rising session musician injured when Tommy fed on her — he staged it as a suicide attempt and gaslit her into believing it. Her devotion to him has only deepened since, helped by a homophobic misunderstanding about what she witnessed. Tommy's now floating the idea of siring her outright to lock it all down.`,
    conn:['tommy','celesteBeaumont']},
 
   {id:'elizUnknown',name:'Elizabeth ????',clan:'Thin-Blooded',sub:'Fate unknown',x:812,y:756,
-   detail:`A thin-blooded drifter abducted by Amalek, Norman, and Tommy using Tommy's star power as bait. Nobody asked why Amalek needed her. He took her to his private room and she was never seen again. What he wanted from her, and what became of her, has never been discussed by anyone who was there. Thin-blooded Kindred exist at the absolute margins of Kindred society — the final generation, an omen of Gehenna. She had people who knew her. Whether any of them are looking is unknown.`,
+   detail:`A thin-blooded drifter abducted by Amalek, Norman, and Tommy using Tommy's star power as bait. Amalek took her to his private room and she was never seen again. No one who was there has ever asked what happened to her, or seems to want to know.`,
    conn:['amalek','norman','tommy']},
 
   {id:'ganymede',name:'Ganymede',clan:'Caitiff (deceased)',sub:"Diablerized by Amalek",x:941,y:1656,
-   detail:`Formerly one of Jupiter's most devoted flock. Secretly sired by an unknown party and fed a deliberate false gospel — that vampires are aliens of a dying superior race sent to save humanity — meant to position him to challenge Jupiter's control of Healing Beyond the Nine from within. Jupiter discovered the deception and locked him away. He was then used as a patsy in a staged attack meant to pin the original apartment fire on him. He tried to flee. Norman ran him down with Amalek's car. Amalek diablerized him while he lay trapped beneath the wreckage, in front of witnesses. He is dead. Who actually sired and coached him remains unknown.`,
+   detail:`Once one of Jupiter's most devoted flock, secretly sired by an unknown party and fed a false gospel meant to turn him against her. Jupiter caught the deception and locked him away — then he was used as a patsy in a staged attack and diablerized by Amalek in front of witnesses. He's dead.`,
    conn:['jupiter','amalek','norman']},
 
   {id:'antonioGhoul',name:'Antonio',clan:'Ghoul',sub:'Untethered, DC',x:1669,y:1000,
-   detail:`A teenage Italian ghoul whose master cut him loose after the warehouse incident — three gangsters dead, a compromised operation, promises made without authorization. He is seventeen, untethered, and slightly Blood Bonded to Jini after she gave him her vitae to save his life. He has taken to following her, visiting her at work, and making increasingly bold romantic overtures she has not encouraged. He has mentioned his former master in passing — a Nosferatu who lives in the sewers, and who Jini's own Primogen now suspects of stealing the Hecata files on her missing husband. Antonio does not seem to grasp how significant that connection is.`,
+   detail:`A teenage Italian ghoul cut loose by his old master after a warehouse job went bad. Jini saved his life with her vitae, leaving him lightly Blood Bonded and increasingly smitten. He's mentioned, almost in passing, that his former master is a Nosferatu who lives in the sewers — he has no idea how significant that is.`,
    conn:['jini']},
 
   {id:'agnetteVess',name:'Agnette Vess',clan:'Hecata',sub:"Jini's Primogen",x:1441,y:852,
-   detail:`Jini's Primogen within the Hecata. Composed, exacting, and clearly in possession of more information than she lets on at any given time. When Jini reported what she'd overheard at the reflecting pool — Amalek's confession, the EH Holdings revelation — Vess ordered her to keep close watch on the Anarch faction going forward. She also confirmed what Jini already suspected: the stolen files on Andrew were almost certainly taken by a Nosferatu. She did not say how she knew that.`,
+   detail:`Jini's exacting, composed Primogen within the Hecata, who clearly knows more than she lets on. Confirmed Jini's suspicion that the stolen Andrew files were taken by a Nosferatu, and ordered her to keep close watch on the Anarchs going forward. Didn't explain how she knew any of it.`,
    conn:['jini']},
 
   {id:'antonLaVey',name:'Anton LaVey',clan:'Malkavian',sub:"Amalek's malkav, whereabouts unknown",x:1144,y:1519,
-   detail:`The Malkavian elder Amalek turns to in moments of genuine crisis — less a sire-figure than a confessor with an agenda of his own. Amalek fled to him after the Ganymede diablerie with the FBI closing in. LaVey's price for help was simple: keep pushing DC further into Sabbat-flavored chaos. In exchange, he performed the Rite of Innocence on Amalek's behalf — a Blood Sorcery ritual requiring a child sacrifice, conducted off-page, that masks Amalek's aura from divination and supernatural scrutiny. Amalek now carries a totem born of that killing. Whether it will be enough to survive the FBI's attention is unknown. What LaVey actually wants from a more chaotic DC has not been revealed.`,
+   detail:`The Malkavian elder Amalek runs to in real crisis — less a father figure than a confessor with his own agenda. He performed the Rite of Innocence to mask Amalek's aura from scrutiny, at the cost of a child's life, in exchange for Amalek pushing DC further into Sabbat-flavored chaos. What he actually wants from that chaos is unclear.`,
    conn:['amalek']},
 
-  {id:'wuMann',name:'Wu Mann',clan:'Mortal',sub:"Hugh Mann's daughter",x:956,y:704,
-   detail:`Hugh Mann's teenage daughter. Convinced the fire that killed her father was arson, she has been unable to get the police or anyone else to take her seriously. She tracked Norman down during his self-imposed exile at Amalek's house and asked him directly to pass along anything he learns. She has no idea Norman was there the night it happened — or what he actually knows.`,
+  {id:'washington',name:'Agent Washington',clan:'Mortal',sub:'FBI — hunting Amalek',x:1636,y:1461,
+   detail:`A young, idealistic FBI agent assigned to the Amalek case. Still believes enough in the system, and in doing the right thing, that the right story told well could quietly turn him into an asset — without him ever fully realizing it's happened.`,
+   conn:['amalek','buscemi']},
+
+  {id:'buscemi',name:'Agent Buscemi',clan:'Mortal',sub:'FBI — hunting Amalek',x:1707,y:1321,
+   detail:`A burnt-out FBI agent four years from retirement, punching the clock and greasy as they come. Probably crooked, definitely tired, and very likely bribable if the price and the cover story are convincing enough. Washington's senior partner on the Amalek case.`,
+   conn:['amalek','washington']},
+
+  {id:'wuMann',name:'Wu Mann',clan:'Mortal',sub:"Hugh Mann's daughter",x:956,y:704,pc:false,
+   detail:`Hugh Mann's teenage daughter, convinced — correctly — that her father's death was arson rather than an accident. She tracked Norman down during his exile at Amalek's house and asked him directly to pass along anything he learns. She has no idea Norman was there the night it happened.`,
    conn:['norman']},
 
   {id:'nosferatuPrimogen',name:'Nosferatu Primogen',clan:'Nosferatu',sub:'Identity unknown — communicates only by missive',x:776,y:581,
-   detail:`No one in the Camarilla's local hierarchy has ever seen him. He communicates entirely through delivered missives, never in person, and yet somehow holds the Prince's ear regardless. Celeste Beaumont surfaced his existence to the coterie as a potential exploit — whoever controls access to him, or can impersonate his channel, gains leverage no one else in the city currently has. Possibly connected to the Nosferatu who stole the Hecata files on Andrew. Possibly connected to Antonio's former master. Possibly the same person.`,
+   detail:`A Nosferatu power player no one in the local hierarchy has ever actually seen. Communicates entirely through delivered missives and somehow still holds the Prince's ear. Celeste surfaced his existence to the coterie as a potential exploit — whoever controls access to him gains leverage no one else in the city currently has.`,
    conn:['celesteBeaumont']},
 ];
 
@@ -279,119 +291,119 @@ const nodes=[
 // ─────────────────────────────────────────────
 const events=[
   {id:'ev0a', date:'1944', name:"Jini's Husband Lost", cat:'discovery',
-   detail:`Jini's husband Andrew ships out to the Pacific theater during WWII. He never returns — listed MIA, presumed dead. Decades before her Embrace, this loss becomes the organizing principle of her entire existence, mortal and Kindred alike.`},
+   detail:`Jini's husband Andrew ships out to the Pacific during WWII and never returns — listed MIA, presumed dead. Decades before her Embrace, the loss becomes the organizing principle of her entire existence.`},
 
   {id:'ev0b', date:'1945', name:"Amalek Escapes the Reich", cat:'discovery',
-   detail:`As the Nazi war machine collapses, Amalek — disillusioned with the SS occult research division he served — strikes a deal with a Jewish vampire and helps smuggle Jews out of Germany. He is given power and the Embrace in return. The deal that saved him is also the deal that made him.`},
+   detail:`As the Reich collapses, a disillusioned Amalek strikes a deal with a Jewish vampire and helps smuggle Jews out of Germany. He's given power and the Embrace in return.`},
 
   {id:'ev0c', date:'1965', name:'Healing Beyond the Nine Founded', cat:'faction',
-   detail:`Jupiter establishes her cult, Healing Beyond the Nine, in a bohemian corner of Georgetown. The gospel of a poisoned, failing Earth begins quietly recruiting believers years before the coterie ever forms.`},
+   detail:`Jupiter establishes her cult, Healing Beyond the Nine, in a bohemian corner of Georgetown — quietly recruiting believers years before the coterie ever forms.`},
 
   {id:'ev0d', date:'1965', name:"Tommy's First Album", cat:'faction',
-   detail:`Tommy Fleet releases his debut album and becomes a country star almost overnight, riding music appropriated from underprivileged Black musicians to a white audience that has no idea where it really came from.`},
+   detail:`Tommy Fleet releases his debut album and becomes a country star overnight, riding music appropriated from Black musicians to an audience that has no idea where it came from.`},
 
   {id:'ev0e', date:'1967', name:'Norman Reassigned to DC', cat:'faction',
-   detail:`Norman leaves Detroit, reassigned by the Pinkertons to clear "human refuse" from Washington DC in the name of urban revitalization. He arrives already very good at the part of the job that involves crushing people.`},
+   detail:`Norman leaves Detroit, reassigned by the Pinkertons to clear DC's 'human refuse' in the name of urban renewal. He's already very good at the part of the job that involves crushing people.`},
 
 
   {id:'ev1', date:'Apr 04, 1968', name:'MLK Assassinated', cat:'faction',
-   detail:`Dr. Martin Luther King Jr. is shot in Memphis. Washington DC erupts into riots. The city the coterie will soon be operating in is already on fire before any of them have met.`},
+   detail:`Dr. Martin Luther King Jr. is shot in Memphis. Washington DC erupts into riots — the city the coterie will soon operate in is already on fire before any of them have met.`},
 
   {id:'ev2', date:'Apr 06, 1968', name:'Death of Aldous Mercer', cat:'death',
-   detail:`Camarilla Primogen Aldous Mercer is assassinated amid the chaos of the riots. The Prince's court has not satisfactorily explained the circumstances. His death sets the machinery in motion.`},
+   detail:`Camarilla Primogen Aldous Mercer is assassinated amid the chaos of the riots. The Prince's court has never satisfactorily explained the circumstances.`},
 
   {id:'ev3', date:'Apr 08, 1968', name:'The Envelopes', cat:'faction',
-   detail:`Documents are delivered to five individuals through separate channels. Each contains a surveillance target and a coded threat — specific enough to demonstrate the sender knows everything. The targets turn out to be each other. This is how the coterie is assembled.`},
+   detail:`Coded threat envelopes are delivered to five individuals through separate channels — each containing a surveillance target who turns out to be one of the others. This is how the coterie is assembled.`},
 
   {id:'ev4', date:'Apr 11, 1968', name:'Mercer Funeral', cat:'meeting',
-   detail:`The coterie attends Mercer's funeral, ostensibly to spy on one another. Amalek makes a poor first impression trying to ply Jupiter and Jini with absinthe tainted by blood magic — both refuse. Reverend Elias Drum is murdered by Amalek using Blood Sorcery, providing cover for Thomas Crane to slip upstairs unobserved.`},
+   detail:`The coterie attends Mercer's funeral to spy on each other. Reverend Elias Drum is murdered by Amalek using Blood Sorcery, providing cover for Thomas Crane to slip upstairs unobserved.`},
 
   {id:'ev5', date:'Apr 13, 1968', name:'Findings Turned In', cat:'faction',
-   detail:`The coterie reports their surveillance findings on each other to the Gray Man, their shadowy handler's representative. Norman alone blows the assignment off as a joke — a decision that will not age well.`},
+   detail:`The coterie reports their surveillance findings on each other to the Gray Man. Norman alone blows the assignment off as a joke — a decision that won't age well.`},
 
   {id:'ev6', date:'Apr 15, 1968', name:'The Death Certificate', cat:'discovery',
-   detail:`Jini retrieves Reverend Drum's death certificate for Dr. Giovanni. In doing so she discovers a ghost haunting the document — Drum's own. She steals both the certificate and his fetter, handing them to Giovanni. In the process she learns the Hecata file being compiled on her missing husband has been stolen.`},
+   detail:`Jini retrieves Drum's death certificate for Giovanni and discovers his ghost haunting it. She steals both the certificate and his fetter — and learns the Hecata file on Andrew has been stolen.`},
 
   {id:'ev7', date:'Apr 17, 1968', name:'Webb Back-Channel Opened', cat:'meeting',
-   detail:`Amalek quietly opens a private line to Sheriff Marcus Webb, behind the rest of the coterie's back. Neither Webb nor Amalek mention this arrangement to anyone else.`},
+   detail:`Amalek quietly opens a private back-channel with Sheriff Marcus Webb, behind the rest of the coterie's back. Neither mentions the arrangement to anyone else.`},
 
   {id:'ev8', date:'Apr 22, 1968', name:'First Job: The Fire', cat:'death',
-   detail:`The coterie's first assignment from the handler: torch an apartment complex. Tommy injures fledgling starlet Vera Lynn while feeding on her and stages it as self-harm. Jupiter and Amalek fake an electrical fault; Amalek calls it in to Webb from a payphone as Jupiter sets the blaze herself in serpent form.`},
+   detail:`The coterie's first job: torch an apartment complex. Tommy injures starlet Vera Lynn feeding on her and stages it as self-harm, while Jupiter sets the blaze herself.`},
 
   {id:'ev9', date:'Apr 22, 1968', name:'Hugh Mann Dies', cat:'death',
-   detail:`Norman returns to find his own home consumed in the fire. Hugh Mann, his touchstone, dies in the blaze. The coterie tries to maintain the deception but the truth surfaces fast. Norman has a breakdown in a bohemian nightclub. He moves in with Amalek shortly after — homeless, jobless, and increasingly unmoored.`},
+   detail:`Norman returns to find his own home consumed in the fire. His touchstone Hugh Mann dies in the blaze, and Norman has a breakdown, then moves in with Amalek — homeless and unmoored.`},
 
   {id:'ev10', date:'Apr 28, 1968', name:'Second Job: The Bomb', cat:'faction',
-   detail:`A new assignment arrives: plant a car bomb and assassinate Calvin DuChamp. Separately, Jini is tasked by Dr. Giovanni with retrieving Drum's death certificate — work that overlaps with the bomb plot in ways no one has noticed yet.`},
+   detail:`A new assignment: plant a car bomb and assassinate Calvin DuChamp. Separately, Jini is tasked with retrieving Drum's death certificate — work that overlaps the bomb plot in ways no one's noticed yet.`},
 
   {id:'ev11', date:'May 01, 1968', name:'The Hotel Job Goes Bad', cat:'meeting',
-   detail:`Norman and Jini go to collect the bomb from a ghoul supplier, only to find the deal has soured — gangsters are beating the ghoul to death in a dingy hotel room. They kill the gangsters, save the ghoul (Antonio), and walk away with the bomb and an unplanned dependent.`},
+   detail:`Norman and Jini go to collect the bomb from a ghoul supplier and find the deal soured. They kill the attackers, save the ghoul (Antonio), and walk away with an unplanned dependent.`},
 
   {id:'ev12', date:'May 03, 1968', name:"Amalek's Warning", cat:'meeting',
    detail:`Amalek speaks with his sire, Rabbi Levi Morgenstern, who warns him to be careful. The warning will be ignored almost immediately.`},
 
   {id:'ev13', date:'May 05, 1968', name:'Elizabeth Taken', cat:'discovery',
-   detail:`Amalek recruits Norman and Tommy for a special task, promising a boon in return. Using Tommy's star power as bait, the trio abduct a thin-blooded drifter woman. Amalek takes her to his private room. She is never seen again. Neither helper asks what happened.`},
+   detail:`Using Tommy's star power as bait, Amalek, Norman, and Tommy abduct a thin-blooded drifter. Amalek takes her to his private room. She's never seen again, and no one asks why.`},
 
   {id:'ev14', date:'May 09, 1968', name:'Stakeout at the Church', cat:'discovery',
-   detail:`The coterie stakes out the abandoned church where Calvin DuChamp is set to speak. Norman discovers Noddist paraphernalia among DuChamp's belongings — a detail no one quite knows what to do with yet.`},
+   detail:`The coterie stakes out the church where Calvin DuChamp is set to speak. Norman discovers Noddist paraphernalia among DuChamp's belongings — a detail no one quite knows what to do with yet.`},
 
   {id:'ev15', date:'May 10, 1968', name:'Tommy Strikes Out with Celeste', cat:'meeting',
-   detail:`Tommy attempts to probe Celeste Beaumont for information ahead of the DuChamp operation. It goes poorly — he offers a small boon and receives nothing in return.`},
+   detail:`Tommy tries to probe Celeste Beaumont for information ahead of the DuChamp operation. It goes poorly — he offers a boon and gets nothing back.`},
 
   {id:'ev16', date:'May 11, 1968', name:'The Speech and the Bomb', cat:'faction',
-   detail:`The night of DuChamp's speech. Amalek and Tommy attend the meeting itself — young Anarchs are thrilled to see Tommy supporting their cause, and Thomas Crane is in the room. Amalek slips away backstage and delivers a letter to DuChamp directly. Meanwhile Tommy, Jini, and Jupiter attempt to plant the car bomb; a distraction goes wrong when Jini breaks a car window and is detained by a guard. Norman plants the bomb anyway, a fight breaks out, and DuChamp escapes in a different vehicle.`},
+   detail:`The night of DuChamp's speech, the bomb plot goes sideways: Jini is detained by a guard, Norman plants it anyway, a fight breaks out, and DuChamp escapes in a different vehicle.`},
 
   {id:'ev17', date:'Jun 05, 1968', name:'RFK Assassinated', cat:'faction',
-   detail:`Senator Robert F. Kennedy is shot at the Ambassador Hotel in Los Angeles. A congressional committee on assassinations is formed in the aftermath. DC's political temperature climbs further still.`},
+   detail:`Senator Robert F. Kennedy is shot in Los Angeles. A congressional committee on assassinations forms in the aftermath, and DC's political temperature climbs further still.`},
 
   {id:'ev18', date:'Jun 07, 1968', name:'Vera Lynn Misreads Everything', cat:'embrace',
-   detail:`Vera Lynn's infatuation with Tommy deepens. She discovers him feeding on a man and mistakes the act for intimacy — in a homophobic society, she assumes his odd behavior stems from closeted bisexuality rather than anything supernatural. The misunderstanding suits Tommy fine for now.`},
+   detail:`Vera Lynn catches Tommy feeding on a man and mistakes it for intimacy, deepening her infatuation. In a homophobic society, the misunderstanding suits Tommy just fine.`},
 
   {id:'ev19', date:'Jun 09, 1968', name:'Cult Infiltration Discovered', cat:'discovery',
-   detail:`Jupiter discovers that one of her flock — Ganymede — has been secretly sired and deliberately misled about the nature of vampirism, positioned to challenge her control of Healing Beyond the Nine. She deals with it ruthlessly and locks the new lick away.`},
+   detail:`Jupiter discovers that her flock member Ganymede was secretly sired and turned against her. She deals with it ruthlessly and locks the new fledgling away.`},
 
   {id:'ev20', date:'Jun 11, 1968', name:'The Missing Primogen', cat:'discovery',
-   detail:`Celeste Beaumont interrupts a coterie meeting at a coffee shop to reveal that the Nosferatu Primogen is functionally missing — no one has ever seen him, and he communicates only through delivered missives, despite holding the Prince's ear. A potentially valuable exploit. Tommy grovels and offers yet another favor.`},
+   detail:`Celeste Beaumont interrupts a coterie meeting to reveal the Nosferatu Primogen is functionally missing — never seen, communicating only by missive, yet holding the Prince's ear regardless.`},
 
   {id:'ev21', date:'Jun 13, 1968', name:'Antonio Mentions His Master', cat:'discovery',
-   detail:`Antonio begins following Jini, visiting her at work and making increasingly bold romantic overtures. In the course of this he mentions his former master — a Nosferatu who lives in the sewers.`},
+   detail:`Antonio begins following Jini around, making increasingly bold overtures. In the process, he mentions his former master — a Nosferatu who lives in the sewers.`},
 
   {id:'ev22', date:'Jun 15, 1968', name:'The Reflecting Pool Meeting', cat:'meeting',
-   detail:`Calvin DuChamp arranges a meeting with Amalek at the reflecting pool. Amalek brings Jini and Jupiter as backup and tries to keep them at a distance — Jini stealthily follows anyway. Amalek confesses to being Sabbat but denies diablerie. The two plot to weaken the Camarilla's grip on DC and bolster the Anarch faction, and DuChamp names a real estate firm, EH Holdings, that has been aggressively buying and demolishing buildings Anarchs try to use. Jini overhears the entire exchange.`},
+   detail:`Calvin DuChamp meets Amalek at the reflecting pool. Amalek confesses to being Sabbat but denies diablerie, and DuChamp names EH Holdings as the firm buying up Anarch-friendly buildings. Jini overhears it all.`},
 
   {id:'ev23', date:'Jun 16, 1968', name:'Jini Reports to Agnette Vess', cat:'faction',
-   detail:`Jini relays what she overheard to her Primogen, Agnette Vess, who orders her to keep watch on the would-be revolutionaries. Vess also confirms that the data on Andrew was likely stolen by a Nosferatu.`},
+   detail:`Jini relays what she overheard to her Primogen, Agnette Vess, who orders her to keep watching the Anarchs — and confirms the stolen Andrew files were likely taken by a Nosferatu.`},
 
   {id:'ev24', date:'Jun 17, 1968', name:"Celeste's Favor Called", cat:'meeting',
-   detail:`Celeste Beaumont calls Tommy and cashes in his outstanding favor: a performance to bolster a "burgeoning young talent." Tommy has no idea yet what he is walking into.`},
+   detail:`Celeste Beaumont calls Tommy and cashes in his outstanding favor: a performance to bolster a 'burgeoning young talent.' Tommy has no idea what he's walking into.`},
 
   {id:'ev25', date:'Jun 18, 1968', name:'The Patsy Plot', cat:'faction',
-   detail:`Norman hatches a scheme to get his old job back — using Ganymede, Jupiter's recently turned and imprisoned lost lamb, as a patsy for the apartment fire. Jupiter, Amalek, and Norman plan a staged attack on the cult to abduct and kill the fresh vampire and pin the original arson on him.`},
+   detail:`Norman hatches a scheme to get his old job back, using Ganymede — Jupiter's imprisoned fledgling — as a patsy to pin the original arson on.`},
 
   {id:'ev26', date:'Jun 18, 1968', name:'Tommy at the Metal Show', cat:'meeting',
-   detail:`Tommy arrives at Celeste's "performance" to find a heavy metal show at a total dive — deliberately outside his element. The crowd is hostile to the pop country star and the headliner, a dismissive British kid named Osbourne, mocks him outright. Against every odd, Tommy plays a blistering set, wins the crowd, and cements an Anarch-hero reputation he never wanted.`},
+   detail:`Tommy plays a hostile metal show meant to humiliate him, wins the crowd against every odd, and cements an Anarch-hero reputation he never wanted.`},
 
   {id:'ev27', date:'Jun 18, 1968', name:'The Fake Attack Goes Wrong', cat:'death',
-   detail:`The staged attack on the cult unravels. Ganymede attempts to flee before Norman runs her down with Amalek's car through a garden wall. Amalek loses control and diablerizes her while she's trapped beneath the vehicle, in front of witnesses. Norman and Amalek flee on foot, leaving Jupiter to calm her terrified flock and handle the responding police — who she tells may have a connection to Tommy Fleet.`},
+   detail:`The staged attack on Jupiter's cult unravels. Ganymede tries to flee, gets run down, and is diablerized by Amalek in front of witnesses. Norman and Amalek flee, leaving Jupiter to handle the fallout alone.`},
 
   {id:'ev28', date:'Jun 20, 1968', name:'Amalek Goes to Ground', cat:'faction',
-   detail:`Suspicion falls heavily on Amalek despite the masks. He leaves town to consult his Malkavian — Anton LaVey — for a solution. Norman, meanwhile, haunts Amalek's empty house, obfuscating himself from mortals and locking himself inside.`},
+   detail:`Suspicion falls heavily on Amalek despite his masks. He leaves town to consult his malkav, Anton LaVey, for a solution — while Norman haunts Amalek's empty house in self-imposed exile.`},
 
   {id:'ev28b', date:'Jun 20, 1968', name:'The Rite of Innocence', cat:'death',
-   detail:`In exchange for Amalek's continued work pushing DC toward Sabbat-flavored chaos, Anton LaVey performs the Rite of Innocence on his behalf — a Blood Sorcery ritual requiring the sacrifice of a child, conducted away from the table. The result is a totem that masks Amalek's aura from supernatural scrutiny. The cost was a child's life. Amalek does not appear to have hesitated.`},
+   detail:`In exchange for Amalek pushing DC toward Sabbat chaos, Anton LaVey performs the Rite of Innocence on his behalf — a child-sacrifice ritual that masks Amalek's aura from supernatural scrutiny.`},
 
   {id:'ev29', date:'Jun 21, 1968', name:'Jini and Jupiter Compare Notes', cat:'meeting',
    detail:`Jini and Jupiter meet privately to discuss the Amalek situation. Both independently resolve not to trust him going forward.`},
 
   {id:'ev30', date:'Jun 23, 1968', name:'FBI Closes In', cat:'faction',
-   detail:`FBI agents investigating Amalek encounter Jini and Jupiter outside his house — everyone, it seems, is looking for him. During questioning, Jupiter slips and refers to him by his true name rather than his mortal mask, Klaus Grossman. The agents also visit Tommy Fleet's home; he notices afterward that his place is under surveillance.`},
+   detail:`FBI agents investigating Amalek encounter Jini and Jupiter outside his house. Jupiter slips and uses his true name instead of his mortal mask — and Tommy's home turns up under surveillance too.`},
 
   {id:'ev31', date:'Jun 24, 1968', name:"Wu Mann's Visit", cat:'discovery',
-   detail:`During his self-imposed exile at Amalek's house, Norman receives a visit from Wu Mann — Hugh Mann's teenage daughter. She is convinced the fire was arson and can't get anyone to take her seriously. She asks Norman to pass along anything he learns.`},
+   detail:`During his exile at Amalek's house, Norman gets a visit from Wu Mann, Hugh's daughter, convinced the fire was arson. She asks him to pass along anything he learns.`},
 
   {id:'ev32', date:'Jun 25, 1968', name:'The Gallery Invitation', cat:'meeting',
-   detail:`Celeste Beaumont calls Tommy to congratulate him on the performance. Tommy raises the idea of siring Vera Lynn to contain the brewing Masquerade risk and lock down his control over her. Beaumont promises to raise it with the council — for another favor — and summons the entire coterie to meet her at a decrepit art gallery.`},
+   detail:`Celeste calls to congratulate Tommy and promises to raise the idea of siring Vera Lynn with the council — for another favor — then summons the whole coterie to her gallery.`},
 ];
 
 // ─────────────────────────────────────────────
