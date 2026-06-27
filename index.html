@@ -170,15 +170,15 @@
 // ─────────────────────────────────────────────
 const nodes=[
   {id:'norman',name:'Norman Graves',clan:'Malkavian',sub:'PC — Pinkerton Enforcer',x:1100,y:910,pc:true,
-   detail:`A Pinkerton enforcer who crushed labor movements in Detroit before his sire Embraced him for the fervor of it. His touchstone Hugh Mann died in a fire Norman unknowingly helped set on the Patron's orders. Now jobless and unraveling, he's hiding out at Amalek's — and Hugh's daughter Wu wants to know what really happened.`,
-   conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown','ganymede','odessaBright','wuMann']},
+   detail:`A Pinkerton enforcer who crushed labor movements in Detroit before his sire Embraced him for the fervor of it. His touchstone Hugh Mann died in a fire Norman unknowingly helped set on the Patron's orders. He's clawed his Pinkerton job back with a cadaver Jini pried out of Dr. Giovanni — then burned Amalek's house to the ground for closure, mastering his vampiric fear of fire to do it. Hugh's daughter Wu still wants the truth he can't give her.`,
+   conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown','ganymede','odessaBright','wuMann','drGiovanni']},
 
   {id:'jini',name:'Jini',clan:'Hecata',sub:'PC — Night Nurse',x:1281,y:1041,pc:true,
-   detail:`A WWII war bride whose husband Andrew was lost in the Pacific, presumed dead. Her sire Dr. Giovanni Embraced her for her occult aptitude, and everything since has been in service of finding Andrew. She's just discovered the Hecata files compiled on his disappearance were stolen — almost certainly by a Nosferatu.`,
+   detail:`A WWII war bride whose husband Andrew was lost in the Pacific, presumed dead. Her sire Dr. Giovanni Embraced her for her occult aptitude, and everything since has been in service of finding Andrew — whose Hecata file was stolen, almost certainly by a Nosferatu. Now holding leverage of her own over Giovanni, she pried a convincing cadaver out of his pathology hold to buy Norman his job back, and traded vitae to Antonio for the sewer entrance where his old Nosferatu master once met him.`,
    conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy','antonioGhoul','eliDrum','agnetteVess']},
 
   {id:'amalek',name:'Amalek',clan:'Tremere',sub:'PC — Ex-SS Occultist',x:1212,y:1254,pc:true,
-   detail:`An ex-SS occultist who bought his Embrace by smuggling Jews out of the collapsing Reich. A devout Noddist and a practicing diablerizer, he consumed Ganymede in full view of witnesses during a botched job. He's fled to his malkav Anton LaVey for cover while the FBI circles his mortal mask, Klaus Grossman.`,
+   detail:`An ex-SS occultist who bought his Embrace by smuggling Jews out of the collapsing Reich. A devout Noddist and a practicing diablerizer, he consumed Ganymede in front of witnesses and has been talking fast ever since. He crawled to his sire Rabbi Levi for a dressing-down and a storage-unit safehouse, sweet-talked a Sabbat pack out of a captive and a pack of Camarilla hounds out of a staking — both on the strength of his Marcus Webb back-channel — then cleared his valuables out of his old house. Hours later, Norman burned it down.`,
    conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','ganymede','norman','jini','jupiter','tommy','calvDuchamp','ehHoldings','antonLaVey','washington','buscemi']},
 
   {id:'jupiter',name:'Jupiter / Ira',clan:'Setite',sub:'PC — Cult Leader',x:988,y:1254,pc:true,
@@ -186,8 +186,8 @@ const nodes=[
    conn:['sam','grayMan','norman','jini','amalek','tommy','calvDuchamp','ganymede']},
 
   {id:'tommy',name:'Tommy Fleet',clan:'Toreador',sub:'PC — Country Musician',x:919,y:1041,pc:true,
-   detail:`A charismatic country star who built a career stealing music from underprivileged Black musicians. He lost control feeding on starlet Vera Lynn, staged it as a suicide attempt, and gaslit her into devotion that's curdling into a real Blood Bond. His charm is cracking under Celeste Beaumont's scrutiny, and he knows it.`,
-   conn:['veraLynn','celesteBeaumont','grayMan','norman','jini','amalek','jupiter','calvDuchamp']},
+   detail:`A charismatic country star who built a career stealing music from underprivileged Black musicians. He lost control feeding on starlet Vera Lynn, staged it as a suicide attempt, and gaslit her into devotion that's curdling into a real Blood Bond. The accidental Anarch-hero reputation he picked up at the metal show has made him a Sabbat favorite — a pack tried to gift him a captive to eat. His own sire has now warned him, plainly, that Celeste Beaumont is not to be trusted.`,
+   conn:['veraLynn','celesteBeaumont','grayMan','norman','jini','amalek','jupiter','calvDuchamp','tommysSire']},
 
   {id:'patron',name:'The Patron',clan:'Unknown',sub:'True identity unknown — never met',x:1100,y:454,
    detail:`The unseen blackmailer running the coterie through the Gray Man. No one has ever met this person, confirmed their clan, or even confirmed they're a single individual rather than a committee. Assembled the coterie by threat, escalated the jobs from surveillance to arson to assassination, and is, as far as anyone can tell, always watching.`,
@@ -202,11 +202,11 @@ const nodes=[
    conn:['norman']},
 
   {id:'rabbiLevi',name:'Rabbi Levi Morgenstern',clan:'Tremere',sub:"Amalek's sire",x:1285,y:1479,
-   detail:`Amalek's sire — a Jewish vampire who survived the century with an actuarial, not cruel, relationship to what human life costs. Genuinely fatherly toward Amalek in a way that makes the control more insidious. He's warmed noticeably as Amalek edges toward real power, and doesn't yet know about the Noddism or the diablerie.`,
+   detail:`Amalek's sire — a Jewish vampire who survived the century with an actuarial, not cruel, relationship to what human life costs. Genuinely fatherly toward Amalek in a way that makes the control more insidious. When Amalek came to him in real trouble, he delivered a stern dressing-down and then, as ever, protected him — handing over a storage-unit facility he owns as a safehouse. He still may not grasp the full extent of the Noddism and diablerie he's sheltering.`,
    conn:['amalek']},
 
   {id:'drGiovanni',name:'Dr. Giovanni',clan:'Hecata',sub:"Jini's sire",x:1522,y:1100,
-   detail:`Jini's sire, a self-described Head of Pathology who was never a real doctor. Treats the sire bond as pure transaction — Jini is useful, so he keeps her. He's holding Reverend Drum's ghost and fetter, plus a price for the stolen Andrew files he hasn't named yet. He'll collect at maximum leverage.`,
+   detail:`Jini's sire, a self-described Head of Pathology who was never a real doctor. He treats the sire bond as pure transaction — and for once the transaction ran the other way, with Jini holding leverage enough to pry a body out of his morgue for Norman. He still has Reverend Drum's ghost and fetter, and an unnamed price for the stolen Andrew files he intends to collect at maximum advantage.`,
    conn:['jini','eliDrum']},
 
   {id:'sam',name:'Sam',clan:'Setite',sub:"Jupiter's sire",x:750,y:1336,
@@ -218,12 +218,12 @@ const nodes=[
    conn:['amalek','eliDrum','calvDuchamp']},
 
   {id:'marcusWebb',name:'Marcus Webb',clan:'Brujah',sub:'Sheriff of DC',x:1510,y:1283,
-   detail:`The Prince's unhurried, lethal Sheriff. Closed his investigation into Elias Drum's death in exchange for Amalek's promise of information on the blackmailer behind the coterie. That investigation is now creeping toward something far more dangerous than a single murder — and Amalek is the only one who knows just how close it's getting.`,
+   detail:`The Prince's unhurried, lethal Sheriff. Closed his investigation into Elias Drum's death in exchange for Amalek's promise of information on the blackmailer behind the coterie. His name now does work he hasn't authorized — Amalek invoked their back-channel to wave a pack of his own hounds off the coterie. That investigation keeps creeping toward something far worse than a single murder.`,
    conn:['amalek','odessaBright','eliDrum']},
 
   {id:'celesteBeaumont',name:'Celeste Beaumont',clan:'Toreador',sub:'Toreador Primogen',x:768,y:840,
-   detail:`Toreador Primogen who's run DC's Elysium-gallery since before the Civil War. Tommy spilled the coterie's entire blackmail situation to her within twenty minutes of meeting. She surfaced the missing Nosferatu Primogen as a potential exploit, called in two favors from Tommy already, and is now summoning the whole coterie to her gallery.`,
-   conn:['tommy','veraLynn','calvDuchamp','nosferatuPrimogen']},
+   detail:`Toreador Primogen who's run DC's Elysium-gallery since before the Civil War. Tommy spilled the coterie's entire blackmail situation to her within twenty minutes of meeting. She surfaced the missing Nosferatu Primogen as a potential exploit and has called in favor after favor from Tommy — but Tommy's own sire has now named her, flatly, as someone not to be trusted.`,
+   conn:['tommy','veraLynn','calvDuchamp','nosferatuPrimogen','tommysSire']},
 
   {id:'mattMercer',name:'Aldous Mercer',clan:'Ventrue',sub:'Camarilla Primogen, deceased',x:1309,y:525,
    detail:`A Camarilla Primogen whose assassination, amid the chaos of the MLK riots, brought the coterie together in the first place. He held DC's urban renewal contracts through mortal proxies and ghoul officials, and was quietly building a back-channel deal with Odessa Bright's reform faction to shore up his council seat.`,
@@ -258,7 +258,7 @@ const nodes=[
    conn:['jupiter','amalek','norman']},
 
   {id:'antonioGhoul',name:'Antonio',clan:'Ghoul',sub:'Untethered, DC',x:1669,y:1000,
-   detail:`A teenage Italian ghoul cut loose by his old master after a warehouse job went bad. Jini saved his life with her vitae, leaving him lightly Blood Bonded and increasingly smitten. He's mentioned, almost in passing, that his former master is a Nosferatu who lives in the sewers — he has no idea how significant that is.`,
+   detail:`A teenage Italian ghoul cut loose by his old master after a warehouse job went bad. Jini saved his life with her vitae, leaving him lightly Blood Bonded and increasingly smitten — smitten enough to trade away the sewer entrance where his old Nosferatu master once met him, in exchange for more of her blood. He still has no idea how significant that doorway might be.`,
    conn:['jini']},
 
   {id:'agnetteVess',name:'Agnette Vess',clan:'Hecata',sub:"Jini's Primogen",x:1441,y:852,
@@ -284,6 +284,10 @@ const nodes=[
   {id:'nosferatuPrimogen',name:'Nosferatu Primogen',clan:'Nosferatu',sub:'Identity unknown — communicates only by missive',x:776,y:581,
    detail:`A Nosferatu power player no one in the local hierarchy has ever actually seen. Communicates entirely through delivered missives and somehow still holds the Prince's ear. Celeste surfaced his existence to the coterie as a potential exploit — whoever controls access to him gains leverage no one else in the city currently has.`,
    conn:['celesteBeaumont']},
+
+  {id:'tommysSire',name:'Jerry Wexler',clan:'Toreador',sub:"Tommy's sire — music exec",x:600,y:910,
+   detail:`A big-shot country music executive and Tommy's sire — a good ol' boy in a big hat and a long limousine, with the easy racism of a man who's never once been told no. The music industry is his hunting ground: a steady supply of hungry talent he can use, drain, and discard. He surfaced this week to warn Tommy, plainly, that Celeste Beaumont is not to be trusted — and shared nothing about how he'd know.`,
+   conn:['tommy','celesteBeaumont']},
 ];
 
 // ─────────────────────────────────────────────
@@ -404,6 +408,27 @@ const events=[
 
   {id:'ev32', date:'Jun 25, 1968', name:'The Gallery Invitation', cat:'meeting',
    detail:`Celeste calls to congratulate Tommy and promises to raise the idea of siring Vera Lynn with the council — for another favor — then summons the whole coterie to her gallery.`},
+
+  {id:'ev33', date:'Jun 26, 1968', name:"Amalek's Sire Reins Him In", cat:'meeting',
+   detail:`Cornered and exposed, Amalek calls his sire Rabbi Levi Morgenstern and weathers a furious dressing-down. Levi protects him anyway, handing over a storage-unit facility he owns as a temporary safehouse.`},
+
+  {id:'ev34', date:'Jun 26, 1968', name:'A Body for the Pinkertons', cat:'faction',
+   detail:`Norman finally uses his head: he needs a convincing corpse to satisfy his bosses. Jini, working pathology and now holding leverage over Dr. Giovanni, secures a cadaver — and Norman buys his old Pinkerton job back with it.`},
+
+  {id:'ev35', date:'Jun 27, 1968', name:"Shooed from Tommy's Door", cat:'meeting',
+   detail:`The coterie converges on Tommy Fleet's house. He shoos them off immediately, pointing them at the venue he's promised Celeste he'll appear at — and pointedly gives them the location and nothing else.`},
+
+  {id:'ev36', date:'Jun 27, 1968', name:'The Sabbat Warehouse', cat:'faction',
+   detail:`The "venue" is an abandoned brick warehouse hosting a Sabbat party, not an art opening. The pack, mistaking Tommy for an Anarch hero, offers a captive vampire for him to consume; Amalek talks them into surrendering her as a prisoner instead. On the way out the coterie runs face-first into Camarilla hounds — and Amalek defuses them too, invoking Marcus Webb and giving up the captive as a "confused fledgling." They're let go, suspected but alive.`},
+
+  {id:'ev37', date:'Jun 28, 1968', name:"Tommy's Sire's Warning", cat:'meeting',
+   detail:`Tommy's sire pays him a visit and underlines, as if it needed saying, that Celeste Beaumont is not to be trusted. He offers the warning and little else about how he'd know.`},
+
+  {id:'ev38', date:'Jun 28, 1968', name:'The Sewer Bargain', cat:'discovery',
+   detail:`Jini strikes a deal with the smitten ghoul Antonio: more of her vitae in exchange for the sewer entrance where he once met his old Nosferatu master — a doorway that may lead straight toward the stolen Andrew files.`},
+
+  {id:'ev39', date:'Jun 29, 1968', name:'Norman Burns It Down', cat:'death',
+   detail:`Amalek quietly moves his most valuable possessions out of his old house. The same night, Norman — chasing closure for Hugh and mastering his vampiric fear of fire — douses Amalek's varnished floors in gasoline and pitches a molotov through the kitchen window. The house goes up.`},
 ];
 
 // ─────────────────────────────────────────────
