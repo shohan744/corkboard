@@ -1,1 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recovered Effects — North Star Site</title>
+<style>
+  html, body {
+    margin: 0;
+    min-height: 100%;
+  }
+  body {
+    background: #23282e;
+    font-family: Georgia, serif;
+    color: #d5cbb5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 12px 80px;
+    box-sizing: border-box;
+    overflow-x: auto;
+  }
+  h1 {
+    font-size: 16px;
+    letter-spacing: 3px;
+    font-weight: normal;
+    color: #a89878;
+    margin: 0 0 4px 0;
+    text-transform: uppercase;
+  }
+  .subtitle {
+    font-size: 12px;
+    color: #6b7887;
+    margin-bottom: 22px;
+    font-style: italic;
+  }
+  .stage {
+    position: relative;
+    touch-action: none;
+  }
+  .letter {
+    background: #efe8d5;
+    background-image:
+      radial-gradient(ellipse at 15% 12%, rgba(160,140,100,0.12), transparent 45%),
+      radial-gradient(ellipse at 88% 85%, rgba(120,100,70,0.14), transparent 50%);
+    padding: 44px 48px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+    color: #2a2419;
+    position: relative;
+    user-select: none;
+  }
+  .textgrid {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    line-height: 30px;
+    white-space: pre;
+    position: relative;
+  }
+  .reg {
+    position: absolute; width: 18px; height: 18px; opacity: 0.7;
+  }
+  .reg::before, .reg::after { content:''; position:absolute; background:#2a2419; }
+  .reg::before { left:8px; top:0; width:2px; height:18px; }
+  .reg::after { top:8px; left:0; height:2px; width:18px; }
+  .reg.tl { top:12px; left:12px; }
+  .reg.tr { top:12px; right:12px; }
+  .reg.bl { bottom:12px; left:12px; }
 
+  .card {
+    position: absolute;
+    cursor: grab;
+    filter: drop-shadow(3px 5px 8px rgba(0,0,0,0.55));
+    transition: filter 0.2s;
+    z-index: 5;
+    display: none;
+  }
+  .card.dragging { cursor: grabbing; filter: drop-shadow(6px 10px 14px rgba(0,0,0,0.7)); }
+  .card.shown { display: block; }
+  .card svg { display: block; }
+  .card .cardreg { opacity: 0.85; }
+
+  .aligned-glow {
+    animation: alignpulse 1.6s ease-in-out;
+  }
+  @keyframes alignpulse {
+    0% { filter: drop-shadow(0 0 0px rgba(240,199,102,0)); }
+    35% { filter: drop-shadow(0 0 18px rgba(240,199,102,0.9)); }
+    100% { filter: drop-shadow(3px 5px 8px rgba(0,0,0,0.55)); }
+  }
+
+  .controls {
+    margin-top: 26px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  button {
+    background: #3a4550;
+    color: #e8eef3;
+    border: 1px solid #5a6773;
+    padding: 10px 20px;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
+    letter-spacing: 1px;
+  }
+  button:hover { background: #4a5765; }
+  button.primary { background: #6b2b3e; border-color: #8a4552; }
+  button.primary:hover { background: #7d3448; }
+  .hint {
+    margin-top: 14px;
+    font-size: 12px;
+    color: #6b7887;
+    font-style: italic;
+    max-width: 480px;
+    text-align: center;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+  <h1>Recovered Effects</h1>
+  <div class="subtitle">Command tent, North Star site — personal correspondence, one (1) page</div>
+
+  <div class="stage" id="stage">
+    <div class="letter" id="letter">
+      <div class="reg tl"></div><div class="reg tr"></div><div class="reg bl"></div>
+      <div class="textgrid" id="textgrid">Dear Theodore,
+
+I hope the weather up there is kinder than the papers
+say. Your father sends his regards and wants to know
+if you received the wool socks. We expect five of your
+cousins to visit as guests this summer, most likely
+before the fair. Aunt Ruth says August is best for the
+garden, though I disagree. I attended vesper service
+at the chapel on Sunday, and Father Malone confirms the
+roof will be repaired by fall. Please hold on to the
+item you promised your brother, the little carved bird,
+until you are home again. The relief of seeing you at
+the door will be worth every week. Write when the mail
+arrives, if it ever does out there.
+
+With love,
+Margaret</div>
+    </div>
+    <div class="card" id="card"></div>
+  </div>
+
+  <div class="controls">
+    <button class="primary" id="showCardBtn">Examine the card found on Fox Seven</button>
+    <button id="resetBtn" style="display:none">Put the card back</button>
+  </div>
+  <div class="hint" id="hint">A folded letter, soft at the creases from rereading. Nothing remarkable about it.</div>
+
+<script>
+(function() {
+  // Hidden word positions: [line, col, length] in the monospace grid
+  var POSITIONS = [
+    [4, 42, 4],  // five
+    [5, 20, 6],  // guests
+    [6, 0, 6],   // before
+    [6, 32, 6],  // August
+    [7, 38, 6],  // vesper
+    [8, 43, 8],  // confirms
+    [9, 38, 4],  // hold
+    [10, 0, 4],  // item
+    [11, 0, 5],  // until
+    [11, 30, 6], // relief
+    [13, 0, 7]   // arrives
+  ];
+  var LINE_H = 30;
+
+  var stage = document.getElementById('stage');
+  var letter = document.getElementById('letter');
+  var textgrid = document.getElementById('textgrid');
+  var card = document.getElementById('card');
+  var hint = document.getElementById('hint');
+  var showBtn = document.getElementById('showCardBtn');
+  var resetBtn = document.getElementById('resetBtn');
+
+  // Measure one monospace character in the live font
+  var meas = document.createElement('span');
+  meas.style.cssText = 'font-family:"Courier New",Courier,monospace;font-size:16px;position:absolute;visibility:hidden;white-space:pre;';
+  meas.textContent = 'MMMMMMMMMM';
+  document.body.appendChild(meas);
+  var CH = meas.getBoundingClientRect().width / 10;
+  document.body.removeChild(meas);
+
+  // Card geometry: covers the whole text grid plus a margin
+  var PAD = 26;
+  var gridW = 55 * CH;
+  var gridH = 17 * LINE_H;
+  var cardW = gridW + PAD * 2;
+  var cardH = gridH + PAD * 2;
+
+  // Build SVG path with evenodd holes
+  function rectPath(x, y, w, h, r) {
+    r = r || 0;
+    if (!r) return 'M' + x + ' ' + y + 'h' + w + 'v' + h + 'h' + (-w) + 'Z';
+    return 'M' + (x + r) + ' ' + y +
+      'h' + (w - 2 * r) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + r +
+      'v' + (h - 2 * r) + 'a' + r + ' ' + r + ' 0 0 1 ' + (-r) + ' ' + r +
+      'h' + (-(w - 2 * r)) + 'a' + r + ' ' + r + ' 0 0 1 ' + (-r) + ' ' + (-r) +
+      'v' + (-(h - 2 * r)) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + (-r) + 'Z';
+  }
+  var d = rectPath(0, 0, cardW, cardH, 8);
+  POSITIONS.forEach(function(p) {
+    var x = PAD + p[1] * CH - 2;
+    var y = PAD + p[0] * LINE_H + 3;
+    var w = p[2] * CH + 4;
+    var h = LINE_H - 7;
+    d += ' ' + rectPath(x, y, w, h);
+  });
+
+  card.innerHTML =
+    '<svg width="' + cardW + '" height="' + cardH + '" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="' + d + '" fill="#4a4238" fill-rule="evenodd" stroke="#2e2820" stroke-width="2"/>' +
+    // subtle card texture lines
+    '<line x1="14" y1="' + (cardH - 14) + '" x2="60" y2="' + (cardH - 14) + '" stroke="#3a3328" stroke-width="1"/>' +
+    '<line x1="14" y1="' + (cardH - 18) + '" x2="42" y2="' + (cardH - 18) + '" stroke="#3a3328" stroke-width="1"/>' +
+    // corner registration notches matching the letter's marks
+    '<g class="cardreg" stroke="#d5cbb5" stroke-width="2">' +
+    '<line x1="12" y1="21" x2="30" y2="21"/><line x1="21" y1="12" x2="21" y2="30"/>' +
+    '<line x1="' + (cardW - 30) + '" y1="21" x2="' + (cardW - 12) + '" y2="21"/><line x1="' + (cardW - 21) + '" y1="12" x2="' + (cardW - 21) + '" y2="30"/>' +
+    '<line x1="12" y1="' + (cardH - 21) + '" x2="30" y2="' + (cardH - 21) + '"/><line x1="21" y1="' + (cardH - 30) + '" x2="21" y2="' + (cardH - 12) + '"/>' +
+    '</g></svg>';
+
+  // Target position: card PAD aligns with textgrid's offset inside the stage
+  function targetPos() {
+    var stageRect = stage.getBoundingClientRect();
+    var gridRect = textgrid.getBoundingClientRect();
+    return {
+      x: gridRect.left - stageRect.left - PAD,
+      y: gridRect.top - stageRect.top - PAD
+    };
+  }
+
+  var pos = { x: 0, y: 0 };
+  var snapped = false;
+
+  function setPos(x, y) {
+    pos.x = x; pos.y = y;
+    card.style.left = x + 'px';
+    card.style.top = y + 'px';
+  }
+
+  function checkSnap() {
+    var t = targetPos();
+    var dx = pos.x - t.x, dy = pos.y - t.y;
+    if (Math.abs(dx) < 12 && Math.abs(dy) < 12) {
+      setPos(t.x, t.y);
+      if (!snapped) {
+        snapped = true;
+        card.classList.add('aligned-glow');
+        hint.textContent = 'The corner marks line up. The windows are not random at all.';
+        setTimeout(function(){ card.classList.remove('aligned-glow'); }, 1700);
+      }
+    } else {
+      snapped = false;
+    }
+  }
+
+  // Drag handling (pointer events cover mouse + touch)
+  var dragging = false, startX = 0, startY = 0, origX = 0, origY = 0;
+  card.addEventListener('pointerdown', function(e) {
+    dragging = true;
+    card.classList.add('dragging');
+    card.setPointerCapture(e.pointerId);
+    startX = e.clientX; startY = e.clientY;
+    origX = pos.x; origY = pos.y;
+    e.preventDefault();
+  });
+  card.addEventListener('pointermove', function(e) {
+    if (!dragging) return;
+    setPos(origX + (e.clientX - startX), origY + (e.clientY - startY));
+  });
+  card.addEventListener('pointerup', function(e) {
+    dragging = false;
+    card.classList.remove('dragging');
+    checkSnap();
+  });
+
+  showBtn.addEventListener('click', function() {
+    card.classList.add('shown');
+    var t = targetPos();
+    // start the card offset below-right, partly off the letter, slightly askew feel
+    setPos(t.x + 180, t.y + 240);
+    showBtn.style.display = 'none';
+    resetBtn.style.display = '';
+    hint.textContent = 'A stiff gray card, cut with eleven small windows. No markings on the reverse. It is exactly the size of a letter page. Drag it.';
+  });
+
+  resetBtn.addEventListener('click', function() {
+    card.classList.remove('shown');
+    resetBtn.style.display = 'none';
+    showBtn.style.display = '';
+    snapped = false;
+    hint.textContent = 'A folded letter, soft at the creases from rereading. Nothing remarkable about it.';
+  });
+})();
+</script>
+</body>
+</html>
