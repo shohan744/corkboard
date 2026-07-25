@@ -103,7 +103,39 @@
     #tl-legend{display:flex;gap:16px;padding:12px 60px;border-top:1px solid #1a1810;flex-shrink:0}
     .tl-leg{display:flex;align-items:center;gap:5px;font-family:'Space Mono',monospace;font-size:8px;color:#3a3528;letter-spacing:0.06em;text-transform:uppercase}
     .tl-leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-  </style>
+
+    /* ── VOICEMAIL ── */
+    .vm-light{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:#c04040;box-shadow:0 0 7px rgba(200,60,60,0.9);animation:vmblink 1.3s steps(1) infinite;z-index:2}
+    @keyframes vmblink{50%{background:#3a1a1a;box-shadow:none}}
+    .vm-light.played{background:#4a4535;box-shadow:none;animation:none}
+    #card-vm{display:none;margin-bottom:18px}
+    #card-vm-label{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8b5a4a;margin-bottom:8px}
+    .vm-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #2a2720;background:#161410;border-radius:2px;margin-bottom:4px}
+    .vm-play{width:28px;height:28px;flex-shrink:0;border-radius:50%;border:1px solid #7a6e3e;background:#1e1c14;color:#c9b97a;cursor:pointer;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all 0.12s;padding:0}
+    .vm-play:hover{background:#2a2720;border-color:#c9b97a}
+    .vm-title{font-family:'Space Mono',monospace;font-size:10px;color:#a89e72;letter-spacing:0.03em;line-height:1.4}
+    .vm-row.playing{border-color:#7a6e3e}
+    .vm-row.playing .vm-play{background:#c9b97a;color:#1e1c14;border-color:#c9b97a}
+
+    /* ── MOBILE ── */
+    #view-web{touch-action:none}
+    #tl-scroll{-webkit-overflow-scrolling:touch}
+    @media (max-width: 768px){
+      #wrap{flex-direction:column-reverse}
+      #panel{width:100%;min-width:0;height:46vh;border-right:none;border-top:1px solid #2e2b1f}
+      #panel-header{padding:10px 14px}
+      #ph-title{font-size:13px}
+      #ph-sub{display:none}
+      #card{padding:12px 14px}
+      #main{height:54vh;flex:none}
+      #tl-track-wrap{padding:0 12px}
+      #tl-inner{padding:0 40px}
+      .tl-event{margin:0 26px}
+      #tl-legend{padding:8px 12px;gap:9px;flex-wrap:wrap}
+      #hint{display:none}
+      .conn-pill{padding:8px 10px}
+      .vm-play{width:34px;height:34px}
+    }
 </head>
 <body>
 <div id="wrap">
@@ -127,6 +159,10 @@
         <div id="card-name"></div>
         <div id="card-sub"></div>
         <div id="card-divider"></div>
+        <div id="card-vm">
+          <div id="card-vm-label">Answering service</div>
+          <div id="card-vm-list"></div>
+        </div>
         <div id="card-detail"></div>
         <div id="card-conn-label">Known associates</div>
         <div id="card-conn-list"></div>
@@ -543,9 +579,10 @@ const evidence=[
   {id:'ed-harvey-flier', name:'The Ed Harvey Flier', found:'Delivered by mail to each coterie member — Jul 04, 1968',
    desc:'A vintage pest-control advertisement: "Dominate the Rodents!" The number, 555-RODENT, reached a business that shut down years ago — and an operator who knew more than she let on.',
    src:'props/ed-harvey-flier.png'},
-  {id:'margaret-letter', name:'The Margaret Letter', found:'Command tent, North Star site',
-   desc:'Personal correspondence recovered with Fox Seven\'s effects. A stiff gray card, cut with eleven small windows, was found separately on the body.',
-   src:'props/margaret-letter.html'},
+  // Uncomment after the players discover it at the North Star site:
+  // {id:'margaret-letter', name:'The Margaret Letter', found:'Command tent, North Star site',
+  //  desc:'Personal correspondence recovered with Fox Seven\'s effects. A stiff gray card, cut with eleven small windows, was found separately on the body.',
+  //  src:'props/margaret-letter.html'},
 ];
 
 function buildEvidence(){
@@ -576,6 +613,75 @@ function closeEvidence(){
   document.getElementById('ev-frame-wrap').style.display='none';
   document.getElementById('ev-frame').src='';
   document.getElementById('ev-list').style.display='flex';
+}
+
+// ─────────────────────────────────────────────
+// VOICEMAILS
+// One entry per node id. Put mp3s in an /audio folder
+// next to this file. Add a row like:
+//   jini:[{id:'vm-jini-1',title:'A Warning from Giovanni',src:'audio/vm-jini-1.mp3'}],
+// Multiple messages per node are fine — just add more
+// objects to the array. Each needs a unique id (that's
+// what tracks played/unplayed across visits).
+// ─────────────────────────────────────────────
+const voicemails={
+  amalek:[{id:'vm-amalek-1',title:'Gratitude from Mr. LaVey',src:'props/anton_call.mp3'}],
+  jini:[{id:'vm-jini-1',title:'Problems at Work',src:'props/hospital_call.mp3'}],
+  tommy:[{id:'vm-tommy-1',title:'An Apology from Vera',src:'props/vera_call1.mp3'}],
+  jupiter:[{id:'vm-jupiter-1',title:'Gifts Given',src:'props/vera_call2.mp3'}],
+  norman:[{id:'vm-norman-1',title:'A Sales Call',src:'props/norman_call.mp3'}],
+};
+
+let vmPlayed=new Set();
+try{vmPlayed=new Set(JSON.parse(localStorage.getItem('vmPlayed')||'[]'));}catch(e){}
+function vmSave(){try{localStorage.setItem('vmPlayed',JSON.stringify([...vmPlayed]));}catch(e){}}
+function vmUnheard(nid){return (voicemails[nid]||[]).some(v=>!vmPlayed.has(v.id));}
+
+let vmAudio=null,vmActiveRow=null;
+function vmStop(){
+  if(vmAudio){vmAudio.pause();vmAudio=null;}
+  if(vmActiveRow){
+    vmActiveRow.classList.remove('playing');
+    const b=vmActiveRow.querySelector('.vm-play');
+    if(b)b.textContent='\u25B6';
+    vmActiveRow=null;
+  }
+}
+function vmPlay(nid,vm,row){
+  if(vmActiveRow===row){vmStop();return;} // tap again = stop
+  vmStop();
+  vmAudio=new Audio(vm.src);
+  vmActiveRow=row;
+  row.classList.add('playing');
+  row.querySelector('.vm-play').textContent='\u25A0';
+  vmAudio.addEventListener('ended',vmStop);
+  vmAudio.addEventListener('error',()=>{
+    vmStop();
+    row.querySelector('.vm-title').textContent=vm.title+' — (audio file not found)';
+  });
+  vmAudio.play().catch(()=>{});
+  vmPlayed.add(vm.id);vmSave();
+  updateVmLight(nid);
+}
+function updateVmLight(nid){
+  const el=document.getElementById('n'+nid);
+  if(!el)return;
+  const light=el.querySelector('.vm-light');
+  if(light&&!vmUnheard(nid))light.classList.add('played');
+}
+function fillVm(nid){
+  const wrap=document.getElementById('card-vm'),list=document.getElementById('card-vm-list');
+  const vms=voicemails[nid]||[];
+  if(!vms.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  list.innerHTML='';
+  vms.forEach(vm=>{
+    const row=document.createElement('div');
+    row.className='vm-row';
+    row.innerHTML=`<button class="vm-play">\u25B6</button><div class="vm-title">${vm.title}</div>`;
+    row.querySelector('.vm-play').onclick=()=>vmPlay(nid,vm,row);
+    list.appendChild(row);
+  });
 }
 
 // ─────────────────────────────────────────────
@@ -625,7 +731,8 @@ function drawNodes(){
       el=document.createElement('div');
       el.id='n'+n.id;
       el.className='nd'+(n.pc?' pc':'');
-      el.innerHTML=`<div class="ni"><div class="nn">${n.name}</div><div class="ns">${n.clan}</div></div>`;
+      const vmHtml=voicemails[n.id]?`<span class="vm-light${vmUnheard(n.id)?'':' played'}"></span>`:'';
+      el.innerHTML=`<div class="ni">${vmHtml}<div class="nn">${n.name}</div><div class="ns">${n.clan}</div></div>`;
       el.addEventListener('click',()=>pickNode(n.id));
       document.getElementById('board-canvas').appendChild(el);
     }
@@ -641,6 +748,7 @@ function pickNode(id){
     const cn=idMap[cid];if(!cn)return null;
     return{label:cn.name,action:()=>pickNode(cid)};
   });
+  fillVm(id);
   drawNodes();drawEdges();
 }
 webView.addEventListener('mousedown',e=>{
@@ -652,6 +760,19 @@ window.addEventListener('mousemove',e=>{
   px=e.clientX-ps.x;py=e.clientY-ps.y;drawNodes();drawEdges();
 });
 window.addEventListener('mouseup',()=>{panning=false;webView.style.cursor='crosshair';});
+
+// touch panning (mobile)
+webView.addEventListener('touchstart',e=>{
+  if(e.target.closest('.nd'))return;
+  const t=e.touches[0];
+  panning=true;ps={x:t.clientX-px,y:t.clientY-py};
+},{passive:true});
+webView.addEventListener('touchmove',e=>{
+  if(!panning)return;
+  const t=e.touches[0];
+  px=t.clientX-ps.x;py=t.clientY-ps.y;drawNodes();drawEdges();
+},{passive:true});
+webView.addEventListener('touchend',()=>{panning=false;});
 
 // ─────────────────────────────────────────────
 // TIMELINE LOGIC
@@ -692,6 +813,7 @@ function pickEvent(id){
   document.getElementById('tev'+id).classList.add('sel');
   const ev=evMap[id];
   showCard(ev.cat.toUpperCase(), ev.name, ev.date, ev.detail, [], ()=>null);
+  document.getElementById('card-vm').style.display='none';
 }
 
 // ─────────────────────────────────────────────
@@ -736,6 +858,8 @@ function switchTab(tab){
   // reset card
   document.getElementById('card-empty').style.display='flex';
   document.getElementById('card-content').style.display='none';
+  document.getElementById('card-vm').style.display='none';
+  vmStop();
   sel=null;
   if(tab==='web'){drawNodes();drawEdges();}
   if(tab==='evidence'){buildEvidence(); closeEvidence();}
