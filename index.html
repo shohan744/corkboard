@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Corkboard</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Cinzel:wght@400;700&family=EB+Garamond:ital@0;1&display=swap');
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{width:100%;height:100%;overflow:hidden;background:#1e1c15}
     #wrap{display:flex;width:100vw;height:100vh;overflow:hidden}
@@ -64,45 +64,83 @@
 
     /* ── TIMELINE VIEW ── */
     #view-timeline{flex:1;display:none;flex-direction:column;overflow:hidden;background:#1e1c15;position:relative}
-    #tl-track-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden;position:relative;padding:0 60px}
-    #tl-scroll{overflow-x:auto;overflow-y:hidden;padding:40px 0 30px;cursor:grab;user-select:none}
-    #tl-scroll::-webkit-scrollbar{height:3px}
-    #tl-scroll::-webkit-scrollbar-thumb{background:#2e2b1f}
-    #tl-scroll.grabbing{cursor:grabbing}
-    #tl-inner{position:relative;height:160px;white-space:nowrap;display:inline-flex;align-items:center;padding:0 80px}
 
-    /* spine */
-    #tl-line{position:absolute;top:50%;left:0;right:0;height:1px;background:#2a2720;transform:translateY(-50%)}
-    #tl-line::before{content:'';position:absolute;left:0;top:-1px;width:60px;height:3px;background:linear-gradient(90deg,#1e1c15,#2a2720)}
-    #tl-line::after{content:'';position:absolute;right:0;top:-1px;width:60px;height:3px;background:linear-gradient(270deg,#1e1c15,#2a2720)}
+    /* ══ CHAPTER LANDING ══ */
+    #tl-landing{flex:1;display:flex;overflow-y:auto;padding:0}
+    #tl-landing-left{width:38%;min-width:280px;max-width:440px;padding:38px 34px;box-sizing:border-box;border-right:1px solid #2a2720}
+    #tl-landing-right{flex:1;position:relative;padding:40px 30px;box-sizing:border-box;min-height:100%}
+    #tl-land-head{font-family:'Cinzel',Georgia,serif;font-size:22px;font-weight:700;color:#c9b97a;letter-spacing:0.04em;line-height:1.2;margin-bottom:6px}
+    #tl-land-sub{font-family:'Space Mono',monospace;font-size:9px;color:#6a5f3e;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:24px}
+    .tl-land-block{font-family:'EB Garamond',Georgia,serif;font-size:14px;line-height:1.6;color:#9a8f72;margin-bottom:20px}
+    .tl-land-block h4{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#7a6e3e;margin:0 0 7px}
+    /* aged-paper chapter cards */
+    #tl-cards{display:flex;flex-wrap:wrap;gap:28px 34px;align-content:flex-start;justify-content:center;padding-top:10px}
+    .tl-card{position:relative;width:210px;height:150px;cursor:pointer;background:linear-gradient(135deg,#d8cba8 0%,#cdbf98 55%,#c2b088 100%);border-radius:2px;padding:18px 20px;box-sizing:border-box;box-shadow:2px 4px 10px rgba(0,0,0,0.45);transition:transform 0.18s ease,box-shadow 0.18s ease;color:#2a2113;overflow:hidden}
+    .tl-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,0.18),transparent 60%),radial-gradient(ellipse at 80% 90%,rgba(80,60,30,0.22),transparent 55%);pointer-events:none}
+    .tl-card::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(120,90,50,0.03) 3px,rgba(120,90,50,0.03) 4px);pointer-events:none}
+    .tl-card:nth-child(4n+1){transform:rotate(-2.5deg)}
+    .tl-card:nth-child(4n+2){transform:rotate(1.8deg)}
+    .tl-card:nth-child(4n+3){transform:rotate(2.2deg)}
+    .tl-card:nth-child(4n+4){transform:rotate(-1.5deg)}
+    .tl-card:hover{transform:rotate(0deg) translateY(-5px) scale(1.03);box-shadow:0 0 22px rgba(201,185,122,0.55),3px 6px 14px rgba(0,0,0,0.5);z-index:5}
+    .tl-card-num{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#7a5a2e;margin-bottom:8px;position:relative}
+    .tl-card-title{font-family:'Cinzel',Georgia,serif;font-size:18px;font-weight:700;line-height:1.2;color:#2a1e10;position:relative}
+    .tl-card-range{position:absolute;bottom:14px;left:20px;right:20px;font-family:'Space Mono',monospace;font-size:8px;color:#6a512e;letter-spacing:0.06em;position:absolute}
+    .tl-card-count{position:absolute;bottom:14px;right:18px;font-family:'Space Mono',monospace;font-size:8px;color:#8a6a3a}
 
-    /* event markers */
-    .tl-event{position:relative;display:inline-flex;flex-direction:column;align-items:center;margin:0 36px;cursor:pointer;flex-shrink:0}
-    .tl-event.above .tl-label{bottom:calc(50% + 22px);top:auto}
-    .tl-event.below .tl-label{top:calc(50% + 22px);bottom:auto}
-    .tl-dot{width:10px;height:10px;border-radius:50%;background:#2e2b1e;border:1px solid #4a4535;transition:all 0.15s;position:relative;z-index:2;flex-shrink:0}
-    .tl-event:hover .tl-dot{background:#7a6e3e;border-color:#c9b97a}
-    .tl-event.sel .tl-dot{background:#c9b97a;border-color:#c9b97a;box-shadow:0 0 8px rgba(201,185,122,0.4)}
-    .tl-dot.cat-death{border-color:#8b3a3a;background:#3a1a1a}
-    .tl-dot.cat-meeting{border-color:#3a5a8b;background:#1a2a3a}
-    .tl-dot.cat-discovery{border-color:#3a7a4a;background:#1a3a1a}
-    .tl-dot.cat-faction{border-color:#7a5a3a;background:#3a2a1a}
-    .tl-dot.cat-embrace{border-color:#6a3a8b;background:#2a1a3a}
-    .tl-event:hover .tl-dot.cat-death,.tl-event.sel .tl-dot.cat-death{background:#8b3a3a;border-color:#c97a7a}
-    .tl-event:hover .tl-dot.cat-meeting,.tl-event.sel .tl-dot.cat-meeting{background:#3a5a8b;border-color:#7aaac9}
-    .tl-event:hover .tl-dot.cat-discovery,.tl-event.sel .tl-dot.cat-discovery{background:#3a7a4a;border-color:#7ac98a}
-    .tl-event:hover .tl-dot.cat-faction,.tl-event.sel .tl-dot.cat-faction{background:#7a5a3a;border-color:#c9aa7a}
-    .tl-event:hover .tl-dot.cat-embrace,.tl-event.sel .tl-dot.cat-embrace{background:#6a3a8b;border-color:#aa7ac9}
-    .tl-tick{position:absolute;top:50%;width:1px;height:14px;background:#2a2720;transform:translateY(-50%);z-index:1}
-    .tl-label{position:absolute;width:110px;text-align:center;pointer-events:none}
-    .tl-label-date{font-family:'Space Mono',monospace;font-size:8px;color:#4a4535;letter-spacing:0.08em;margin-bottom:3px}
-    .tl-label-name{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:#7a6e3e;line-height:1.3;white-space:normal}
-    .tl-event:hover .tl-label-name,.tl-event.sel .tl-label-name{color:#c9b97a}
-
-    /* category legend */
-    #tl-legend{display:flex;gap:16px;padding:12px 60px;border-top:1px solid #1a1810;flex-shrink:0}
-    .tl-leg{display:flex;align-items:center;gap:5px;font-family:'Space Mono',monospace;font-size:8px;color:#3a3528;letter-spacing:0.06em;text-transform:uppercase}
-    .tl-leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    /* ══ CHAPTER TIMELINE (vertical spine) ══ */
+    #tl-chapter{flex:1;display:none;flex-direction:column;overflow:hidden}
+    #tl-ch-bar{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid #2a2720;flex-shrink:0}
+    .tl-ch-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#9a8f72;background:#23211a;border:1px solid #3a352a;border-radius:2px;padding:6px 12px;cursor:pointer;transition:all 0.12s}
+    .tl-ch-btn:hover{border-color:#c9b97a;color:#c9b97a}
+    #tl-ch-title{font-family:'Cinzel',Georgia,serif;font-size:16px;font-weight:700;color:#c9b97a;letter-spacing:0.03em;margin-left:4px}
+    #tl-ch-title small{font-family:'Space Mono',monospace;font-size:9px;color:#6a5f3e;letter-spacing:0.1em;text-transform:uppercase;margin-left:10px;font-weight:400}
+    #tl-spine-scroll{flex:1;overflow-y:auto;padding:30px 0 60px;position:relative}
+    #tl-spine-scroll::-webkit-scrollbar{width:4px}
+    #tl-spine-scroll::-webkit-scrollbar-thumb{background:#2e2b1f}
+    #tl-spine{position:relative;max-width:900px;margin:0 auto;min-height:100%}
+    /* central vertical line */
+    #tl-spine::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,#3a352a 6%,#3a352a 94%,transparent);transform:translateX(-50%)}
+    /* chapter divider (see-all) */
+    .tl-divider{position:relative;text-align:center;margin:34px 0 26px;z-index:3}
+    .tl-divider span{font-family:'Cinzel',Georgia,serif;font-size:14px;font-weight:700;color:#c9b97a;background:#1e1c15;padding:0 18px;letter-spacing:0.05em}
+    .tl-divider small{display:block;font-family:'Space Mono',monospace;font-size:8px;color:#6a5f3e;letter-spacing:0.1em;text-transform:uppercase;margin-top:3px}
+    /* rows */
+    .tl-row{position:relative;display:flex;margin:0 0 4px;min-height:34px}
+    .tl-row.major{margin:14px 0}
+    .tl-row .tl-side{width:50%;box-sizing:border-box;position:relative}
+    /* major -> right side; minor -> left side */
+    .tl-row.major .tl-side-left{visibility:hidden}
+    .tl-row.minor .tl-side-right{visibility:hidden}
+    .tl-item{cursor:pointer;position:relative;padding:6px 0;transition:all 0.12s}
+    .tl-side-right .tl-item{text-align:left;padding-left:34px;padding-right:12px}
+    .tl-side-left .tl-item{text-align:right;padding-right:34px;padding-left:12px}
+    /* connector from spine to item */
+    .tl-side-right .tl-item::before{content:'';position:absolute;left:0;top:15px;width:26px;height:1px;background:#3a352a;transition:background 0.12s}
+    .tl-side-left .tl-item::before{content:'';position:absolute;right:0;top:15px;width:26px;height:1px;background:#3a352a;transition:background 0.12s}
+    /* dot on the spine */
+    .tl-item::after{content:'';position:absolute;top:11px;width:9px;height:9px;border-radius:50%;background:#2e2b1e;border:1px solid #4a4535;transition:all 0.14s;z-index:2}
+    .tl-side-right .tl-item::after{left:-4.5px}
+    .tl-side-left .tl-item::after{right:-4.5px}
+    .tl-item:hover::after{background:#7a6e3e;border-color:#c9b97a}
+    .tl-item:hover::before{background:#7a6e3e}
+    .tl-item.open::after{background:#c9b97a;border-color:#c9b97a;box-shadow:0 0 8px rgba(201,185,122,0.45)}
+    /* category dot colors */
+    .tl-item.cat-death::after{border-color:#8b3a3a;background:#3a1a1a}
+    .tl-item.cat-meeting::after{border-color:#3a5a8b;background:#1a2a3a}
+    .tl-item.cat-discovery::after{border-color:#3a7a4a;background:#1a3a1a}
+    .tl-item.cat-faction::after{border-color:#7a5a3a;background:#3a2a1a}
+    .tl-item.cat-embrace::after{border-color:#6a3a8b;background:#2a1a3a}
+    .tl-i-date{font-family:'Space Mono',monospace;font-size:8px;color:#5a5138;letter-spacing:0.08em;margin-bottom:2px}
+    .tl-i-name{font-family:'Space Mono',monospace;font-weight:700;line-height:1.3;color:#8a7e52}
+    .tl-row.major .tl-i-name{font-size:14px;color:#c9b97a;letter-spacing:0.02em}
+    .tl-row.minor .tl-i-name{font-size:10px}
+    .tl-item:hover .tl-i-name{color:#e8dcae}
+    /* inline expanded detail */
+    .tl-detail{max-height:0;overflow:hidden;transition:max-height 0.28s ease,margin 0.28s ease;margin:0}
+    .tl-item.open .tl-detail{max-height:420px;margin-top:8px}
+    .tl-detail-inner{font-family:'EB Garamond',Georgia,serif;font-size:13px;line-height:1.6;color:#9a8f72;padding:10px 14px;background:#23211a;border:1px solid #2e2b1f;border-radius:2px}
+    .tl-side-left .tl-detail-inner{text-align:left}
 
     /* ── VOICEMAIL ── */
     .vm-light{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:#c04040;box-shadow:0 0 7px rgba(200,60,60,0.9);animation:vmblink 1.3s steps(1) infinite;z-index:2}
@@ -128,13 +166,40 @@
       #ph-sub{display:none}
       #card{padding:12px 14px}
       #main{height:54vh;flex:none}
-      #tl-track-wrap{padding:0 12px}
-      #tl-inner{padding:0 40px}
-      .tl-event{margin:0 26px}
-      #tl-legend{padding:8px 12px;gap:9px;flex-wrap:wrap}
       #hint{display:none}
       .conn-pill{padding:8px 10px}
       .vm-play{width:34px;height:34px}
+      /* landing: stack, cards below text */
+      #tl-landing{flex-direction:column;overflow-y:auto}
+      #tl-landing-left{width:100%;max-width:none;min-width:0;border-right:none;border-bottom:1px solid #2a2720;padding:22px 18px}
+      #tl-land-head{font-size:18px}
+      #tl-landing-right{padding:22px 16px}
+      #tl-cards{gap:20px}
+      .tl-card{width:100%;max-width:320px;transform:rotate(0deg)!important}
+      .tl-card:nth-child(n){transform:rotate(0deg)}
+      /* chapter spine: single column, everything on the right of a left-shifted line */
+      #tl-ch-bar{flex-wrap:wrap;gap:8px;padding:10px 14px}
+      #tl-ch-title{font-size:14px;width:100%;margin-left:0}
+      #tl-spine-scroll{padding:20px 0 50px}
+      #tl-spine{max-width:none;margin:0}
+      #tl-spine::before{left:18px}
+      /* collapse to one column: every row's populated side becomes full width, left-aligned to the 18px spine */
+      .tl-row{width:100%}
+      .tl-row .tl-side{width:100%!important;position:static}
+      /* the empty side is already visibility:hidden via base rules; make the populated one full-width */
+      .tl-row.major .tl-side-left{display:none}
+      .tl-row.minor .tl-side-right{display:none}
+      .tl-row.major .tl-side-right,.tl-row.minor .tl-side-left{display:block;visibility:visible}
+      .tl-side-left .tl-item,.tl-side-right .tl-item{text-align:left;padding-left:40px;padding-right:12px}
+      .tl-side-left .tl-item::before,.tl-side-right .tl-item::before{left:18px;right:auto;width:16px}
+      .tl-side-left .tl-item::after,.tl-side-right .tl-item::after{left:13.5px;right:auto}
+      /* indent minors so the hierarchy still reads */
+      .tl-row.minor .tl-item{padding-left:56px}
+      .tl-row.minor .tl-item::before{width:32px}
+      .tl-row.minor .tl-i-name{font-size:11px}
+      .tl-side-left .tl-detail-inner{text-align:left}
+      .tl-divider{text-align:left;padding-left:6px}
+      .tl-divider span{background:transparent;padding:0}
     }
   </style>
 </head>
@@ -182,20 +247,28 @@
 
     <!-- TIMELINE -->
     <div id="view-timeline">
-      <div id="tl-track-wrap">
-        <div id="tl-scroll">
-          <div id="tl-inner">
-            <div id="tl-line"></div>
-            <!-- events injected by JS -->
-          </div>
+      <!-- landing: chapter cards -->
+      <div id="tl-landing">
+        <div id="tl-landing-left">
+          <div id="tl-land-head">The Gray Man</div>
+          <div id="tl-land-sub">A Vampire Chronicle · Washington D.C. · 1968</div>
+          <div class="tl-land-block" id="tl-land-desc"></div>
+          <div class="tl-land-block" id="tl-land-ui"></div>
+        </div>
+        <div id="tl-landing-right">
+          <div id="tl-cards"><!-- chapter cards injected --></div>
         </div>
       </div>
-      <div id="tl-legend">
-        <div class="tl-leg"><div class="tl-leg-dot" style="background:#8b3a3a;border:1px solid #c97a7a"></div>Death</div>
-        <div class="tl-leg"><div class="tl-leg-dot" style="background:#6a3a8b;border:1px solid #aa7ac9"></div>Embrace</div>
-        <div class="tl-leg"><div class="tl-leg-dot" style="background:#3a5a8b;border:1px solid #7aaac9"></div>Meeting</div>
-        <div class="tl-leg"><div class="tl-leg-dot" style="background:#3a7a4a;border:1px solid #7ac98a"></div>Discovery</div>
-        <div class="tl-leg"><div class="tl-leg-dot" style="background:#7a5a3a;border:1px solid #c9aa7a"></div>Faction</div>
+      <!-- chapter view: vertical spine -->
+      <div id="tl-chapter">
+        <div id="tl-ch-bar">
+          <button class="tl-ch-btn" onclick="showChapterCards()">&larr; Chapters</button>
+          <button class="tl-ch-btn" onclick="renderSpine('all')">See All</button>
+          <div id="tl-ch-title"></div>
+        </div>
+        <div id="tl-spine-scroll">
+          <div id="tl-spine"><!-- rows injected --></div>
+        </div>
       </div>
     </div>
 
@@ -221,19 +294,19 @@ const nodes=[
    conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown','ganymede','odessaBright','wuMann','drGiovanni','emily']},
 
   {id:'jini',name:'Jini',clan:'Hecata',sub:'PC — Night Nurse',x:1281,y:1041,pc:true,
-   detail:`A WWII war bride whose husband Andrew was lost in the Pacific, presumed dead. Her sire Dr. Giovanni Embraced her for her occult aptitude, and everything since has been in service of finding Andrew, whose Hecata file was stolen, almost certainly by a Nosferatu. Now holding leverage of her own over Giovanni, she pried a convincing cadaver out of his pathology hold to buy Norman his job back, and traded vitae to Antonio for the sewer entrance where his old Nosferatu master once met him. That door opened onto a Nosferatu information hub, which delivered the answer she has organized her unlife around: Andrew is still alive. Where he is, and in what state, is the next question, and there is no world in which she does not go looking. Meanwhile Giovanni has escalated from threats to sabotage — her friend Susan warned her that he's spreading rumors at St. Mary's about stolen supplies and missed shifts. Susan also handed her a possible answer: Giovanni's conspicuous attention to the newest, prettiest nurse on staff might be blackmail material. And on the flight north, Jini watched Norman commit Amaranth at close range. She found herself less repelled than she expected. Curious, even.`,
+   detail:`A WWII war bride whose husband Andrew was lost in the Pacific, presumed dead. Her sire Dr. Giovanni Embraced her for her occult aptitude, and everything since has been in service of finding Andrew, whose Hecata file was stolen, almost certainly by a Nosferatu. Now holding leverage of her own over Giovanni, she pried a convincing cadaver out of his pathology hold to buy Norman his job back, and traded vitae to Antonio for the sewer entrance where his old Nosferatu master once met him. That door opened onto a Nosferatu information hub, which delivered the answer she has organized her unlife around: Andrew is still alive. Where he is, and in what state, is the next question, and there is no world in which she does not go looking. Meanwhile Giovanni has escalated from threats to sabotage — her friend Susan warned her that he's spreading rumors at St. Mary's about stolen supplies and missed shifts. Susan also handed her a possible answer: Giovanni's conspicuous attention to the newest, prettiest nurse on staff might be blackmail material. And on the flight north, Jini watched Norman commit Amaranth at close range. She found herself less repelled than she expected. Curious, even. At the Presentation, her primogen Agnette Vess handed her cryptic counsel, a shortwave radio, and a worn copy of Rebecca — and told her to listen once she got home. She and Antonio have photographs of Alice, the nurse Giovanni sees by night, but Jini fled the estate before capturing what she overheard.`,
    conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy','antonioGhoul','eliDrum','agnetteVess','control','susan']},
 
   {id:'amalek',name:'Amalek',clan:'Tremere',sub:'PC — Ex-SS Occultist',x:1212,y:1254,pc:true,
-   detail:`An ex-SS occultist who bought his Embrace by smuggling Jews out of the collapsing Reich. A devout Noddist and a practicing diablerizer, he consumed Ganymede in front of witnesses and has been talking fast ever since. He crawled to his sire Rabbi Levi for a dressing-down and a storage-unit safehouse, sweet-talked a Sabbat pack out of a captive and a pack of Camarilla hounds out of a staking (both on the strength of his Marcus Webb back-channel), then cleared his valuables out of his old house. Hours later, Norman burned it down. Now ensconced in a suite at a prestigious 1968 hotel with a retainer and stable bagged blood coordinated through Jini, he's negotiated one more concession from CONTROL: his FBI tail disappears. His sire then sent him to deliver a bugged book to Thomas Crane; Amalek found the device, sliced the spine, and slipped in a note exposing Levi's deception. Crane rewarded the loyalty with a tour of his private laboratory — Noddist relics, a hidden cell — and something colder underneath: Crane was hunting his first diablerie, and Amalek was on the menu. Amalek talked his way off the plate by offering an easier target: Vera Lynn. Location, habits, and an introduction to Anton LaVey included. He walked out with Crane's gratitude and vintage blood. On the flight north he stood at Norman's shoulder during the Amaranth, encouraging.`,
+   detail:`An ex-SS occultist who bought his Embrace by smuggling Jews out of the collapsing Reich. A devout Noddist and a practicing diablerizer, he consumed Ganymede in front of witnesses and has been talking fast ever since. He crawled to his sire Rabbi Levi for a dressing-down and a storage-unit safehouse, sweet-talked a Sabbat pack out of a captive and a pack of Camarilla hounds out of a staking (both on the strength of his Marcus Webb back-channel), then cleared his valuables out of his old house. Hours later, Norman burned it down. Now ensconced in a suite at a prestigious 1968 hotel with a retainer and stable bagged blood coordinated through Jini, he's negotiated one more concession from CONTROL: his FBI tail disappears. His sire then sent him to deliver a bugged book to Thomas Crane; Amalek found the device, sliced the spine, and slipped in a note exposing Levi's deception. Crane rewarded the loyalty with a tour of his private laboratory — Noddist relics, a hidden cell — and something colder underneath: Crane was hunting his first diablerie, and Amalek was on the menu. Amalek talked his way off the plate by offering an easier target: Vera Lynn. Location, habits, and an introduction to Anton LaVey included. He walked out with Crane's gratitude and vintage blood. On the flight north he stood at Norman's shoulder during the Amaranth, encouraging. Now settled in a Georgetown brownstone near Jupiter — its ritual room inscribed with Sabbat sigils in cultist blood — he encouraged Norman's first diablerie mid-flight, and at the Presentation pledged to protect Vera as half-heartedly as possible, then watched Celeste walk her out the door.`,
    conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','ganymede','norman','jini','jupiter','tommy','calvDuchamp','ehHoldings','antonLaVey','washington','buscemi','control']},
 
   {id:'jupiter',name:'Jupiter / Ira',clan:'Setite',sub:'PC — Cult Leader',x:988,y:1254,pc:true,
-   detail:`A cold Setite predator running a New Age healing cult as a front for slow-burn Blood Bonding. Sent to DC by her sire Sam for a purpose she doesn't fully understand, she discovered and purged a planted infiltrator in her flock, who was later used and killed as a patsy for the coterie. A distraught Vera Lynn showed up at the cult in secret one night looking for solace; Jupiter didn't recognize whose girl she was at first, consoled her, and fed off her before sending her home. Vera left Tommy for real not long after. When Tommy confronted her at her Georgetown haven with his security detail, she called the cops and didn't flinch. On the drive back from the sewer, Tommy tried to lecture her about interfering with his property. She did not accept the framing.`,
+   detail:`A cold Setite predator running a New Age healing cult as a front for slow-burn Blood Bonding. Sent to DC by her sire Sam for a purpose she doesn't fully understand, she discovered and purged a planted infiltrator in her flock, who was later used and killed as a patsy for the coterie. A distraught Vera Lynn showed up at the cult in secret one night looking for solace; Jupiter didn't recognize whose girl she was at first, consoled her, and fed off her before sending her home. Vera left Tommy for real not long after. When Tommy confronted her at her Georgetown haven with his security detail, she called the cops and didn't flinch. On the drive back from the sewer, Tommy tried to lecture her about interfering with his property. She did not accept the framing. Her power has grown: at a three-day LSD rite beneath Vera's orrery she took sphinx form and nursed her three closest followers on vitae, ghouling them in monstrous maternity. Marcus Webb has heard the winged-lion rumors; she deflected him on the Elysium terrace — placated, not convinced.`,
    conn:['sam','grayMan','norman','jini','amalek','tommy','calvDuchamp','ganymede','veraLynn','control']},
 
   {id:'tommy',name:'Tommy Fleet',clan:'Toreador',sub:'PC — Country Musician',x:919,y:1041,pc:true,
-   detail:`A charismatic country star who built a career stealing music from underprivileged Black musicians. He lost control feeding on starlet Vera Lynn, staged it as a suicide attempt, and gaslit her into devotion that's curdling into a real Blood Bond. The accidental Anarch-hero reputation he picked up at the metal show made him a Sabbat favorite. His sire has warned him plainly that Celeste Beaumont is not to be trusted. When Vera returned home shaken from a secret visit to Jupiter's cult, Tommy interrogated her, and in his rush to paint the cult as dangerous, revealed he knew far more about Jupiter than a jealous boyfriend ever should. Vera left him for good shortly after. He confronted Jupiter with a security detail; she called the cops. He now holds princely permission to sire Vera, negotiated as a boon from CONTROL — and he's rebuilt the bridge to use it. He tracked her performance schedule, met her after a set at a familiar nightclub, and spun the lawn confrontation as protectiveness: he knew Jupiter was dangerous, he came armed to keep Vera safe. Mollified but not fooled, Vera forgave him and reestablished the relationship. Then Tommy got on a plane to the Arctic, leaving her alone in DC — unaware that Amalek has since handed her location to a Tremere shopping for his first diablerie.`,
+   detail:`A charismatic country star who built a career stealing music from underprivileged Black musicians. He lost control feeding on starlet Vera Lynn, staged it as a suicide attempt, and gaslit her into devotion that's curdling into a real Blood Bond. The accidental Anarch-hero reputation he picked up at the metal show made him a Sabbat favorite. His sire has warned him plainly that Celeste Beaumont is not to be trusted. When Vera returned home shaken from a secret visit to Jupiter's cult, Tommy interrogated her, and in his rush to paint the cult as dangerous, revealed he knew far more about Jupiter than a jealous boyfriend ever should. Vera left him for good shortly after. He confronted Jupiter with a security detail; she called the cops. He now holds princely permission to sire Vera, negotiated as a boon from CONTROL — and he's rebuilt the bridge to use it. He tracked her performance schedule, met her after a set at a familiar nightclub, and spun the lawn confrontation as protectiveness: he knew Jupiter was dangerous, he came armed to keep Vera safe. Mollified but not fooled, Vera forgave him and reestablished the relationship. Then Tommy got on a plane to the Arctic, leaving her alone in DC — unaware that Amalek has since handed her location to a Tremere shopping for his first diablerie. The Bond with Vera is complete — her devotion sealed and unfree — but Tommy has sunk into melancholy self-pity, forgot to tell the coterie about the Presentation, botched his first impression with the Prince, and did not forbid Celeste from taking Vera to a private afterparty.`,
    conn:['veraLynn','celesteBeaumont','grayMan','norman','jini','amalek','jupiter','calvDuchamp','tommysSire','control']},
 
   {id:'patron',name:'The Patron',clan:'CONTROL leadership (suspected)',sub:'The face behind the blackmail',x:1100,y:454,
@@ -284,7 +357,7 @@ const nodes=[
    detail:`A young Brujah who never wanted to lead DC's reform faction and increasingly is doing it anyway. She attended Mercer's funeral despite having no right to be there, and was spotted by Amalek doing it. A pragmatist stuck dealing with people who barely tolerate her existence.`,
    conn:['marcusWebb','mattMercer','calvDuchamp']},
 
-  {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Brujah',sub:'West Coast Anarch',x:1688,y:931,
+  {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Brujah',sub:'West Coast Anarch',x:1730,y:860,
    detail:`An exiled West Coast Anarch organizer, building a coalition that's part ideology and part hunting ground. Came east after committing diablerie of his own — the threads still show in his aura. He identified EH Holdings as the real-estate front quietly demolishing buildings the Anarch movement could've used, and passed that intel to Amalek.`,
    conn:['celesteBeaumont','amalek','odessaBright','thomasCrane','ehHoldings']},
 
@@ -293,7 +366,7 @@ const nodes=[
    conn:['calvDuchamp','amalek','grayMan']},
 
   {id:'veraLynn',name:'Vera Lynn',clan:'Mortal',sub:"Starlet / Celeste's plant",x:679,y:1115,
-   detail:`A rising session musician injured when Tommy fed on her; he staged it as a suicide attempt and gaslit her into believing it. She fled to Jupiter's protection, but Tommy found her performance schedule and met her after a set with an explanation ready: he'd come to Jupiter's lawn armed because the cult was dangerous and he feared for her. Mollified but suspicious, addicted to his Lasting Kiss and exhausted by running, she forgave him and went back. She does not know Tommy holds princely permission to sire her. She does not know Amalek has sold her location, her habits, and her refuge to Thomas Crane as a first diablerie — a target that only works while she's mortal or newly turned. She is the most endangered person in Washington, and Tommy just left for the Arctic.`,
+   detail:`A rising session musician injured when Tommy fed on her; he staged it as a suicide attempt and gaslit her into believing it. She fled to Jupiter's protection, but Tommy found her performance schedule and met her after a set with an explanation ready: he'd come to Jupiter's lawn armed because the cult was dangerous and he feared for her. Mollified but suspicious, addicted to his Lasting Kiss and exhausted by running, she forgave him and went back. She does not know Tommy holds princely permission to sire her. She does not know Amalek has sold her location, her habits, and her refuge to Thomas Crane as a first diablerie — a target that only works while she's mortal or newly turned. She is the most endangered person in Washington, and Tommy just left for the Arctic. The Bond to Tommy is now complete — three drinks, sealed. Presented to the Prince and court on Jul 16, she left the party on Celeste Beaumont's arm, bound for a private afterparty no one stopped.`,
    conn:['tommy','celesteBeaumont','jupiter','thomasCrane']},
 
   {id:'elizUnknown',name:'Elizabeth ????',clan:'Thin-Blooded',sub:'Fate unknown',x:812,y:756,
@@ -304,7 +377,7 @@ const nodes=[
    detail:`Once one of Jupiter's most devoted flock, secretly sired by an unknown party and fed a false gospel meant to turn him against her. Jupiter caught the deception and locked him away — then he was used as a patsy in a staged attack and diablerized by Amalek in front of witnesses. He's dead.`,
    conn:['jupiter','amalek','norman']},
 
-  {id:'antonioGhoul',name:'Antonio',clan:'Ghoul',sub:'Untethered, DC',x:1669,y:1000,
+  {id:'antonioGhoul',name:'Antonio',clan:'Ghoul',sub:'Untethered, DC',x:1700,y:1080,
    detail:`A teenage Italian ghoul cut loose by his old master after a warehouse job went bad. Jini saved his life with her vitae, leaving him lightly Blood Bonded and increasingly smitten — smitten enough to trade away the sewer entrance where his old Nosferatu master once met him, in exchange for more of her blood. He still has no idea how significant that doorway might be.`,
    conn:['jini']},
 
@@ -348,7 +421,7 @@ const nodes=[
    detail:`A faction of Camarilla vampires, per CONTROL's briefing, quietly pressuring the federal government toward a nuclear exchange with the Soviets. Their reasoning: human civilization is becoming too organized, too well-instrumented, too surveilled for the Masquerade to hold for another century. A nuclear cull rolls the clock back and preserves Kindred rule. They are also hunting the Arctic broken arrow; presumably to prevent CONTROL from having leverage over the crisis, or to fold the recovered warheads into their own plans. Membership, leadership, and organizational scope remain unknown, but the implication is that some of it sits inside the standing Camarilla hierarchy the coterie already deals with.`,
    conn:['control']},
 
-  {id:'susan',name:'Susan',clan:'Mortal',sub:"Nurse at St. Mary's — Jini's friend",x:1620,y:970,
+  {id:'susan',name:'Susan',clan:'Mortal',sub:"Nurse at St. Mary's — Jini's friend",x:1540,y:1000,
    detail:`A fellow nurse at St. Mary's and one of the few genuinely warm presences left in Jini's nights — a touchstone in the truest sense. Sharp-eyed and loyal, she pulled Jini aside to warn her that Dr. Giovanni was poisoning her reputation with rumors about stolen supplies and missed shifts. She also offered the antidote: Giovanni has been spending a great deal of time with the newest, youngest, prettiest nurse on staff, and a little leverage might get him off Jini's back. Susan thinks she's helping a friend navigate hospital politics. She has no idea what Giovanni is, or what her friend is either.`,
    conn:['jini','drGiovanni']},
 
@@ -365,210 +438,231 @@ const nodes=[
 // TIMELINE EVENTS
 // ─────────────────────────────────────────────
 const events=[
-  {id:'ev0a', date:'1944', name:"Jini's Husband Lost", cat:'discovery',
+  {id:'ev0a', chapter:1, tier:'minor', date:'1944', name:"Jini's Husband Lost", cat:'discovery',
    detail:`Jini's husband Andrew ships out to the Pacific during WWII and never returns — listed MIA, presumed dead. Decades before her Embrace, the loss becomes the organizing principle of her entire existence.`},
 
-  {id:'ev0b', date:'1945', name:"Amalek Escapes the Reich", cat:'discovery',
+  {id:'ev0b', chapter:1, tier:'minor', date:'1945', name:"Amalek Escapes the Reich", cat:'discovery',
    detail:`As the Reich collapses, a disillusioned Amalek strikes a deal with a Jewish vampire and helps smuggle Jews out of Germany. He's given power and the Embrace in return.`},
 
-  {id:'ev0c', date:'1965', name:'Healing Beyond the Nine Founded', cat:'faction',
+  {id:'ev0c', chapter:1, tier:'minor', date:'1965', name:'Healing Beyond the Nine Founded', cat:'faction',
    detail:`Jupiter establishes her cult, Healing Beyond the Nine, in a bohemian corner of Georgetown — quietly recruiting believers years before the coterie ever forms.`},
 
-  {id:'ev0d', date:'1965', name:"Tommy's First Album", cat:'faction',
+  {id:'ev0d', chapter:1, tier:'minor', date:'1965', name:"Tommy's First Album", cat:'faction',
    detail:`Tommy Fleet releases his debut album and becomes a country star overnight, riding music appropriated from Black musicians to an audience that has no idea where it came from.`},
 
-  {id:'ev0e', date:'1967', name:'Norman Reassigned to DC', cat:'faction',
+  {id:'ev0e', chapter:1, tier:'minor', date:'1967', name:'Norman Reassigned to DC', cat:'faction',
    detail:`Norman leaves Detroit, reassigned by the Pinkertons to clear DC's 'human refuse' in the name of urban renewal. He's already very good at the part of the job that involves crushing people.`},
 
 
-  {id:'ev1', date:'Apr 04, 1968', name:'MLK Assassinated', cat:'faction',
+  {id:'ev1', chapter:1, tier:'minor', date:'Apr 04, 1968', name:'MLK Assassinated', cat:'faction',
    detail:`Dr. Martin Luther King Jr. is shot in Memphis. Washington DC erupts into riots — the city the coterie will soon operate in is already on fire before any of them have met.`},
 
-  {id:'ev2', date:'Apr 06, 1968', name:'Death of Aldous Mercer', cat:'death',
+  {id:'ev2', chapter:1, tier:'major', date:'Apr 06, 1968', name:'Death of Aldous Mercer', cat:'death',
    detail:`Camarilla Primogen Aldous Mercer is assassinated amid the chaos of the riots. The Prince's court has never satisfactorily explained the circumstances.`},
 
-  {id:'ev3', date:'Apr 08, 1968', name:'The Envelopes', cat:'faction',
+  {id:'ev3', chapter:1, tier:'major', date:'Apr 08, 1968', name:'The Envelopes', cat:'faction',
    detail:`Coded threat envelopes are delivered to five individuals through separate channels — each containing a surveillance target who turns out to be one of the others. This is how the coterie is assembled.`},
 
-  {id:'ev4', date:'Apr 11, 1968', name:'Mercer Funeral', cat:'meeting',
+  {id:'ev4', chapter:1, tier:'major', date:'Apr 11, 1968', name:'Mercer Funeral', cat:'meeting',
    detail:`The coterie attends Mercer's funeral to spy on each other. Reverend Elias Drum is murdered by Amalek using Blood Sorcery, providing cover for Thomas Crane to slip upstairs unobserved.`},
 
-  {id:'ev5', date:'Apr 13, 1968', name:'Findings Turned In', cat:'faction',
+  {id:'ev5', chapter:1, tier:'minor', date:'Apr 13, 1968', name:'Findings Turned In', cat:'faction',
    detail:`The coterie reports their surveillance findings on each other to the Gray Man. Norman alone blows the assignment off as a joke — a decision that won't age well.`},
 
-  {id:'ev6', date:'Apr 15, 1968', name:'The Death Certificate', cat:'discovery',
+  {id:'ev6', chapter:1, tier:'major', date:'Apr 15, 1968', name:'The Death Certificate', cat:'discovery',
    detail:`Jini retrieves Drum's death certificate for Giovanni and discovers his ghost haunting it. She steals both the certificate and his fetter — and learns the Hecata file on Andrew has been stolen.`},
 
-  {id:'ev7', date:'Apr 17, 1968', name:'Webb Back-Channel Opened', cat:'meeting',
+  {id:'ev7', chapter:1, tier:'minor', date:'Apr 17, 1968', name:'Webb Back-Channel Opened', cat:'meeting',
    detail:`Amalek quietly opens a private back-channel with Sheriff Marcus Webb, behind the rest of the coterie's back. Neither mentions the arrangement to anyone else.`},
 
-  {id:'ev8', date:'Apr 22, 1968', name:'First Job: The Fire', cat:'death',
+  {id:'ev8', chapter:1, tier:'major', date:'Apr 22, 1968', name:'First Job: The Fire', cat:'death',
    detail:`The coterie's first job: torch an apartment complex. Tommy injures starlet Vera Lynn feeding on her and stages it as self-harm, while Jupiter sets the blaze herself.`},
 
-  {id:'ev9', date:'Apr 22, 1968', name:'Hugh Mann Dies', cat:'death',
+  {id:'ev9', chapter:1, tier:'major', date:'Apr 22, 1968', name:'Hugh Mann Dies', cat:'death',
    detail:`Norman returns to find his own home consumed in the fire. His touchstone Hugh Mann dies in the blaze, and Norman has a breakdown, then moves in with Amalek — homeless and unmoored.`},
 
-  {id:'ev10', date:'Apr 28, 1968', name:'Second Job: The Bomb', cat:'faction',
+  {id:'ev10', chapter:2, tier:'major', date:'Apr 28, 1968', name:'Second Job: The Bomb', cat:'faction',
    detail:`A new assignment: plant a car bomb and assassinate Calvin DuChamp. Separately, Jini is tasked with retrieving Drum's death certificate — work that overlaps the bomb plot in ways no one's noticed yet.`},
 
-  {id:'ev11', date:'May 01, 1968', name:'The Hotel Job Goes Bad', cat:'meeting',
+  {id:'ev11', chapter:2, tier:'minor', date:'May 01, 1968', name:'The Hotel Job Goes Bad', cat:'meeting',
    detail:`Norman and Jini go to collect the bomb from a ghoul supplier and find the deal soured. They kill the attackers, save the ghoul (Antonio), and walk away with an unplanned dependent.`},
 
-  {id:'ev12', date:'May 03, 1968', name:"Amalek's Warning", cat:'meeting',
+  {id:'ev12', chapter:2, tier:'minor', date:'May 03, 1968', name:"Amalek's Warning", cat:'meeting',
    detail:`Amalek speaks with his sire, Rabbi Levi Morgenstern, who warns him to be careful. The warning will be ignored almost immediately.`},
 
-  {id:'ev13', date:'May 05, 1968', name:'Elizabeth Taken', cat:'discovery',
+  {id:'ev13', chapter:2, tier:'minor', date:'May 05, 1968', name:'Elizabeth Taken', cat:'discovery',
    detail:`Using Tommy's star power as bait, Amalek, Norman, and Tommy abduct a thin-blooded drifter. Amalek takes her to his private room. She's never seen again, and no one asks why.`},
 
-  {id:'ev14', date:'May 09, 1968', name:'Stakeout at the Church', cat:'discovery',
+  {id:'ev14', chapter:2, tier:'minor', date:'May 09, 1968', name:'Stakeout at the Church', cat:'discovery',
    detail:`The coterie stakes out the church where Calvin DuChamp is set to speak. Norman discovers Noddist paraphernalia among DuChamp's belongings — a detail no one quite knows what to do with yet.`},
 
-  {id:'ev15', date:'May 10, 1968', name:'Tommy Strikes Out with Celeste', cat:'meeting',
+  {id:'ev15', chapter:2, tier:'minor', date:'May 10, 1968', name:'Tommy Strikes Out with Celeste', cat:'meeting',
    detail:`Tommy tries to probe Celeste Beaumont for information ahead of the DuChamp operation. It goes poorly — he offers a boon and gets nothing back.`},
 
-  {id:'ev16', date:'May 11, 1968', name:'The Speech and the Bomb', cat:'faction',
+  {id:'ev16', chapter:2, tier:'major', date:'May 11, 1968', name:'The Speech and the Bomb', cat:'faction',
    detail:`The night of DuChamp's speech, the bomb plot goes sideways: Jini is detained by a guard, Norman plants it anyway, a fight breaks out, and DuChamp escapes in a different vehicle.`},
 
-  {id:'ev17', date:'Jun 05, 1968', name:'RFK Assassinated', cat:'faction',
+  {id:'ev17', chapter:2, tier:'minor', date:'Jun 05, 1968', name:'RFK Assassinated', cat:'faction',
    detail:`Senator Robert F. Kennedy is shot in Los Angeles. A congressional committee on assassinations forms in the aftermath, and DC's political temperature climbs further still.`},
 
-  {id:'ev18', date:'Jun 07, 1968', name:'Vera Lynn Misreads Everything', cat:'embrace',
+  {id:'ev18', chapter:2, tier:'minor', date:'Jun 07, 1968', name:'Vera Lynn Misreads Everything', cat:'embrace',
    detail:`Vera Lynn catches Tommy feeding on a man and mistakes it for intimacy, deepening her infatuation. In a homophobic society, the misunderstanding suits Tommy just fine.`},
 
-  {id:'ev19', date:'Jun 09, 1968', name:'Cult Infiltration Discovered', cat:'discovery',
+  {id:'ev19', chapter:2, tier:'major', date:'Jun 09, 1968', name:'Cult Infiltration Discovered', cat:'discovery',
    detail:`Jupiter discovers that her flock member Ganymede was secretly sired and turned against her. She deals with it ruthlessly and locks the new fledgling away.`},
 
-  {id:'ev20', date:'Jun 11, 1968', name:'The Missing Primogen', cat:'discovery',
+  {id:'ev20', chapter:2, tier:'major', date:'Jun 11, 1968', name:'The Missing Primogen', cat:'discovery',
    detail:`Celeste Beaumont interrupts a coterie meeting to reveal the Nosferatu Primogen is functionally missing — never seen, communicating only by missive, yet holding the Prince's ear regardless.`},
 
-  {id:'ev21', date:'Jun 13, 1968', name:'Antonio Mentions His Master', cat:'discovery',
+  {id:'ev21', chapter:2, tier:'minor', date:'Jun 13, 1968', name:'Antonio Mentions His Master', cat:'discovery',
    detail:`Antonio begins following Jini around, making increasingly bold overtures. In the process, he mentions his former master — a Nosferatu who lives in the sewers.`},
 
-  {id:'ev22', date:'Jun 15, 1968', name:'The Reflecting Pool Meeting', cat:'meeting',
+  {id:'ev22', chapter:2, tier:'minor', date:'Jun 15, 1968', name:'The Reflecting Pool Meeting', cat:'meeting',
    detail:`Calvin DuChamp meets Amalek at the reflecting pool. Amalek confesses to being Sabbat but denies diablerie, and DuChamp names EH Holdings as the firm buying up Anarch-friendly buildings. Jini overhears it all.`},
 
-  {id:'ev23', date:'Jun 16, 1968', name:'Jini Reports to Agnette Vess', cat:'faction',
+  {id:'ev23', chapter:2, tier:'minor', date:'Jun 16, 1968', name:'Jini Reports to Agnette Vess', cat:'faction',
    detail:`Jini relays what she overheard to her Primogen, Agnette Vess, who orders her to keep watching the Anarchs — and confirms the stolen Andrew files were likely taken by a Nosferatu.`},
 
-  {id:'ev24', date:'Jun 17, 1968', name:"Celeste's Favor Called", cat:'meeting',
+  {id:'ev24', chapter:2, tier:'minor', date:'Jun 17, 1968', name:"Celeste's Favor Called", cat:'meeting',
    detail:`Celeste Beaumont calls Tommy and cashes in his outstanding favor: a performance to bolster a 'burgeoning young talent.' Tommy has no idea what he's walking into.`},
 
-  {id:'ev25', date:'Jun 18, 1968', name:'The Patsy Plot', cat:'faction',
+  {id:'ev25', chapter:2, tier:'major', date:'Jun 18, 1968', name:'The Patsy Plot', cat:'faction',
    detail:`Norman hatches a scheme to get his old job back, using Ganymede — Jupiter's imprisoned fledgling — as a patsy to pin the original arson on.`},
 
-  {id:'ev26', date:'Jun 18, 1968', name:'Tommy at the Metal Show', cat:'meeting',
+  {id:'ev26', chapter:2, tier:'minor', date:'Jun 18, 1968', name:'Tommy at the Metal Show', cat:'meeting',
    detail:`Tommy plays a hostile metal show meant to humiliate him, wins the crowd against every odd, and cements an Anarch-hero reputation he never wanted.`},
 
-  {id:'ev27', date:'Jun 18, 1968', name:'The Fake Attack Goes Wrong', cat:'death',
+  {id:'ev27', chapter:2, tier:'major', date:'Jun 18, 1968', name:'The Fake Attack Goes Wrong', cat:'death',
    detail:`The staged attack on Jupiter's cult unravels. Ganymede tries to flee, gets run down, and is diablerized by Amalek in front of witnesses. Norman and Amalek flee, leaving Jupiter to handle the fallout alone.`},
 
-  {id:'ev28', date:'Jun 20, 1968', name:'Amalek Goes to Ground', cat:'faction',
+  {id:'ev28', chapter:2, tier:'minor', date:'Jun 20, 1968', name:'Amalek Goes to Ground', cat:'faction',
    detail:`Suspicion falls heavily on Amalek despite his masks. He leaves town to consult his malkav, Anton LaVey, for a solution — while Norman haunts Amalek's empty house in self-imposed exile.`},
 
-  {id:'ev28b', date:'Jun 20, 1968', name:'The Rite of Innocence', cat:'death',
+  {id:'ev28b', chapter:2, tier:'major', date:'Jun 20, 1968', name:'The Rite of Innocence', cat:'death',
    detail:`In exchange for Amalek pushing DC toward Sabbat chaos, Anton LaVey performs the Rite of Innocence on his behalf — a child-sacrifice ritual that masks Amalek's aura from supernatural scrutiny.`},
 
-  {id:'ev29', date:'Jun 21, 1968', name:'Jini and Jupiter Compare Notes', cat:'meeting',
+  {id:'ev29', chapter:2, tier:'minor', date:'Jun 21, 1968', name:'Jini and Jupiter Compare Notes', cat:'meeting',
    detail:`Jini and Jupiter meet privately to discuss the Amalek situation. Both independently resolve not to trust him going forward.`},
 
-  {id:'ev30', date:'Jun 23, 1968', name:'FBI Closes In', cat:'faction',
+  {id:'ev30', chapter:2, tier:'major', date:'Jun 23, 1968', name:'FBI Closes In', cat:'faction',
    detail:`FBI agents investigating Amalek encounter Jini and Jupiter outside his house. Jupiter slips and uses his true name instead of his mortal mask — and Tommy's home turns up under surveillance too.`},
 
-  {id:'ev31', date:'Jun 24, 1968', name:"Wu Mann's Visit", cat:'discovery',
+  {id:'ev31', chapter:2, tier:'minor', date:'Jun 24, 1968', name:"Wu Mann's Visit", cat:'discovery',
    detail:`During his exile at Amalek's house, Norman gets a visit from Wu Mann, Hugh's daughter, convinced the fire was arson. She asks him to pass along anything he learns.`},
 
-  {id:'ev32', date:'Jun 25, 1968', name:'The Gallery Invitation', cat:'meeting',
+  {id:'ev32', chapter:2, tier:'minor', date:'Jun 25, 1968', name:'The Gallery Invitation', cat:'meeting',
    detail:`Celeste calls to congratulate Tommy and promises to raise the idea of siring Vera Lynn with the council — for another favor — then summons the whole coterie to her gallery.`},
 
-  {id:'ev33', date:'Jun 26, 1968', name:"Amalek's Sire Reins Him In", cat:'meeting',
+  {id:'ev33', chapter:2, tier:'major', date:'Jun 26, 1968', name:"Amalek's Sire Reins Him In", cat:'meeting',
    detail:`Cornered and exposed, Amalek calls his sire Rabbi Levi Morgenstern and weathers a furious dressing-down. Levi protects him anyway, handing over a storage-unit facility he owns as a temporary safehouse.`},
 
-  {id:'ev34', date:'Jun 26, 1968', name:'A Body for the Pinkertons', cat:'faction',
+  {id:'ev34', chapter:2, tier:'minor', date:'Jun 26, 1968', name:'A Body for the Pinkertons', cat:'faction',
    detail:`Norman finally uses his head: he needs a convincing corpse to satisfy his bosses. Jini, working pathology and now holding leverage over Dr. Giovanni, secures a cadaver — and Norman buys his old Pinkerton job back with it.`},
 
-  {id:'ev35', date:'Jun 27, 1968', name:"Shooed from Tommy's Door", cat:'meeting',
+  {id:'ev35', chapter:2, tier:'minor', date:'Jun 27, 1968', name:"Shooed from Tommy's Door", cat:'meeting',
    detail:`The coterie converges on Tommy Fleet's house. He shoos them off immediately, pointing them at the venue he's promised Celeste he'll appear at — and pointedly gives them the location and nothing else.`},
 
-  {id:'ev36', date:'Jun 27, 1968', name:'The Sabbat Warehouse', cat:'faction',
+  {id:'ev36', chapter:2, tier:'minor', date:'Jun 27, 1968', name:'The Sabbat Warehouse', cat:'faction',
    detail:`The "venue" is an abandoned brick warehouse hosting a Sabbat party, not an art opening. The pack, mistaking Tommy for an Anarch hero, offers a captive vampire for him to consume; Amalek talks them into surrendering her as a prisoner instead. On the way out the coterie runs face-first into Camarilla hounds — and Amalek defuses them too, invoking Marcus Webb and giving up the captive as a "confused fledgling." They're let go, suspected but alive.`},
 
-  {id:'ev37', date:'Jun 28, 1968', name:"Tommy's Sire's Warning", cat:'meeting',
+  {id:'ev37', chapter:2, tier:'major', date:'Jun 28, 1968', name:"Tommy's Sire's Warning", cat:'meeting',
    detail:`Tommy's sire pays him a visit and underlines, as if it needed saying, that Celeste Beaumont is not to be trusted. He offers the warning and little else about how he'd know.`},
 
-  {id:'ev38', date:'Jun 28, 1968', name:'The Sewer Bargain', cat:'discovery',
+  {id:'ev38', chapter:2, tier:'major', date:'Jun 28, 1968', name:'The Sewer Bargain', cat:'discovery',
    detail:`Jini strikes a deal with the smitten ghoul Antonio: more of her vitae in exchange for the sewer entrance where he once met his old Nosferatu master — a doorway that may lead straight toward the stolen Andrew files.`},
 
-  {id:'ev39', date:'Jun 29, 1968', name:'Norman Burns It Down', cat:'death',
+  {id:'ev39', chapter:2, tier:'major', date:'Jun 29, 1968', name:'Norman Burns It Down', cat:'death',
    detail:`Amalek quietly moves his most valuable possessions out of his old house. The same night, Norman — chasing closure for Hugh and mastering his vampiric fear of fire — douses Amalek's varnished floors in gasoline and pitches a molotov through the kitchen window. The house goes up.`},
 
-  {id:'ev39a', date:'Jun 30, 1968', name:"Vera's Secret Cult Visit", cat:'meeting',
+  {id:'ev39a', chapter:2, tier:'minor', date:'Jun 30, 1968', name:"Vera's Secret Cult Visit", cat:'meeting',
    detail:`Emotionally shredded by Tommy's inconsistent behavior but chemically hooked on his Lasting Kiss, Vera Lynn makes a secret visit to Healing Beyond the Nine looking for a balm for her soul. Jupiter, who doesn't recognize who she's running from at first, takes her in and consoles her. Before sending her home, Jupiter feeds off her.`},
 
-  {id:'ev39b', date:'Jun 30, 1968', name:'Tommy Interrogates Vera', cat:'discovery',
+  {id:'ev39b', chapter:2, tier:'minor', date:'Jun 30, 1968', name:'Tommy Interrogates Vera', cat:'discovery',
    detail:`Vera returns to Tommy's mansion, shaken. Tommy interrogates her about where she's been and, rushing to paint the cult as dangerous, reveals he knows far more about Jupiter than a jealous boyfriend has any business knowing. Vera says nothing, and starts planning her exit.`},
 
-  {id:'ev40', date:'Jul 01, 1968', name:'Amalek Finds Sanctuary', cat:'meeting',
+  {id:'ev40', chapter:2, tier:'minor', date:'Jul 01, 1968', name:'Amalek Finds Sanctuary', cat:'meeting',
    detail:`With Nosferatu connections clearing criminal charges tied to his mask's name, Amalek collects insurance money for the burned villa and secures a suite in a prestigious 1968 hotel. He hires a retainer and begins coordinating with Jini to establish a supply of bagged blood.`},
 
-  {id:'ev41', date:'Jul 01, 1968', name:'Hospital Blood Run Goes Bad', cat:'discovery',
+  {id:'ev41', chapter:2, tier:'minor', date:'Jul 01, 1968', name:'Hospital Blood Run Goes Bad', cat:'discovery',
    detail:`Jini goes to the hospital blood supply to restock. She finds a guard posted in response to a recent break-in. The sign-out is routine, but her sire Dr. Giovanni's conversation is veiled and threatening — he makes clear that further independence from him will cost her his resources.`},
 
-  {id:'ev42', date:'Jul 02, 1968', name:'Norman Visits "Pinkerton HQ"', cat:'meeting',
+  {id:'ev42', chapter:2, tier:'major', date:'Jul 02, 1968', name:'Norman Visits "Pinkerton HQ"', cat:'meeting',
    detail:`Norman insists on showing the coterie his workplace and his sire. "Pinkerton HQ" turns out to be an abandoned sanitorium full of Malkavians in various states of delusion. Sil is not lying: he genuinely believes he runs a Pinkerton field office out of this building, and Norman believes it right along with him. Sil introduces the coterie to Emily, a young woman deeply ingrained in the madness network, nearly feral, dispensing cryptic hints and nonsense in equal measure. Amalek and Jupiter are quietly horrified. The 'job' that cost Amalek his home and Jupiter a cultist to protect is not a cover, not a conspiracy: it is a shared hallucination between a sire and his childe.`},
 
-  {id:'ev43', date:'Jul 03, 1968', name:'Vera Abandons Tommy', cat:'discovery',
+  {id:'ev43', chapter:2, tier:'major', date:'Jul 03, 1968', name:'Vera Abandons Tommy', cat:'discovery',
    detail:`Tommy returns to his mansion to find it empty of Vera. He discovers a letter hidden in her armoire: Jupiter has offered her succor and protection, and she's left just before his arrival. Furious and impulsive, Tommy rounds up his security detail.`},
 
-  {id:'ev44', date:'Jul 03, 1968', name:'Tommy Confronts Jupiter', cat:'faction',
+  {id:'ev44', chapter:2, tier:'minor', date:'Jul 03, 1968', name:'Tommy Confronts Jupiter', cat:'faction',
    detail:`Tommy appears on the lawn of Jupiter's Georgetown haven with his security detail, attempting to intimidate her into returning Vera. Jupiter stands her ground and simply calls the cops. Tommy backs off humiliated but vowing revenge — and without any real plan beyond his rage.`},
 
-  {id:'ev45', date:'Jul 04, 1968', name:'The Ed Harvey Flier', cat:'discovery',
+  {id:'ev45', chapter:2, tier:'minor', date:'Jul 04, 1968', name:'The Ed Harvey Flier', cat:'discovery',
    detail:`Each member of the coterie receives a flier in the mail — seemingly targeted and suspicious. It's a vintage pest control advertisement for 'Ed Harvey's Pest Control,' offering to 'dominate the rodents.' A phone number and address are listed: 555-RODENT.`},
 
-  {id:'ev46', date:'Jul 05, 1968', name:'The Number That Shouldn\'t Work', cat:'discovery',
+  {id:'ev46', chapter:2, tier:'minor', date:'Jul 05, 1968', name:'The Number That Shouldn\'t Work', cat:'discovery',
    detail:`Jupiter calls 555-RODENT out of curiosity. The business shut down years ago — but the operator seems to know more than she should, and gives Jupiter an address before hanging up. No one discusses how she got a working line from a defunct business.`},
 
-  {id:'ev47', date:'Jul 05, 1968', name:'The Cemetery Message', cat:'discovery',
+  {id:'ev47', chapter:2, tier:'major', date:'Jul 05, 1968', name:'The Cemetery Message', cat:'discovery',
    detail:`The coterie travels to the address: a lonely, overgrown cemetery. Within, they find a hollowed-out rock containing written instructions from CONTROL. A military plane went down in the Arctic carrying nuclear weapons — a broken arrow from the chrome dome. They are to assist in retrieval, with details encrypted in a cipher. CASCADE is also hunting the materials and will offer resistance.`},
 
-  {id:'ev48', date:'Jul 06, 1968', name:'Cipher Cracked', cat:'discovery',
+  {id:'ev48', chapter:2, tier:'minor', date:'Jul 06, 1968', name:'Cipher Cracked', cat:'discovery',
    detail:`Post-session, the coterie works the cipher and decrypts CONTROL's full instructions. The broken arrow is real. The scope of what they're being asked to do — on pain of who-knows-what from the unknown Patron — becomes clear.`},
 
-  {id:'ev49', date:'Jul 07, 1968', name:'Into the Sewer', cat:'meeting',
+  {id:'ev49', chapter:3, tier:'minor', date:'Jul 07, 1968', name:'Into the Sewer', cat:'meeting',
    detail:`The coterie finally uses the sewer entrance Jini bought from Antonio, expecting to find one Nosferatu with answers about the stolen Andrew file. What they find is a functioning Nosferatu information hub: staff, infrastructure, dossiers. Antonio's old master turns out to be a node in a much larger network than any of them understood.`},
 
-  {id:'ev50', date:'Jul 07, 1968', name:'CONTROL Reveals Itself', cat:'discovery',
+  {id:'ev50', chapter:3, tier:'major', date:'Jul 07, 1968', name:'CONTROL Reveals Itself', cat:'discovery',
    detail:`The Nosferatu at the hub name themselves: CONTROL, a coalition led primarily by their clan, dedicated to averting a nuclear war they believe CASCADE (a faction of Camarilla elders) is engineering to cull a human civilization growing too surveilled and organized to hide from. The Patron and the Gray Man have been CONTROL's operational face from the beginning. The coterie has been working for this coalition, under duress, since April.`},
 
-  {id:'ev51', date:'Jul 07, 1968', name:'Three Boons Paid', cat:'faction',
+  {id:'ev51', chapter:3, tier:'major', date:'Jul 07, 1968', name:'Three Boons Paid', cat:'faction',
    detail:`In exchange for continued cooperation on the Arctic broken arrow, CONTROL agrees to pay three real boons rather than lean on the blackmail: Amalek's FBI tail (Washington and Buscemi) is reassigned and vanishes, Tommy is granted princely permission to sire Vera Lynn, and Jini receives confirmation that Andrew is still alive. Coercion becomes something like partnership. The coterie is now in on the conspiracy by choice.`},
 
-  {id:'ev52', date:'Jul 08, 1968', name:'The Ride Home', cat:'meeting',
+  {id:'ev52', chapter:3, tier:'minor', date:'Jul 08, 1968', name:'The Ride Home', cat:'meeting',
    detail:`On the drive back from the sewer, Tommy tries to lecture Jupiter about interfering with his property. Jupiter, who has just walked out of the room where CONTROL confirmed the stakes of the wider game, does not accept the framing and bites back. Nothing is resolved. The temperature inside the coterie has not improved and now every internal grudge has to fit around a shared conspiracy that will not wait for them to sort it out.`},
 
-  {id:'ev53', date:'Jul 09, 1968', name:"Susan's Warning", cat:'discovery',
+  {id:'ev53', chapter:3, tier:'minor', date:'Jul 09, 1968', name:"Susan's Warning", cat:'discovery',
    detail:`Jini's friend Susan pulls her aside at St. Mary's: Dr. Giovanni has been spreading rumors that Jini steals supplies and flakes on shifts — things he himself asked her to do. A petty jab at her comfort and her hunting grounds, a reminder of who is sire and who is childe. Susan has a suggestion, though: Giovanni has been spending a lot of time with the newest, youngest, prettiest nurse on staff. Perhaps a little blackmail could get him off Jini's case.`},
 
-  {id:'ev54', date:'Jul 10, 1968', name:'The Book and the Bug', cat:'discovery',
+  {id:'ev54', chapter:3, tier:'major', date:'Jul 10, 1968', name:'The Book and the Bug', cat:'discovery',
    detail:`Rabbi Levi hands Amalek a simple task: deliver a book to Thomas Crane without revealing its origin, and keep whatever payment comes. Amalek inspects the gift first and finds a listening device planted in the spine. He slices the spine open and tucks a short missive inside the cover, laying out the deception. Whatever game Levi is playing against Crane, Amalek has just chosen a side — and it isn't his sire's.`},
 
-  {id:'ev55', date:'Jul 10, 1968', name:"Crane's Laboratory", cat:'meeting',
+  {id:'ev55', chapter:3, tier:'minor', date:'Jul 10, 1968', name:"Crane's Laboratory", cat:'meeting',
    detail:`Crane reads the missive, secures the book out of earshot, and decides Amalek — twice now his benefactor — is trustworthy. He shows him the private laboratory: Noddist paraphernalia, occult apparatus, and a hidden prison cell. Crane has seen the writing on the wall. Nuclear hellfire will cleanse human and Kindred society alike, and he intends to be strong enough to dominate what's left. It is never said aloud, but Amalek can feel it: Crane is hunting his first diablerie, and this invitation to drinks could easily become a banquet with Amalek as the main course.`},
 
-  {id:'ev56', date:'Jul 10, 1968', name:'An Easier Target', cat:'faction',
+  {id:'ev56', chapter:3, tier:'minor', date:'Jul 10, 1968', name:'An Easier Target', cat:'faction',
    detail:`Amalek talks his way off the menu by offering to stand WITH Crane — and suggests an easier first victim: a soon-to-be-embraced starlet, oblivious and vulnerable. Vera. He hands over the location of her cult refuge, Tommy's mansion, and the contact information for Anton LaVey, his malkuth, to better induct Crane into true Sabbat practice. In return: Crane's gratitude, and some of his vintage blood to help rebuild Amalek's supply.`},
 
-  {id:'ev57', date:'Jul 11, 1968', name:'Tommy Wins Her Back', cat:'meeting',
+  {id:'ev57', chapter:3, tier:'major', date:'Jul 11, 1968', name:'Tommy Wins Her Back', cat:'meeting',
    detail:`Tommy works his connections to find Vera's performance schedule and approaches her after a set at one of his most familiar nightclubs. He doesn't sweep her off her feet, but he offers an excuse for the lawn confrontation: he knows Jupiter is dangerous, and came armed with a posse to make sure Vera was safe. Mollified but suspicious, she forgives him and reestablishes the relationship. Days later, Tommy boards a plane for the Arctic and leaves her alone in DC.`},
 
-  {id:'ev58', date:'Jul 12, 1968', name:'The Hangar', cat:'meeting',
+  {id:'ev58', chapter:3, tier:'major', date:'Jul 12, 1968', name:'The Hangar', cat:'meeting',
    detail:`The coterie finally assembles at CONTROL's hangar and meets their crew: Idira, an androgynous Tzimisce who flew bombing missions in the war under a forged identity, and Phil, a scrawny, kind-eyed Nosferatu technician who will handle securing and retrieving the device. Wheels up for the far north.`},
 
-  {id:'ev59', date:'Jul 12, 1968', name:'Assassin at Altitude', cat:'faction',
+  {id:'ev59', chapter:3, tier:'major', date:'Jul 12, 1968', name:'Assassin at Altitude', cat:'faction',
    detail:`Midflight, Jupiter notices something tumble from a shelf — no turbulence, no one nearby. An assassin, obfuscated, working his way toward the cockpit. The coterie manages to subdue the would-be killer before he can reach Idira. Someone knew about this flight. Someone knew the route, the plane, and the passenger list.`},
 
-  {id:'ev60', date:'Jul 12, 1968', name:'The Amaranth', cat:'death',
+  {id:'ev60', chapter:3, tier:'major', date:'Jul 12, 1968', name:'The Amaranth', cat:'death',
    detail:`With the assassin subdued and the questions asked, Norman drinks him dry — all the way dry. His first diablerie, committed at ten thousand feet with Amalek at his shoulder, encouraging. Jini watches with an interest she didn't expect in herself. Phil goes very quiet. Whatever Norman took in with the blood, he hasn't shared it yet.`},
+
+  {id:'ev61', chapter:4, tier:'minor', date:'Jul 13, 1968', name:'A Brownstone and a Bargain', cat:'meeting',
+   detail:`Amalek takes a Georgetown brownstone just down the street from Jupiter. The neighbors waste no time: Jupiter needs LSD for a rite; Amalek needs warm bodies. A tit-for-tat — Amalek receives a pair of cultists whose blood inscribes the Sabbat sigils of his new ritual room, and Jupiter gets her sacrament.`},
+
+  {id:'ev62', chapter:4, tier:'minor', date:'Jul 14, 1968', name:'The Alice Photographs', cat:'discovery',
+   detail:`Jini and Antonio stake out the Giovanni estate and photograph Alice — the young nurse the doctor has been seeing under cover of night — coming and going. Inside, Jini hears what may be abusive, controlling behavior, but loses her nerve and flees before capturing anything on film. Evidence enough to raise questions; not enough to survive them.`},
+
+  {id:'ev63', chapter:4, tier:'major', date:'Jul 15, 1968', name:'The Rite of the Sphinx', cat:'faction',
+   detail:`In the basement of Healing Beyond the Nine, beneath Vera's engraved orrery, Jupiter conducts a profane communion. Dosing her flock with heroic quantities of LSD, she reveals the "gift of her pilgrimage to the frozen North" — Metamorphosis — and takes the form of a massive sphinx. Over three drug-soaked days she pierces her lioness breasts and nurses her three closest followers on vitae, ghouling them in an act of monstrous maternity. The madness network will be whispering about the winged lion-woman within the week.`},
+
+  {id:'ev64', chapter:4, tier:'major', date:'Jul 15, 1968', name:'The Bond Completes', cat:'faction',
+   detail:`Over the same three nights, Vera drinks from Tommy a third time. The Blood Bond seals. Whatever she felt for him before — love, fear, addiction — is now indistinguishable from devotion, and none of it is freely hers. Tommy sinks into a melancholy self-pity that even he may not be able to tell from grief.`},
+
+  {id:'ev65', chapter:4, tier:'minor', date:'Jul 16, 1968', name:"Levi's Problem", cat:'meeting',
+   detail:`Tommy neglects to tell the coterie the Presentation is tonight. The alarm comes sideways: Rabbi Levi calls Amalek. The Prince fears the fledgling he sanctioned will be killed or turned by the Sabbat to make him look weak, and he is leaning on Levi to ensure she lives — or dies quietly. Levi's problem becomes Amalek's problem. Amalek gears up and gets the coterie in the door.`},
+
+  {id:'ev66', chapter:4, tier:'major', date:'Jul 16, 1968', name:'The Presentation', cat:'meeting',
+   detail:`Vera Lynn is formally presented to the Prince and the court. Tommy makes a poor first impression — for a moment it seems he might not survive his own manners — but his respect for Elysium buys forgiveness, for now. Wexler tells his childe only what he already knows: Celeste is dangerous, and she does not like him. Agnette Vess gives Jini cryptic counsel, a shortwave radio, and a worn copy of Rebecca. Marcus Webb corners Jupiter on the terrace about rumors of a winged lion-woman nursing blood; she deflects with talk of hallucinogens and hippie hysteria. Placated. For now.`},
+
+  {id:'ev67', chapter:4, tier:'major', date:'Jul 16, 1968', name:'Celeste Takes Vera', cat:'faction',
+   detail:`As the party winds down, Celeste invites Vera to a private afterparty. Tommy, sunk in self-pity, does not forbid it. Amalek — pledged to protect her as half-heartedly as possible — does not intervene. The most dangerous woman in the city walks the newest, most fragile Kindred in Washington out into the dark, and everyone who could have stopped it watches her go.`},
 ];
 
 // ─────────────────────────────────────────────
@@ -580,6 +674,9 @@ const evidence=[
   {id:'ed-harvey-flier', name:'The Ed Harvey Flier', found:'Delivered by mail to each coterie member — Jul 04, 1968',
    desc:'A vintage pest-control advertisement: "Dominate the Rodents!" The number, 555-RODENT, reached a business that shut down years ago — and an operator who knew more than she let on.',
    src:'props/ed-harvey-flier.png'},
+  {id:'rebecca-cipher', name:'The Rebecca Broadcast', found:"Shortwave transmission received at Jini's apartment — Jul 16, 1968",
+   desc:'A flat voice on the frequency Agnette indicated, reading number groups between bursts of static: <b style="font-family:monospace; color:#c9b97a;">1&#8209;2&#8209;76&nbsp;&nbsp;3&#8209;5&#8209;42&nbsp;&nbsp;5&#8209;1&#8209;96</b>. Repeated twice, then silence.',
+   src:'props/rebecca.pdf'},
   // Uncomment after the players discover it at the North Star site:
   // {id:'margaret-letter', name:'The Margaret Letter', found:'Command tent, North Star site',
   //  desc:'Personal correspondence recovered with Fox Seven\'s effects. A stiff gray card, cut with eleven small windows, was found separately on the body.',
@@ -781,40 +878,117 @@ webView.addEventListener('touchend',()=>{panning=false;});
 const evMap={};
 events.forEach(e=>evMap[e.id]=e);
 
-function buildTimeline(){
-  const inner=document.getElementById('tl-inner');
-  // remove old event els
-  inner.querySelectorAll('.tl-event').forEach(el=>el.remove());
-  events.forEach((ev,i)=>{
-    const above=i%2===0;
-    const wrap=document.createElement('div');
-    wrap.className='tl-event '+(above?'above':'below');
-    wrap.id='tev'+ev.id;
+// ─────────────────────────────────────────────
+// CHAPTERS
+// Edit titles/taglines/ranges here. `chapter` field on
+// each event (1-4) decides which chapter it belongs to.
+// ─────────────────────────────────────────────
+const chapters=[
+  {n:1, title:'The End is the Beginning', range:'1944 – Apr 1968',
+   tag:'From the ashes of a Primogen to the first job'},
+  {n:2, title:'Hit the Fan', range:'Apr – Jul 1968',
+   tag:'One job spirals into a city full of debts'},
+  {n:3, title:'Cold, Cold Heart', range:'Jul 1968',
+   tag:'The sewer, the truth, and a broken arrow in the ice'},
+  {n:4, title:'Always on My Mind', range:'Jul 1968 – present',
+   tag:'The reckoning comes home'},
+];
 
-    const LABEL_H=54; // px clearance from center spine to label
-    const labelTop = above
-      ? `bottom:${LABEL_H}px`
-      : `top:${LABEL_H}px`;
+const landingDesc=`A Vampire: the Masquerade chronicle set in Washington D.C. in the long, hot summer of 1968 — a city on fire with riots, assassinations, and the quiet war of the dead beneath it. Five Kindred, blackmailed into a coterie by an unseen Patron, are dragged through a widening conspiracy: rival cabals steering the living toward nuclear ruin, sires who own them, and the slow seduction of becoming monsters they can no longer excuse.`;
 
-    wrap.innerHTML=`
-      <div class="tl-tick"></div>
-      <div class="tl-dot cat-${ev.cat}"></div>
-      <div class="tl-label" style="${labelTop}">
-        <div class="tl-label-date">${ev.date}</div>
-        <div class="tl-label-name">${ev.name}</div>
-      </div>`;
-    wrap.addEventListener('click',()=>pickEvent(ev.id));
-    inner.appendChild(wrap);
+const landingUI=`This is the case board. <b>Web</b> maps who knows whom. <b>Timeline</b> — this page — collects the story in chapters; tap a card to open one. <b>Evidence</b> holds the props and documents. Inside a chapter, major beats sit to the right of the spine, minor beats to the left. Tap any event to read it. "See All" strings every chapter into one thread.`;
+
+function renderChapterCards(){
+  document.getElementById('tl-land-desc').innerHTML='<h4>The Chronicle</h4>'+landingDesc;
+  document.getElementById('tl-land-ui').innerHTML='<h4>Using This Board</h4>'+landingUI;
+  const wrap=document.getElementById('tl-cards');
+  wrap.innerHTML='';
+  chapters.forEach(ch=>{
+    const count=events.filter(e=>e.chapter===ch.n).length;
+    const card=document.createElement('div');
+    card.className='tl-card';
+    card.innerHTML=`
+      <div class="tl-card-num">Chapter ${ch.n}</div>
+      <div class="tl-card-title">${ch.title}</div>
+      <div class="tl-card-range">${ch.range}</div>
+      <div class="tl-card-count">${count} entries</div>`;
+    card.onclick=()=>renderSpine(ch.n);
+    wrap.appendChild(card);
   });
 }
 
-function pickEvent(id){
-  // deselect previous
-  document.querySelectorAll('.tl-event.sel').forEach(el=>el.classList.remove('sel'));
-  document.getElementById('tev'+id).classList.add('sel');
-  const ev=evMap[id];
-  showCard(ev.cat.toUpperCase(), ev.name, ev.date, ev.detail, [], ()=>null);
-  document.getElementById('card-vm').style.display='none';
+function showChapterCards(){
+  document.getElementById('tl-landing').style.display='flex';
+  document.getElementById('tl-chapter').style.display='none';
+}
+
+// sortable date -> for recent-first ordering
+function evSortKey(ev){
+  const d=ev.date.trim();
+  // pure year
+  if(/^\d{4}$/.test(d)) return new Date(+d,0,1).getTime();
+  const t=Date.parse(d);
+  return isNaN(t)?0:t;
+}
+// same-date tiebreak: later array position = later that day
+function evSeq(ev){ return events.indexOf(ev); }
+function evCompareDesc(a,b){ return (evSortKey(b)-evSortKey(a)) || (evSeq(b)-evSeq(a)); }
+
+function renderSpine(which){ // which = chapter number, or 'all'
+  document.getElementById('tl-landing').style.display='none';
+  document.getElementById('tl-chapter').style.display='flex';
+  const titleEl=document.getElementById('tl-ch-title');
+  const spine=document.getElementById('tl-spine');
+  spine.innerHTML='';
+
+  if(which==='all'){
+    titleEl.innerHTML=`The Whole Chronicle <small>all chapters</small>`;
+    // newest chapter first (4->1), each chapter newest event first
+    [...chapters].reverse().forEach(ch=>{
+      const evs=events.filter(e=>e.chapter===ch.n).sort(evCompareDesc);
+      if(!evs.length)return;
+      const div=document.createElement('div');
+      div.className='tl-divider';
+      div.innerHTML=`<span>Chapter ${ch.n} — ${ch.title}</span><small>${ch.range}</small>`;
+      spine.appendChild(div);
+      evs.forEach(ev=>spine.appendChild(spineRow(ev)));
+    });
+  } else {
+    const ch=chapters.find(c=>c.n===which);
+    titleEl.innerHTML=`${ch.title} <small>Chapter ${ch.n} · ${ch.range}</small>`;
+    const evs=events.filter(e=>e.chapter===which).sort(evCompareDesc);
+    evs.forEach(ev=>spine.appendChild(spineRow(ev)));
+    if(!evs.length){
+      const p=document.createElement('div');
+      p.style.cssText='text-align:center;color:#6a5f3e;font-family:Space Mono,monospace;font-size:11px;padding:40px';
+      p.textContent='This chapter is still being written.';
+      spine.appendChild(p);
+    }
+  }
+  document.getElementById('tl-spine-scroll').scrollTop=0;
+}
+
+function spineRow(ev){
+  const major=ev.tier==='major';
+  const row=document.createElement('div');
+  row.className='tl-row '+(major?'major':'minor');
+  const item=`
+    <div class="tl-item cat-${ev.cat}" data-id="${ev.id}">
+      <div class="tl-i-date">${ev.date}</div>
+      <div class="tl-i-name">${ev.name}</div>
+      <div class="tl-detail"><div class="tl-detail-inner">${ev.detail}</div></div>
+    </div>`;
+  // major -> right side, minor -> left side
+  row.innerHTML=`
+    <div class="tl-side tl-side-left">${major?'':item}</div>
+    <div class="tl-side tl-side-right">${major?item:''}</div>`;
+  const itemEl=row.querySelector('.tl-item');
+  itemEl.addEventListener('click',()=>{
+    const wasOpen=itemEl.classList.contains('open');
+    document.querySelectorAll('.tl-item.open').forEach(el=>el.classList.remove('open'));
+    if(!wasOpen)itemEl.classList.add('open');
+  });
+  return row;
 }
 
 // ─────────────────────────────────────────────
@@ -863,30 +1037,14 @@ function switchTab(tab){
   vmStop();
   sel=null;
   if(tab==='web'){drawNodes();drawEdges();}
+  if(tab==='timeline'){renderChapterCards(); showChapterCards();}
   if(tab==='evidence'){buildEvidence(); closeEvidence();}
 }
 
 // ─────────────────────────────────────────────
-// TIMELINE DRAG SCROLL
-// ─────────────────────────────────────────────
-const tlScroll=document.getElementById('tl-scroll');
-let tlDragging=false,tlStartX=0,tlScrollLeft=0;
-tlScroll.addEventListener('mousedown',e=>{
-  if(e.target.closest('.tl-event'))return;
-  tlDragging=true;tlStartX=e.pageX-tlScroll.offsetLeft;tlScrollLeft=tlScroll.scrollLeft;
-  tlScroll.classList.add('grabbing');
-});
-window.addEventListener('mousemove',e=>{
-  if(!tlDragging)return;
-  const x=e.pageX-tlScroll.offsetLeft;
-  tlScroll.scrollLeft=tlScrollLeft-(x-tlStartX);
-});
-window.addEventListener('mouseup',()=>{tlDragging=false;tlScroll.classList.remove('grabbing');});
-
-// ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
-buildTimeline();
+renderChapterCards();
 drawNodes();
 setTimeout(drawEdges,60);
 </script>
