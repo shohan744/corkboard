@@ -56,6 +56,8 @@
     .ni.sel{border-color:#c9b97a}
     .ni.sel::before{background:#c9b97a}
     .pc .ni{border-color:#3a3420}
+    .minor .ni{border-style:dashed;opacity:0.72}
+    .minor .ni:hover,.minor .ni.sel{opacity:1}
     .pc .ni::before{background:#4a4228}
     .pc .ni.sel{border-color:#c9b97a}
     .nn{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#b8a96a;line-height:1.4}
@@ -153,11 +155,16 @@
     #card-vm{display:none;margin-bottom:18px}
     #card-vm-label{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8b5a4a;margin-bottom:8px}
     .vm-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #2a2720;background:#161410;border-radius:2px;margin-bottom:4px}
-    .vm-play{width:28px;height:28px;flex-shrink:0;border-radius:50%;border:1px solid #7a6e3e;background:#1e1c14;color:#c9b97a;cursor:pointer;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all 0.12s;padding:0}
+    .vm-play{width:28px;height:28px;flex-shrink:0;border-radius:6px;border:1px solid #7a6e3e;background:#1e1c14;color:#c9b97a;cursor:pointer;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all 0.12s;padding:0}
     .vm-play:hover{background:#2a2720;border-color:#c9b97a}
     .vm-title{font-family:'Space Mono',monospace;font-size:10px;color:#a89e72;letter-spacing:0.03em;line-height:1.4}
     .vm-row.playing{border-color:#7a6e3e}
     .vm-row.playing .vm-play{background:#c9b97a;color:#1e1c14;border-color:#c9b97a}
+    .vm-play .reel{transform-box:view-box}
+    .vm-row.playing .reel{animation:reelspin 1.6s linear infinite}
+    .vm-row.playing .reel:last-of-type{animation-duration:1.2s}
+    @keyframes reelspin{to{transform:rotate(360deg)}}
+    @media (prefers-reduced-motion:reduce){.vm-row.playing .reel{animation:none}}
 
     /* ── MOBILE ── */
     #view-web{touch-action:none}
@@ -283,19 +290,19 @@
 const nodes=[
   {id:'norman',name:'Norman Graves',clan:'Malkavian',sub:'PC — "Pinkerton Enforcer"',x:1100,y:910,pc:true,
    detail:`A "Pinkerton enforcer" who crushed labor movements in Detroit before his sire Embraced him for the fervor of it. His touchstone Hugh Mann died in a fire Norman unknowingly helped set on the Patron's orders. He clawed his Pinkerton job back with a cadaver Jini pried out of Dr. Giovanni, then burned Amalek's house to the ground for closure, mastering his vampiric fear of fire to do it. Hugh's daughter Wu still wants the truth he can't give her. The coterie has now witnessed what "the job" actually is: an abandoned sanitorium full of delusional Malkavians, with Norman and his sire genuinely believing they run a Pinkerton field office there. No one has told Norman what they saw. He still thinks he goes to work. And now something new: when an obfuscated assassin was subdued aboard the CONTROL flight north, Norman drank him dry — all the way dry. His first Amaranth, committed at altitude with Amalek at his shoulder encouraging him. Whatever he took in with the blood, he hasn't said. Then, the night of the Presentation, catastrophe: reaching for Tommy through the Madness Network when the Sabbat struck, Norman lost himself to his delusion — instead of driving his beloved Cadillac into the enemies assaulting Tommy, he plowed into Tommy himself and drove off. He has since joined the coterie's vinculum, and now feels the man he ran down more clearly than ever.`,
-   conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown','ganymede','odessaBright','wuMann','drGiovanni','emily']},
+   conn:['sil','grayMan','amalek','jini','jupiter','tommy','elizUnknown','ganymede','odessaBright','wuMann','drGiovanni','emily','paulNitze']},
 
   {id:'jini',name:'Jini',clan:'Hecata',sub:'PC — Night Nurse',x:1281,y:1041,pc:true,
    detail:`A WWII war bride whose husband Andrew was lost in the Pacific, presumed dead. Her sire Dr. Giovanni Embraced her for her occult aptitude, and everything since has been in service of finding Andrew, whose Hecata file was stolen, almost certainly by a Nosferatu. Now holding leverage of her own over Giovanni, she pried a convincing cadaver out of his pathology hold to buy Norman his job back, and traded vitae to Antonio for the sewer entrance where his old Nosferatu master once met him. That door opened onto a Nosferatu information hub, which delivered the answer she has organized her unlife around: Andrew is still alive. Where he is, and in what state, is the next question, and there is no world in which she does not go looking. Meanwhile Giovanni has escalated from threats to sabotage — her friend Susan warned her that he's spreading rumors at St. Mary's about stolen supplies and missed shifts. Susan also handed her a possible answer: Giovanni's conspicuous attention to the newest, prettiest nurse on staff might be blackmail material. And on the flight north, Jini watched Norman commit Amaranth at close range. She found herself less repelled than she expected. Curious, even. At the Presentation, her primogen Agnette Vess handed her cryptic counsel, a shortwave radio, and a worn copy of Rebecca — and told her to listen once she got home. She and Antonio have photographs of Alice, the nurse Giovanni sees by night, but Jini fled the estate before capturing what she overheard. Sensing the coterie's collective weakness after the Sabbat ambush, she and Amalek co-conspired to propose the vinculum — and within the red brick walls of his abode, the sharing of vitae was done.`,
-   conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy','antonioGhoul','eliDrum','agnetteVess','control','susan']},
+   conn:['drGiovanni','grayMan','amalek','norman','jupiter','tommy','antonioGhoul','eliDrum','agnetteVess','control','susan','paulNitze']},
 
   {id:'amalek',name:'Amalek',clan:'Tremere',sub:'PC — Ex-SS Occultist',x:1212,y:1254,pc:true,
    detail:`An ex-SS occultist who bought his Embrace by smuggling Jews out of the collapsing Reich. A devout Noddist and a practicing diablerizer, he consumed Ganymede in front of witnesses and has been talking fast ever since. He crawled to his sire Rabbi Levi for a dressing-down and a storage-unit safehouse, sweet-talked a Sabbat pack out of a captive and a pack of Camarilla hounds out of a staking (both on the strength of his Marcus Webb back-channel), then cleared his valuables out of his old house. Hours later, Norman burned it down. Now ensconced in a suite at a prestigious 1968 hotel with a retainer and stable bagged blood coordinated through Jini, he's negotiated one more concession from CONTROL: his FBI tail disappears. His sire then sent him to deliver a bugged book to Thomas Crane; Amalek found the device, sliced the spine, and slipped in a note exposing Levi's deception. Crane rewarded the loyalty with a tour of his private laboratory — Noddist relics, a hidden cell — and something colder underneath: Crane was hunting his first diablerie, and Amalek was on the menu. Amalek talked his way off the plate by offering an easier target: Vera Lynn. Location, habits, and an introduction to Anton LaVey included. He walked out with Crane's gratitude and vintage blood. On the flight north he stood at Norman's shoulder during the Amaranth, encouraging. Now settled in a Georgetown brownstone near Jupiter — its ritual room inscribed with Sabbat sigils in cultist blood — he encouraged Norman's first diablerie mid-flight, and at the Presentation pledged to protect Vera as half-heartedly as possible, then watched Celeste walk her out the door. When Crane collected on the target Amalek sold him, Amalek said nothing. Instead, sensing the group's weakness, he and Jini co-proposed a vinculum. Within the red brick walls of his abode he performed the sharing masterfully, creating an even bond across the coterie — and freeing himself, at last, from the shackles of his master. His drug dealer, the languid hippy who runs The Broken Spine, is about to host a very different sort of meeting.`,
-   conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','ganymede','norman','jini','jupiter','tommy','calvDuchamp','ehHoldings','antonLaVey','washington','buscemi','control']},
+   conn:['rabbiLevi','grayMan','thomasCrane','marcusWebb','eliDrum','elizUnknown','ganymede','norman','jini','jupiter','tommy','calvDuchamp','ehHoldings','antonLaVey','washington','buscemi','control','landers']},
 
   {id:'jupiter',name:'Jupiter / Ira',clan:'Setite',sub:'PC — Cult Leader',x:988,y:1254,pc:true,
    detail:`A cold Setite predator running a New Age healing cult as a front for slow-burn Blood Bonding. Sent to DC by her sire Sam for a purpose she doesn't fully understand, she discovered and purged a planted infiltrator in her flock, who was later used and killed as a patsy for the coterie. A distraught Vera Lynn showed up at the cult in secret one night looking for solace; Jupiter didn't recognize whose girl she was at first, consoled her, and fed off her before sending her home. Vera left Tommy for real not long after. When Tommy confronted her at her Georgetown haven with his security detail, she called the cops and didn't flinch. On the drive back from the sewer, Tommy tried to lecture her about interfering with his property. She did not accept the framing. Her power has grown: at a three-day LSD rite beneath Vera's orrery she took sphinx form and nursed her three closest followers on vitae, ghouling them in monstrous maternity. Marcus Webb has heard the winged-lion rumors; she deflected him on the Elysium terrace — placated, not convinced. Stepping into the warm night air after the Presentation, she was approached by Odessa Bright with a tit-for-tat: sanctuary and protection for the Brujah clan's problem cases, in exchange for eyes and ears on the street. What Jupiter doesn't know is who Odessa is really working for. Terms are to be set at The Broken Spine. She entered the coterie's vinculum despite her misgivings.`,
-   conn:['sam','grayMan','norman','jini','amalek','tommy','calvDuchamp','ganymede','veraLynn','odessaBright','control']},
+   conn:['sam','grayMan','norman','jini','amalek','tommy','calvDuchamp','ganymede','veraLynn','odessaBright','control','landers']},
 
   {id:'tommy',name:'Tommy Fleet',clan:'Toreador',sub:'PC — Country Musician',x:919,y:1041,pc:true,
    detail:`A charismatic country star who built a career stealing music from underprivileged Black musicians. He lost control feeding on starlet Vera Lynn, staged it as a suicide attempt, and gaslit her into devotion that's curdling into a real Blood Bond. The accidental Anarch-hero reputation he picked up at the metal show made him a Sabbat favorite. His sire has warned him plainly that Celeste Beaumont is not to be trusted. When Vera returned home shaken from a secret visit to Jupiter's cult, Tommy interrogated her, and in his rush to paint the cult as dangerous, revealed he knew far more about Jupiter than a jealous boyfriend ever should. Vera left him for good shortly after. He confronted Jupiter with a security detail; she called the cops. He now holds princely permission to sire Vera, negotiated as a boon from CONTROL — and he'd rebuilt the bridge to use it. The Bond with Vera is complete — her devotion sealed and unfree — but at the Presentation Tommy sank into melancholy self-pity, botched his first impression with the Prince, and did not forbid Celeste from taking Vera to a private afterparty. Then the worst night of his unlife: muscling his way into Vera's car, losing Celeste's limo in the twisting of DC nightlife, and walking into a Sabbat ambush led by an academic-looking stranger with a New England accent. A dramatic shootout, and Vera was gone — kidnapped. Norman's Cadillac finished the job, plowing into Tommy instead of the enemy. He limped home bleeding, humiliated, and Vera-less. He entered the vinculum despite his misgivings, and now the whole coterie feels his need to get her back.`,
@@ -321,7 +328,7 @@ const nodes=[
    detail:`Jini's sire, a self-described Head of Pathology who was never a real doctor. He treats the sire bond as pure transaction — and lately the transactions have turned petty. He's been quietly spreading rumors at St. Mary's that Jini steals supplies and flakes on shifts (things he himself asked her to do), a small cruelty aimed at her comfort and her hunting grounds, to remind her who is sire and who is childe. He's also been spending conspicuous time with the newest, youngest, prettiest nurse on staff — which Susan thinks could be leverage. He still holds Reverend Drum's ghost and fetter, and an unnamed price for the stolen Andrew files.`,
    conn:['jini','eliDrum','susan']},
 
-  {id:'sam',name:'Sam',clan:'Setite',sub:"Jupiter's sire",x:750,y:1336,
+  {id:'sam',name:'Sam',clan:'Setite',sub:"Jupiter's sire",x:133,y:1147,minor:true,
    detail:`Jupiter's sire, an Egyptian antiquities dealer who's quietly run Setite influence games in DC since the late 1950s — longer than Jupiter knows. He sent her here pointed at something specific she hasn't figured out yet, and contacts her rarely, always with requests she fulfills to stay in his good graces.`,
    conn:['jupiter']},
 
@@ -337,23 +344,23 @@ const nodes=[
    detail:`Toreador Primogen who's run DC's Elysium-gallery since before the Civil War. Tommy spilled the coterie's entire blackmail situation to her within twenty minutes of meeting. She surfaced the missing Nosferatu Primogen as a potential exploit and has called in favor after favor from Tommy — but Tommy's own sire has now named her, flatly, as someone not to be trusted. Vera was snatched en route to her afterparty — from a car conspicuously separate from Celeste's own limo, which slipped away into DC's nightlife just before the ambush. Whether her hands are clean is an open question.`,
    conn:['tommy','veraLynn','calvDuchamp','nosferatuPrimogen','tommysSire']},
 
-  {id:'mattMercer',name:'Aldous Mercer',clan:'Ventrue',sub:'Camarilla Primogen, deceased',x:1309,y:525,
+  {id:'mattMercer',name:'Aldous Mercer',clan:'Ventrue',sub:'Camarilla Primogen, deceased',x:1749,y:85,minor:true,
    detail:`A Camarilla Primogen whose assassination, amid the chaos of the MLK riots, brought the coterie together in the first place. He held DC's urban renewal contracts through mortal proxies and ghoul officials, and was quietly building a back-channel deal with Odessa Bright's reform faction to shore up his council seat.`,
    conn:['grayMan','eliDrum','odessaBright']},
 
-  {id:'eliDrum',name:'Reverend Elias Drum',clan:'Ghoul',sub:"Mercer's manservant, deceased",x:1478,y:709,
+  {id:'eliDrum',name:'Reverend Elias Drum',clan:'Ghoul',sub:"Mercer's manservant, deceased",x:2176,y:754,minor:true,
    detail:`Mercer's ghoul manservant of thirty years, murdered by Amalek at the funeral as cover for Crane's disappearance upstairs. His was the only genuine grief in a room full of performance. His ghost is now bound to a fetter in Dr. Giovanni's custody — and it knows a great deal more than it's said.`,
    conn:['mattMercer','amalek','thomasCrane','marcusWebb','drGiovanni','jini']},
 
   {id:'odessaBright',name:'Odessa Bright',clan:'Brujah',sub:'Reform faction, DC',x:1711,y:1143,
    detail:`A young Brujah who never wanted to lead DC's reform faction and increasingly is doing it anyway. Her 'Primogen' title is tilted mockingly: DC's Brujah — mostly minorities and the poverty-stricken of the South — have no real sway or power within the court, eschewing the trappings of Camarilla society and being scorned in turn. She attended Mercer's funeral despite having no right to be there, and was spotted by Amalek doing it. After the Presentation she approached Jupiter in the warm night air with a tit-for-tat: sanctuary and protection for the clan's problem cases, in exchange for eyes and ears on the street — the kind of information and contacts only the lowborn can secure. The catch, unbeknownst to Jupiter: this is Marcus Webb's ploy. Odessa has been instructed to report on the coterie, and hopes to curry favor with the Prince in return. Terms are to be set at The Broken Spine, a used book store run by a languid hippy. A pragmatist stuck dealing with people who barely tolerate her existence — and now spying on the ones offering her clan a hand.`,
-   conn:['marcusWebb','mattMercer','calvDuchamp','jupiter']},
+   conn:['marcusWebb','mattMercer','calvDuchamp','jupiter','landers']},
 
-  {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Brujah',sub:'West Coast Anarch',x:1730,y:860,
+  {id:'calvDuchamp',name:'Calvin Duchamp',clan:'Brujah',sub:'West Coast Anarch',x:1912,y:1489,minor:true,
    detail:`An exiled West Coast Anarch organizer, building a coalition that's part ideology and part hunting ground. Came east after committing diablerie of his own — the threads still show in his aura. He identified EH Holdings as the real-estate front quietly demolishing buildings the Anarch movement could've used, and passed that intel to Amalek.`,
    conn:['celesteBeaumont','amalek','odessaBright','thomasCrane','ehHoldings']},
 
-  {id:'ehHoldings',name:'EH Holdings',clan:'Mortal Proxy',sub:'Real estate front, Gray Man',x:991,y:1535,
+  {id:'ehHoldings',name:'EH Holdings',clan:'Mortal Proxy',sub:'Real estate front, Gray Man',x:87,y:754,minor:true,
    detail:`A shell company with no visible owners, buying up buildings in neighborhoods where Anarch organizing is taking root and quietly demolishing them before they can be used. The Patron's oldest known mortal asset. What EH stands for, and who actually signs the checks, remains a mystery.`,
    conn:['calvDuchamp','amalek','grayMan']},
 
@@ -361,15 +368,15 @@ const nodes=[
    detail:`A rising session musician injured when Tommy fed on her; he staged it as a suicide attempt and gaslit her into believing it. She fled to Jupiter's protection, but Tommy found her performance schedule and met her after a set with an explanation ready: he'd come to Jupiter's lawn armed because the cult was dangerous and he feared for her. Mollified but suspicious, addicted to his Lasting Kiss and exhausted by running, she forgave him and went back. She does not know Tommy holds princely permission to sire her. The Bond to Tommy is now complete — three drinks, sealed. Presented to the Prince and court on Jul 16, she left the party bound for a Toreador afterparty — in a car separate from Celeste Beaumont's limo, with Tommy muscled in beside her. She never arrived. A Sabbat pack led by Thomas Crane took her in a dramatic shootout: the diablerie target Amalek sold him, now in his hands. Somewhere in the city, a hidden cell built for a guest who won't be leaving is no longer empty.`,
    conn:['tommy','celesteBeaumont','jupiter','thomasCrane']},
 
-  {id:'elizUnknown',name:'Elizabeth ????',clan:'Thin-Blooded',sub:'Fate unknown',x:812,y:756,
+  {id:'elizUnknown',name:'Elizabeth ????',clan:'Thin-Blooded',sub:'Fate unknown',x:351,y:1489,minor:true,
    detail:`A thin-blooded drifter abducted by Amalek, Norman, and Tommy using Tommy's star power as bait. Amalek took her to his private room and she was never seen again. No one who was there has ever asked what happened to her, or seems to want to know.`,
    conn:['amalek','norman','tommy']},
 
-  {id:'ganymede',name:'Ganymede',clan:'Caitiff (deceased)',sub:"Diablerized by Amalek",x:941,y:1656,
+  {id:'ganymede',name:'Ganymede',clan:'Caitiff (deceased)',sub:"Diablerized by Amalek",x:704,y:1721,minor:true,
    detail:`Once one of Jupiter's most devoted flock, secretly sired by an unknown party and fed a false gospel meant to turn him against her. Jupiter caught the deception and locked him away — then he was used as a patsy in a staged attack and diablerized by Amalek in front of witnesses. He's dead.`,
    conn:['jupiter','amalek','norman']},
 
-  {id:'antonioGhoul',name:'Antonio',clan:'Ghoul',sub:'Untethered, DC',x:1700,y:1080,
+  {id:'antonioGhoul',name:'Antonio',clan:'Ghoul',sub:'Untethered, DC',x:2130,y:1147,minor:true,
    detail:`A teenage Italian ghoul cut loose by his old master after a warehouse job went bad. Jini saved his life with her vitae, leaving him lightly Blood Bonded and increasingly smitten — smitten enough to trade away the sewer entrance where his old Nosferatu master once met him, in exchange for more of her blood. He still has no idea how significant that doorway might be.`,
    conn:['jini']},
 
@@ -381,39 +388,39 @@ const nodes=[
    detail:`The Malkavian elder Amalek runs to in real crisis — less a father figure than a confessor with his own agenda. He performed the Rite of Innocence to mask Amalek's aura from scrutiny, at the cost of a child's life, in exchange for Amalek pushing DC further into Sabbat-flavored chaos. What he actually wants from that chaos is unclear.`,
    conn:['amalek']},
 
-  {id:'washington',name:'Agent Washington',clan:'Mortal',sub:'FBI — hunting Amalek',x:1636,y:1461,
+  {id:'washington',name:'Agent Washington',clan:'Mortal',sub:'FBI — hunting Amalek',x:1559,y:1721,minor:true,
    detail:`A young, idealistic FBI agent assigned to the Amalek case. Still believes enough in the system, and in doing the right thing, that the right story told well could quietly turn him into an asset — without him ever fully realizing it's happened.`,
    conn:['amalek','buscemi']},
 
-  {id:'buscemi',name:'Agent Buscemi',clan:'Mortal',sub:'FBI — hunting Amalek',x:1707,y:1321,
+  {id:'buscemi',name:'Agent Buscemi',clan:'Mortal',sub:'FBI — hunting Amalek',x:1132,y:1804,minor:true,
    detail:`A burnt-out FBI agent four years from retirement, punching the clock and greasy as they come. Probably crooked, definitely tired, and very likely bribable if the price and the cover story are convincing enough. Washington's senior partner on the Amalek case.`,
    conn:['amalek','washington']},
 
-  {id:'wuMann',name:'Wu Mann',clan:'Mortal',sub:"Hugh Mann's daughter",x:956,y:704,pc:false,
+  {id:'wuMann',name:'Wu Mann',clan:'Mortal',sub:"Hugh Mann's daughter",x:222,y:379,minor:true,pc:false,
    detail:`Hugh Mann's teenage daughter, convinced — correctly — that her father's death was arson rather than an accident. She tracked Norman down during his exile at Amalek's house and asked him directly to pass along anything he learns. She has no idea Norman was there the night it happened.`,
    conn:['norman']},
 
-  {id:'nosferatuPrimogen',name:'Nosferatu Primogen',clan:'Nosferatu',sub:'Identity unknown — communicates only by missive',x:776,y:581,
-   detail:`A Nosferatu power player no one in the local hierarchy has ever actually seen. Communicates entirely through delivered missives and somehow still holds the Prince's ear. Celeste surfaced his existence to the coterie as a potential exploit. Given what's now known about CONTROL, the "missing Primogen who moves the city by note" is a very plausible fit for the Patron; unconfirmed, but the shape of it is suggestive.`,
-   conn:['celesteBeaumont','patron']},
+  {id:'nosferatuPrimogen',name:'Nosferatu Primogen',clan:'Nosferatu',sub:'Also known as "Ed Harvey" — communicates only by missive',x:776,y:581,
+   detail:`Also known as "Ed Harvey," the name behind 555-RODENT and the man Jini met at the Archives. Phil's sire. A Nosferatu power player no one in the local hierarchy has ever actually seen. Communicates entirely through delivered missives and somehow still holds the Prince's ear. Celeste surfaced his existence to the coterie as a potential exploit. Given what's now known about CONTROL, the "missing Primogen who moves the city by note" is a very plausible fit for the Patron; unconfirmed, but the shape of it is suggestive.`,
+   conn:['celesteBeaumont','patron','phil']},
 
-  {id:'tommysSire',name:'Jerry Wexler',clan:'Toreador',sub:"Tommy's sire — music exec",x:600,y:910,
+  {id:'tommysSire',name:'Jerry Wexler',clan:'Toreador',sub:"Tommy's sire — music exec",x:514,y:85,minor:true,
    detail:`A big-shot country music executive and Tommy's sire — a good ol' boy in a big hat and a long limousine, with the easy racism of a man who's never once been told no. The music industry is his hunting ground: a steady supply of hungry talent he can use, drain, and discard. He surfaced this week to warn Tommy, plainly, that Celeste Beaumont is not to be trusted — and shared nothing about how he'd know.`,
    conn:['tommy','celesteBeaumont']},
 
-  {id:'emily',name:'Emily ????',clan:'Malkavian',sub:'Madness Network Fixture',x:1382,y:450,
+  {id:'emily',name:'Emily ????',clan:'Malkavian',sub:'Madness Network Fixture',x:1350,y:-75,minor:true,
    detail:`A young woman so deeply ingrained in the Malkavian madness network that she's barely comprehensible. Silas Mercer introduced her to the coterie as part of showing them his 'work' at the abandoned sanitorium — the place Norman insisted was his job, his purpose, his connection to something real. She dispensed cryptic hints and nonsense in equal measure. Whether she's a victim of the system or a key component of it remains unclear.`,
    conn:['sil','norman']},
 
   {id:'control',name:'CONTROL',clan:'Vampire Coalition (Nosferatu-led)',sub:'Anti-nuclear-war conspiracy',x:750,y:250,
    detail:`A coalition of Kindred, led primarily by the Nosferatu, dedicated to averting a nuclear war they believe CASCADE is engineering. The coterie has been blackmailed into working for them from the start; the Patron and the Gray Man are the operational face of this network. The sewer hub was one of their information nodes, staffed by Nosferatu and equipped with what looked like real intelligence infrastructure. Their working theory: certain elder Camarilla vampires (CASCADE) have decided that mid-20th-century human civilization is getting too organized, too networked, too technologically capable for the Masquerade to survive, and that a nuclear cull is the cleanest fix. CONTROL disagrees, and would rather live with humans than under them. In exchange for continued coterie cooperation on the Arctic broken arrow retrieval, CONTROL has paid three real boons: Amalek's FBI tail vanished, Tommy has princely permission to sire Vera, and Jini received confirmation that Andrew is still alive. Little occurs within DC that escapes the notice of the Nosferatu — which makes them the coterie's second lead on finding Vera.`,
-   conn:['grayMan','patron','cascade','amalek','tommy','jini','jupiter','norman']},
+   conn:['grayMan','patron','cascade','amalek','tommy','jini','jupiter','norman','paulNitze']},
 
   {id:'cascade',name:'CASCADE',clan:'Camarilla Vampire Faction',sub:'Pro-nuclear-war conspiracy',x:1450,y:250,
    detail:`A faction of Camarilla vampires, per CONTROL's briefing, quietly pressuring the federal government toward a nuclear exchange with the Soviets. Their reasoning: human civilization is becoming too organized, too well-instrumented, too surveilled for the Masquerade to hold for another century. A nuclear cull rolls the clock back and preserves Kindred rule. They are also hunting the Arctic broken arrow; presumably to prevent CONTROL from having leverage over the crisis, or to fold the recovered warheads into their own plans. Membership, leadership, and organizational scope remain unknown, but the implication is that some of it sits inside the standing Camarilla hierarchy the coterie already deals with.`,
    conn:['control']},
 
-  {id:'susan',name:'Susan',clan:'Mortal',sub:"Nurse at St. Mary's — Jini's friend",x:1540,y:1000,
+  {id:'susan',name:'Susan',clan:'Mortal',sub:"Nurse at St. Mary's — Jini's friend",x:2041,y:378,minor:true,
    detail:`A fellow nurse at St. Mary's and one of the few genuinely warm presences left in Jini's nights — a touchstone in the truest sense. Sharp-eyed and loyal, she pulled Jini aside to warn her that Dr. Giovanni was poisoning her reputation with rumors about stolen supplies and missed shifts. She also offered the antidote: Giovanni has been spending a great deal of time with the newest, youngest, prettiest nurse on staff, and a little leverage might get him off Jini's back. Susan thinks she's helping a friend navigate hospital politics. She has no idea what Giovanni is, or what her friend is either.`,
    conn:['jini','drGiovanni']},
 
@@ -423,7 +430,15 @@ const nodes=[
 
   {id:'phil',name:'Phil',clan:'Nosferatu',sub:'CONTROL technician',x:1300,y:340,
    detail:`A scrawny, bookish Nosferatu who was a nervous, solitary academic long before the Embrace — but whose empathy has always been boundless. When he was offered the chance to help save the world by doing the same quiet data analysis he was already doing, he accepted with knocking knees and flopsweat aplenty. Being turned into an undead abomination wasn't in the job description, but he's grown comfortable with invisibility and living in the dark. A high-humanity vampire, possibly the gentlest soul in CONTROL's employ, and the coterie's technician for securing and retrieving the device. The Amaranth aboard the flight horrified him. He didn't say so. He just went very quiet.`,
-   conn:['control','idira']},
+   conn:['control','idira','nosferatuPrimogen']},
+
+  {id:'landers',name:'Landers',clan:'Brujah',sub:"Odessa's problem case",x:1690,y:1260,pc:false,
+   detail:`A volatile young Brujah Odessa Bright palmed off on Amalek to babysit as the first installment of Jupiter's deal. In return, Landers gave the coterie a way into the Sabbat evidence the Brujah have been sitting on. He saw Amalek picked up by the fake police and relayed it to Jupiter.`,
+   conn:['amalek','odessaBright','jupiter']},
+
+  {id:'paulNitze',name:'Paul Nitze',clan:'Mortal',sub:'CASCADE — deceased',x:913,y:-75,minor:true,pc:false,
+   detail:`A mortal CASCADE insider guarded by dangerous security and a regular at the Metropolitan, the same bar Jini frequents. CONTROL wanted him alive for a confession. The coterie grabbed him after an attack by the man in black, but Norman drank him dry in the getaway car. Jini bound his soul to a fetter and left it with a note for CONTROL.`,
+   conn:['jini','norman','control']},
 ];
 
 // ─────────────────────────────────────────────
@@ -670,6 +685,79 @@ const events=[
 
   {id:'ev72', chapter:4, tier:'minor', date:'Jul 18, 1968', name:'Two Leads', cat:'discovery',
    detail:`Now bonded, the group feels Tommy's need to rescue Vera cleanly and directly. Two possible leads emerge: first, the coming meeting with Odessa to set terms — the Brujah's street eyes may well have seen something. Second, their connection with CONTROL — little occurs within DC that escapes the notice of the Nosferatu. The Odessa meeting is set for The Broken Spine, a used book store run by a languid hippy who Amalek buys his drugs from.`},
+
+  // ── Chapter 4 continued: the bargains pile up ──
+  {id:'ev73', chapter:4, tier:'major', date:'Jul 19, 1968', name:'The Broken Spine Meeting', cat:'meeting',
+   detail:`Terms are set with Odessa Bright in the back of the used bookstore. Jupiter accepts her deal: sanctuary for the Brujah's problem cases in exchange for street-level eyes and ears. As a first installment, Odessa palms off Landers, a volatile young Brujah, on Amalek to babysit. In return, Landers gives the coterie a way into the Sabbat evidence the Brujah have been sitting on.`},
+
+  {id:'ev74', chapter:4, tier:'minor', date:'Jul 20, 1968', name:'Anton Knows About the Box', cat:'discovery',
+   detail:`Anton LaVey lets it slip that he knows far more about Thomas Crane's box than he first let on. He doesn't say how, and he doesn't say why he's been sitting on it.`},
+
+  {id:'ev75', chapter:4, tier:'major', date:'Jul 21, 1968', name:'A Beacon from Vess', cat:'discovery',
+   detail:`Hecata Primogen Agnette Vess confirms to Jini that Vera is alive and being held. She also hands over a tracking and listening beacon, and talks at length about a "new world order." It sounds less like counsel and more like recruitment.`},
+
+  {id:'ev76', chapter:4, tier:'minor', date:'Jul 22, 1968', name:'Blood Drive Plans', cat:'faction',
+   detail:`Tommy and Jini sketch out a public blood drive at the Reflecting Pool, the site of the Poor People's Campaign. Dr. Giovanni and St. Mary's are drawn into the plan. It's a PR stunt, and a way to feed.`},
+
+  {id:'ev77', chapter:4, tier:'minor', date:'Jul 23, 1968', name:"Phil's Sire", cat:'discovery',
+   detail:`Working through Phil, Jini deduces that the missing Nosferatu Primogen behind CONTROL, code-named "Ed," is Phil's own sire. She requests a meeting.`},
+
+  {id:'ev78', chapter:4, tier:'major', date:'Jul 24, 1968', name:'The Sabbat Bargain', cat:'faction',
+   detail:`Amalek drives Tommy to negotiate Vera's return with Anton LaVey. Anton offers a monomacy duel against Thomas Crane. Tommy counters: he pledges himself to the Sabbat and offers to deliver his own sire, Jerry Wexler, into Anton's hands in exchange for skipping the duel. Anton accepts. Tommy leaves with a pentagram carved into his chest and a blood bond to Anton.`},
+
+  {id:'ev79', chapter:4, tier:'major', date:'Jul 25, 1968', name:'Ed Harvey Meets Jini', cat:'meeting',
+   detail:`Jini sits down with "Ed Harvey" and hands the CASCADE tracker over for recovery. She declares her full allegiance to CONTROL, even over her missing husband Andrew. On her way out of the Archives she is tailed by armed guards, but gets away.`},
+
+  {id:'ev80', chapter:4, tier:'major', date:'Jul 26, 1968', name:'Take Nitze Alive', cat:'faction',
+   detail:`A newspaper ad in the sewers gives Jupiter, Jini and Norman their next CONTROL job: capture Paul Nitze alive. He is mortal, but guarded by dangerous CASCADE security. His confession, plus Jini's tracker, would give CONTROL the proof it needs to move against traitor Primogens.`},
+
+  {id:'ev81', chapter:4, tier:'major', date:'Jul 27, 1968', name:'The Wine Bar', cat:'faction',
+   detail:`The coterie meets at a wine bar to plan. It goes sideways fast. Tommy fails to convey the scope of his new Sabbat commitment. Norman's frayed appearance empties the room. Then a firebomb comes through the window and ghouls pour in. The coterie takes aggravated damage but survives, and captures and interrogates one ghoul. He can't tell them who sent him.`},
+
+  {id:'ev82', chapter:4, tier:'minor', date:'Jul 28, 1968', name:"The Rabbi's Hand", cat:'discovery',
+   detail:`Amalek calls Jupiter and Jini to The Broken Spine to talk about killing his sire, Rabbi Levi Morgenstern, before Levi can kill him. A hidden trigger compels Amalek to phone Marcus Webb. Webb tells them a blood hunt against Amalek was nearly initiated, and was only blocked because the Nosferatu Primogen insisted Amalek hasn't outlived his usefulness yet.`},
+
+  {id:'ev83', chapter:4, tier:'minor', date:'Jul 28, 1968', name:'Ashes to Ashes', cat:'death',
+   detail:`During a feeding, Jupiter loses control and kills a mortal. Jini uses Ashes to Ashes to reduce the body to dust, leaving nothing behind for anyone to find.`},
+
+  {id:'ev84', chapter:4, tier:'major', date:'Jul 29, 1968', name:'The Coffee Shop', cat:'death',
+   detail:`Tommy's blood bond to Anton drives him to gather the whole coterie in a coffee shop without knowing why. Anton arrives, massacres the mortal patrons, and stages a dark inversion of Vera's Presentation: Vera, scarred, her voice reduced to a whisper. Tommy attacks and Anton restrains him effortlessly with Dominate, then offers "absolution": diablerizing his own childe to end her suffering. Tommy is on the verge of agreeing when Jupiter shapeshifts into a serpent, grabs Vera, and smashes through a window. Jini, who warned CONTROL beforehand, sits frozen. A conveniently open manhole waits outside, and Norman seals it behind them.`},
+
+  {id:'ev85', chapter:4, tier:'major', date:'Jul 29, 1968', name:'The Blood Price', cat:'death',
+   detail:`Denied the outcome he wanted, Anton takes Tommy's right hand as payment, withering it instantly with Oblivion.`},
+
+  // ── Chapter 5: Moanin' the Blues ──
+  {id:'ev86', chapter:5, tier:'minor', date:'Jul 30, 1968', name:'Safe Underground', cat:'faction',
+   detail:`Vera is safe at CONTROL's sewer base, under Phil's care. Tommy has a withered hand and a leash. The bills are coming due.`},
+
+  {id:'ev87', chapter:5, tier:'minor', date:'Jul 31, 1968', name:'Amalek Leaves Town', cat:'faction',
+   detail:`Having learned how close the blood hunt came, Amalek leaves Washington to do what he needs to do. He tells no one where.`},
+
+  {id:'ev88', chapter:5, tier:'major', date:'Aug 01, 1968', name:'The Impound Lot', cat:'discovery',
+   detail:`Norman's sire Sil sends him on another "shakedown," this time an impound lot night manager Sil believes is skimming from the Pinkerton operation. It turns violent. Before it's over, the manager admits that certain cars are signed out regularly, once a week, by a wealthy woman. Norman walks out with a handful of files from the lot.`},
+
+
+  {id:'ev89', chapter:5, tier:'minor', date:'Aug 03, 1968', name:'Pulled Over', cat:'faction',
+   detail:`On the way back, Amalek is pulled over by "police" who are really Camarilla hounds. With talk of a blood hunt in the air, some have decided to act first and justify later. When they try to lead him into an abandoned office building, Amalek fights back and is knocked into Torpor by thin-blood alchemy.`},
+
+  {id:'ev90', chapter:5, tier:'major', date:'Aug 03, 1968', name:'The Charnel House', cat:'death',
+   detail:`Landers saw Amalek picked up and tells Jupiter, who calls Jini for help finding their missing blood wizard. Inside the office building they find a charnel house: easy-to-miss mortals slaughtered and crude, primitive Sabbat iconography thrown up around them. It was a frame job, and the hounds were about to draw out Amalek's vitae when the girls attack and put them down.`},
+
+  {id:'ev91', chapter:5, tier:'major', date:'Aug 04, 1968', name:"Idira's Offer", cat:'meeting',
+   detail:`The hounds weren't the only ones looking for Amalek. CONTROL sent Idira with an offer: complete the mission and the hunt is called off. She also brings a gift from Phil: messenger rats, for covert message exchange within the coterie. Amalek, normally proud and confident, is shaken at having nearly been killed by a thin-blood.`},
+
+  {id:'ev92', chapter:5, tier:'major', date:'Aug 08, 1968', name:'The Metropolitan', cat:'meeting',
+   detail:`Using Jini's shared connection with Paul Nitze (they frequent the same bar, the Metropolitan), the coterie runs the operation. Jini is the honeypot, Tommy provides a musical distraction, Amalek is the wheelman, Norman the muscle, and Jupiter oversees from the hotel balcony across the street. Tommy holds the crowd, his notorious downward spiral having made him something of a local legend. Jini charms the target and the two step out back.`},
+
+  {id:'ev93', chapter:5, tier:'major', date:'Aug 08, 1968', name:'The Man in Black', cat:'discovery',
+   detail:`The same man in black who shot Norman in Greenland attacks. He raises a silenced pistol to kill Nitze and keep his secrets, but hesitates when Jini steps between them. Amalek's blood sorcery drives him back and the coterie escapes with Nitze.`},
+
+  {id:'ev94', chapter:5, tier:'major', date:'Aug 08, 1968', name:'Nitze Drunk Dry', cat:'death',
+   detail:`Between the swerving car, the wounds dripping vitae and the terrified mortal in his arms, Norman loses control and drinks Paul Nitze dry. Jini barely salvages the situation by binding Nitze's soul to a fetter. The coterie leaves the fetter and a note explaining the situation for CONTROL, carefully dancing around how he died, and leaves town.`},
+
+  {id:'ev95', chapter:5, tier:'major', date:'Aug 10, 1968', name:'Tucker County', cat:'discovery',
+   detail:`Jupiter moved her cult to prep the location earlier in the week, but it is still cold, fetid and miserable in Tucker County. A couple of cultists have gone missing after straying too far for firewood. Finding heavy boot tracks in the bog, the coterie searches together, sensing that splitting up in the fog would be a bad idea.`},
+
 ];
 
 // ─────────────────────────────────────────────
@@ -687,6 +775,12 @@ const evidence=[
   {id:'margaret-letter', name:'The Margaret Letter', found:'Command tent, North Star site',
    desc:'Personal correspondence recovered with Fox Seven\'s effects. A stiff gray card, cut with eleven small windows, was found separately on the body.',
     src:'props/margaret-letter.html'},
+  {id:'midnight-troupe', name:'The Magnificent Midnight Troupe', found:'Circus poster — August 1968',
+   desc:'"One Night Only! Admission Free. They always come back when called." The Pyrant, Miss Ivory, The Iron Ghost, Sweet Talkin\' Jack and The Golden Sphinx.',
+   src:'props/circus.webp'},
+  {id:'messengers', name:'Messengers', found:'Field guide plate — gift from Phil, Aug 1968',
+   desc:'Five rats for covert messages: Epilogue (Jini), Marginalia (Norman), Appendix, now Petunia (Jupiter), Addendum (Amalek) and Carl (Tommy).',
+   src:'props/messengers.webp'},
 ];
 
 function buildEvidence(){
@@ -746,8 +840,6 @@ function vmStop(){
   if(vmAudio){vmAudio.pause();vmAudio=null;}
   if(vmActiveRow){
     vmActiveRow.classList.remove('playing');
-    const b=vmActiveRow.querySelector('.vm-play');
-    if(b)b.textContent='\u25B6';
     vmActiveRow=null;
   }
 }
@@ -757,7 +849,6 @@ function vmPlay(nid,vm,row){
   vmAudio=new Audio(vm.src);
   vmActiveRow=row;
   row.classList.add('playing');
-  row.querySelector('.vm-play').textContent='\u25A0';
   vmAudio.addEventListener('ended',vmStop);
   vmAudio.addEventListener('error',()=>{
     vmStop();
@@ -782,7 +873,7 @@ function fillVm(nid){
   vms.forEach(vm=>{
     const row=document.createElement('div');
     row.className='vm-row';
-    row.innerHTML=`<button class="vm-play">\u25B6</button><div class="vm-title">${vm.title}</div>`;
+    row.innerHTML=`<button class="vm-play" aria-label="Play audio log"><svg class="reel-svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.3"><g class="reel" style="transform-origin:7px 9px"><circle cx="7" cy="9" r="5.2"/><circle cx="7" cy="9" r="1.2" fill="currentColor"/><path d="M7 4v3M7 11v3M2.2 9h3M8.8 9h3" stroke-width="1.6"/></g><g class="reel" style="transform-origin:17px 9px"><circle cx="17" cy="9" r="5.2"/><circle cx="17" cy="9" r="1.2" fill="currentColor"/><path d="M17 4v3M17 11v3M12.2 9h3M18.8 9h3" stroke-width="1.6"/></g><path d="M7 14.2L9.5 20h5l2.5-5.8" stroke-width="1"/></g><rect x="10.5" y="19" width="3" height="2.2" fill="currentColor"/></svg></button><div class="vm-title">${vm.title}</div>`;
     row.querySelector('.vm-play').onclick=()=>vmPlay(nid,vm,row);
     list.appendChild(row);
   });
@@ -834,7 +925,7 @@ function drawNodes(){
     if(!el){
       el=document.createElement('div');
       el.id='n'+n.id;
-      el.className='nd'+(n.pc?' pc':'');
+      el.className='nd'+(n.pc?' pc':'')+(n.minor?' minor':'');
       const vmHtml=voicemails[n.id]?`<span class="vm-light${vmUnheard(n.id)?'':' played'}"></span>`:'';
       el.innerHTML=`<div class="ni">${vmHtml}<div class="nn">${n.name}</div><div class="ns">${n.clan}</div></div>`;
       el.addEventListener('click',()=>pickNode(n.id));
@@ -898,7 +989,7 @@ const chapters=[
    tag:'The sewer, the truth, and a broken arrow in the ice'},
   {n:4, title:'Always on My Mind', range:'Jul 1968',
    tag:'The reckoning comes home'},
-  {n:5, title:"Moanin' the Blues", range:'Jul 1968 – present',
+  {n:5, title:"Moanin' the Blues", range:'Jul – Aug 1968',
    tag:'The bill comes due on every bargain struck'},
 ];
 
